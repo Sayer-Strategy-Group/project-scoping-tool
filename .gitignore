@@ -8,8 +8,9 @@
 **/.DS_Store
 ._*
 
-# Audio recordings (too large for git)
+# Audio/video recordings (too large for git)
 *.mp3
+*.mp4
 
 # Python
 __pycache__/

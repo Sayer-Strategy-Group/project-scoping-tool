@@ -65,10 +65,17 @@ add an "Actuals" section and move learnings into Estimation Adjustments above.
 - **Actuals:** Not yet completed
 
 ### American Bedding (Manufacturing / CPQ)
-- **Scoped:** 2026-03 (CPQ discussion, not full scope)
-- **System:** HubSpot CPQ
-- **Status:** CPQ-specific consultation, not a full implementation scope
-- **Actuals:** N/A
+- **Scoped:** 2026-04-02 (revised same day from initial A/B structure to single fixed fee)
+- **System:** HubSpot CPQ (Sales Hub Pro + Commerce Hub Pro) + NetSuite ERP + Kuebix TMS + n8n middleware
+- **Size:** 3-5 sales users, 700 SKUs (40-60 core), 65+ quotes/week, multiple shipping warehouses
+- **Median estimate:** 226 hrs / $33,900
+- **Range:** 168-284 hrs / $25,200-$42,600
+- **Fixed fee presented:** $34,500
+- **Approach:** Single-phase, 10-12 weeks (inside sales CPQ only)
+- **Verbal quote given:** $25,000 (Billy on intro call, pre-discovery benchmark)
+- **Notable factors:** Sayer owns all development including NetSuite (TPI not involved). Dynamic weight calculation engine replicates 5 Excel spreadsheets in n8n (HIGHEST-RISK workstream -- 28-44 hrs, unvalidated complexity). Kuebix API fully reviewed (quickRate endpoint, Basic Auth, multi-carrier LTL). Multiple shipping origins with routing logic. n8n as middleware (not HubSpot custom code). Recommended Ops Hub Pro (~$800/mo). Government RFP excluded (Phase 2). Vesco PE portfolio company. Patrick (CFO) is budget authority. Initial scope used A/B options ($19,500/$33,000) but revised to single fee after: (1) Sayer confirmed as sole developer, (2) Kuebix API reviewed (45% -> high confidence), (3) dynamic weight calc selected, (4) multiple ship origins confirmed.
+- **Status:** Proposal in progress (Gamma)
+- **Actuals:** Not yet completed
 
 ---
 
@@ -80,7 +87,10 @@ Patterns observed across multiple scoping sessions. Updated as more projects com
 - **Existing HubSpot instances** (Strive): Reconfiguration scoping is harder than greenfield. Assume data quality work will hit max estimate. Always audit before committing hours.
 - **ERP involvement** (Top Down): The scoping skill's 1.5-2x multiplier held up. 22 open questions after discovery = too many unknowns for fixed-fee. Recommend phased with ERP in Phase 2.
 - **Verbal quotes from Cameron** (Arkview): Estimates should land in lower-middle of verbal range to leave buffer. Track verbal quotes alongside formal estimates.
-- **Multi-option proposals** (Strive): Offering A/B options with "start A, plan B" recommendation works well for larger engagements. Option A should always be standalone-viable.
+- **Multi-option proposals** (Strive): Offering A/B options with "start A, plan B" recommendation works well when phases are naturally separable. American Bedding was initially scoped as A/B but revised to single fee when no natural standalone subset existed (CPQ without freight automation leaves reps in a fifth system). A/B works when Option A delivers standalone value; it fails when the core problem requires all components.
+- **Manufacturing/CPQ** (American Bedding): Freight/TMS integration is a unique complexity factor not covered by standard scoping skill ranges. Kuebix API (quickRate endpoint) is well-documented and straightforward once credentials are obtained. Dynamic weight calculation from Excel spreadsheets is the real risk -- nested IF/AND formulas with product-specific logic paths. Always get the Excel files and validate complexity BEFORE committing a fixed fee. Desktop Excel spreadsheets as data source = data centralization is a prerequisite workstream.
+- **ERP adjacency vs. ERP build** (Top Down Auto, American Bedding): When ERP is already live with working sync, use 1.25x adjacency premium instead of full 1.5-2x. The full multiplier is for greenfield ERP implementations with unresolved data questions. However, when consultant (not the ERP partner) owns NetSuite development, add 40-60 hrs for direct API work including OAuth setup, SuiteQL, and estimate/sales order creation.
+- **Middleware architecture** (American Bedding): n8n as integration middleware between 3+ systems is viable and avoids HubSpot custom code action limitations (20s timeout, 128MB). First project using this pattern -- track actuals carefully for calibration.
 
 ---
 
