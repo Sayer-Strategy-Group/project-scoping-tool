@@ -157,7 +157,7 @@ HubSpot custom code connects quotes to Kuebix's multi-carrier LTL rate shopping 
 
 **Dynamic Weight Calculation Engine**
 
-Replaces five Excel spreadsheets with automated calculation logic. Calculates shipping weight and cube volume from product specifications: panel dimensions, fabric weight by cover type (Anti-Bac Vinyl, SoFlux OX, Pinstripe Cloth), foam weight by density and thickness, innerspring weight by size, cotton batting, insulator pads, and packaging. Handles both standard and custom product configurations.
+Replaces five Excel spreadsheets with a modular calculation engine. Each product line gets its own calculation module because each product has different physical construction -- Dorm Mattresses use innerspring, foam, batting, and covers; Camp Mattresses use foam cores with fire barriers; Dura-Last uses poly fiber fill; SoFlux and Vinyl are covers only. Shared utilities handle the common math (fabric area, cube volume, cover material weights, packaging). The engine calculates shipping weight and cube volume from product specifications and handles both standard and custom product configurations.
 
 **Quote Template Design**
 
@@ -199,7 +199,7 @@ Dedicated cloud-hosted API with automated deployment, environment management, he
 
 **Weight Engine Migration**
 
-All five product-line calculators migrated to the production API with comprehensive test coverage. Every calculation path verified against the original Excel baselines. No more execution time constraints -- handles any product configuration at any complexity.
+All five product-line modules and shared utilities migrated to the production API with comprehensive test coverage. Each module validated cell-by-cell against its original Excel file -- construction constants and seam allowances are product-specific and cannot be derived by analogy. Every calculation path verified against the original Excel baselines. No more execution time constraints -- handles any product configuration at any complexity.
 
 **Freight and NetSuite Migration**
 
