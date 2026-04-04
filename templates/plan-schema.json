@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sayer.consulting/schemas/plan.json",
+  "title": "Consulting Delivery Plan",
+  "description": "Structured project plan generated from a signed proposal/SOW. Source of truth for all delivery skills.",
+  "type": "object",
+  "required": ["schemaVersion", "client", "engagement", "phases", "meetings", "risks", "assumptions", "exclusions"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version for forward compatibility"
+    },
+    "client": {
+      "type": "object",
+      "required": ["name", "industry", "primaryContact", "contactEmail"],
+      "properties": {
+        "name": { "type": "string" },
+        "industry": { "type": "string" },
+        "primaryContact": { "type": "string", "description": "Name of primary client point of contact" },
+        "contactEmail": { "type": "string", "format": "email" }
+      }
+    },
+    "engagement": {
+      "type": "object",
+      "required": ["name", "scopeSource", "pricing", "startDate", "estimatedEndDate", "totalHours"],
+      "properties": {
+        "name": { "type": "string", "description": "Short engagement title" },
+        "scopeSource": { "type": "string", "description": "Relative path to proposal/SOW file" },
+        "pricing": {
+          "type": "object",
+          "required": ["model", "amount"],
+          "properties": {
+            "model": { "type": "string", "enum": ["fixed", "hourly"] },
+            "amount": { "type": "number", "description": "Total fixed fee or hourly rate" },
+            "paymentTerms": { "type": "string", "description": "e.g., 50/50, net-30" }
+          }
+        },
+        "startDate": { "type": "string", "format": "date" },
+        "estimatedEndDate": { "type": "string", "format": "date" },
+        "totalHours": {
+          "type": "object",
+          "required": ["min", "max", "median"],
+          "properties": {
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "median": { "type": "number" }
+          }
+        }
+      }
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "order", "startDate", "endDate", "workstreams", "successCriteria"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^phase-[0-9]+$" },
+          "name": { "type": "string" },
+          "order": { "type": "integer", "minimum": 1 },
+          "startDate": { "type": "string", "format": "date" },
+          "endDate": { "type": "string", "format": "date" },
+          "workstreams": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["id", "name", "hours", "owner", "tasks"],
+              "properties": {
+                "id": { "type": "string", "pattern": "^[A-Z]+-[0-9]+$", "description": "Category prefix + number (e.g., CRM-01, MIG-03)" },
+                "name": { "type": "string" },
+                "hours": {
+                  "type": "object",
+                  "required": ["min", "max", "median"],
+                  "properties": {
+                    "min": { "type": "number" },
+                    "max": { "type": "number" },
+                    "median": { "type": "number" }
+                  }
+                },
+                "owner": { "type": "string", "enum": ["sayer", "client", "shared"] },
+                "tasks": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Actionable tasks that become Linear sub-issues"
+                }
+              }
+            }
+          },
+          "milestoneReview": { "type": "boolean", "default": true },
+          "successCriteria": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Verifiable truths that prove phase completion"
+          }
+        }
+      }
+    },
+    "crossPhaseWorkstreams": {
+      "type": "array",
+      "description": "Workstreams that span all phases (e.g., Project Management)",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "hours", "owner"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "hours": {
+            "type": "object",
+            "required": ["min", "max", "median"],
+            "properties": {
+              "min": { "type": "number" },
+              "max": { "type": "number" },
+              "median": { "type": "number" }
+            }
+          },
+          "owner": { "type": "string" },
+          "cadence": { "type": "string", "description": "e.g., weekly 30-min syncs" }
+        }
+      }
+    },
+    "meetings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "duration", "attendees"],
+        "properties": {
+          "type": { "type": "string", "enum": ["kickoff", "standup", "phase-review", "retro", "training", "uat"] },
+          "phase": { "type": ["string", "null"], "description": "Linked phase ID, 'recurring', or null" },
+          "suggestedDate": { "type": ["string", "null"], "format": "date" },
+          "cadence": { "type": ["string", "null"], "enum": ["weekly", "biweekly", null] },
+          "duration": { "type": "integer", "description": "Minutes" },
+          "attendees": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "agendaTemplate": { "type": "string", "description": "Reference to Gamma markdown template" }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "severity", "likelihood", "impact", "mitigation", "owner"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^R-[0-9]+$" },
+          "name": { "type": "string" },
+          "severity": { "type": "string", "enum": ["high", "medium", "low"] },
+          "likelihood": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" },
+          "mitigation": { "type": "string" },
+          "owner": { "type": "string" }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "exclusions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "clientResponsibilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

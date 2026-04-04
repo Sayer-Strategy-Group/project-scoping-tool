@@ -1,0 +1,10 @@
+# Project Scoping & Delivery Tool Dependencies
+#
+# Scoping (existing)
+openpyxl>=3.1.0          # Excel workbook generation
+python-docx>=1.1.0       # Word proposal generation
+#
+# Delivery (new)
+gspread>=6.0.0           # Google Sheets API client
+google-auth>=2.0.0       # Google service account authentication
+requests>=2.31.0         # Linear GraphQL API
