@@ -97,6 +97,32 @@ Skills live in `~/.claude/skills/` and are invoked as slash commands:
 - **Google Sheets:** Service account JSON via Keychain (`GOOGLE_SERVICE_ACCOUNT_JSON`)
 - **Google Calendar:** MCP tools (already authenticated)
 
+## Testing
+
+### Generated Python Scripts
+- All generated scripts must pass `python3 -c "import py_compile; py_compile.compile('<path>', doraise=True)"` on Python 3.9
+- Use `typing.Optional[X]` instead of `X | None` (3.10+ syntax not supported)
+- Use `typing.Tuple[X, Y]` instead of `tuple[X, Y]` for return type hints
+- Linear scripts: test with `--dry-run` flag before live execution
+- Google Sheets scripts: test with `--refresh` flag on existing sheets before creating new ones
+
+### plan.json Validation
+- After generating plan.json, verify hours integrity: sum of all workstream hours (across phases + cross-phase) must equal `engagement.totalHours`
+- Validate with: `python3 -c "import json; d=json.load(open('plan.json')); ..."` (see validation script in commit `17ef982`)
+- All workstream IDs must follow `PREFIX-NN` pattern (CRM-01, MIG-03, etc.)
+- All phases must have at least one workstream and one success criterion
+
+### Skill Smoke Tests
+- `/project-plan` with `--skip-linear`: generates plan.json without API dependency
+- `/project-sheet` with `--detail`: generates both summary and full export sheets
+- `/meeting-calendar` with `--decks-only`: generates Gamma markdown without calendar API
+- `/project-status`: requires Linear project to exist (test after Linear workspace setup)
+- `/delivery-retro` with `--phase-pulse`: lightweight 2-question mode, no API needed
+
+### Idempotency
+- Re-running any skill with existing `delivery-state.json` must not create duplicates
+- Test by running a skill twice and verifying artifact counts match
+
 ## Current Active Projects
 - **Top Down Auto** -- Scoped, pending follow-up call for ERP clarification. See `Top Down Auto/`
 - **Arkview Capital** -- Scoped, pending SOW delivery. See `Arkview Capital/`
