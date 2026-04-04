@@ -30,15 +30,19 @@ American Bedding is a Vesco portfolio company manufacturing mattresses for camps
 
 Today, Caleb processes 65 quotes per week by jumping between NetSuite (pricing), Excel spreadsheets (weight calculations), Kuebix TMS (freight rates), and HubSpot (opportunity tracking). Each quote takes 10 minutes to an hour. Sales leadership cannot see quote activity, versions, or edits without logging into NetSuite separately.
 
-This proposal eliminates that fragmentation. We will configure HubSpot CPQ as the single quoting interface, build automated integrations with NetSuite and Kuebix through n8n middleware, and replace the Excel weight calculators with a dynamic calculation engine. When complete, creating a quote -- from product selection through freight calculation to customer delivery -- happens in HubSpot.
+This proposal eliminates that fragmentation. We will configure HubSpot CPQ as the single quoting interface, build automated integrations with NetSuite and Kuebix, and replace the Excel weight calculators with a dynamic calculation engine. When complete, creating a quote -- from product selection through freight calculation to customer delivery -- happens in HubSpot.
 
-### Phase 1: Inside Sales CPQ (Weeks 1-12)
+### Phase 1 (V1): HubSpot-Native CPQ (Weeks 1-12)
 
-Product catalog sync from NetSuite, automated freight via Kuebix API, dynamic weight calculation, branded quote templates, and full quote-to-order integration.
+Get reps quoting in HubSpot immediately. Product catalog sync from NetSuite, automated freight via Kuebix API, dynamic weight calculation, branded quote templates, and full quote-to-order integration -- all built with HubSpot custom code actions.
 
-### Why Phase 1 First?
+### Phase 2 (V2): Production Platform (Weeks 13-18)
 
-Inside sales represents 65% of revenue and 65 quotes per week of manual effort. Automating this channel delivers the highest ROI in the shortest time. Government RFP automation (Phase 2) is a fundamentally different workflow that benefits from the CPQ foundation built in Phase 1.
+Scale and harden. Migrate the integration engine to a dedicated cloud API for unlimited performance, full test coverage, and long-term maintainability. Eliminates all HubSpot execution constraints.
+
+### Why This Approach?
+
+Inside sales represents 65% of revenue and 65 quotes per week of manual effort. Phase 1 gets reps quoting in HubSpot as fast as possible -- delivering immediate ROI. Phase 2 builds the production foundation for scale, ensuring the system runs reliably as volume grows. Government RFP automation (future phase) is a fundamentally different workflow that benefits from the CPQ foundation built here.
 
 ---
 
@@ -96,36 +100,38 @@ Ten clearly defined outcomes -- each tied to a measurable business result.
 
 ### Architecture
 
-HubSpot CPQ is the quoting interface. n8n middleware orchestrates data flow between three systems. NetSuite remains the ERP source of truth.
+HubSpot CPQ is the quoting interface. Custom code actions and a dedicated cloud API orchestrate data flow between three systems. NetSuite remains the ERP source of truth.
 
 **How a quote gets built (future state):**
 
 1. Rep opens a deal in HubSpot and starts a new quote
 2. Selects products from the synced product catalog (filtered by type, size, material)
-3. n8n calculates total weight and volume from product specifications
-4. n8n determines the correct shipping origin warehouse
-5. n8n calls Kuebix API with weight, dimensions, freight class, and addresses
+3. System calculates total weight and volume from product specifications
+4. System determines the correct shipping origin warehouse
+5. Kuebix API is called with weight, dimensions, freight class, and addresses
 6. Kuebix returns multi-carrier rates -- cheapest is auto-applied as a freight line item
 7. Discount and tax logic auto-calculate based on order value and destination
 8. Rep reviews, adjusts if needed, and sends the quote to the customer
 9. Customer accepts via clickwrap or e-signature
-10. n8n creates an Estimate in NetSuite, which converts to a Sales Order on approval
+10. An Estimate is created in NetSuite, which converts to a Sales Order on approval
 
 **Total time per quote: under 5 minutes for standard orders.**
 
 ### Technology Stack
 
 - **HubSpot** Sales Hub Professional + Commerce Hub Professional (existing)
-- **HubSpot** Operations Hub Professional (recommended addition -- enables custom code actions)
+- **HubSpot** Operations Hub Professional (required -- enables custom code actions for integration logic)
 - **NetSuite** ERP (existing -- REST API with OAuth 2.0 M2M authentication)
 - **Kuebix** TMS (existing -- Shipment API with Basic Auth)
-- **n8n** workflow automation (middleware -- processes data between all three systems)
+- **Railway** cloud platform (production API hosting for Phase 2 -- ~$5-20/month)
 
 ---
 
 ## What We Deliver
 
-### Foundation (Weeks 1-4)
+### Phase 1 (V1): HubSpot-Native CPQ
+
+#### Foundation (Weeks 1-4)
 
 HubSpot CPQ configuration, product catalog migration, and NetSuite integration setup.
 
@@ -135,23 +141,23 @@ Commerce Hub CPQ module activation, custom deal/quote/line item properties, quot
 
 **Product Catalog Sync**
 
-All 700 SKUs extracted from NetSuite via SuiteQL and loaded into HubSpot with custom properties: weight components, freight class, dimensions, cover type, foam series, and construction type. Automated n8n sync keeps HubSpot pricing current with NetSuite changes.
+All 700 SKUs extracted from NetSuite via SuiteQL and loaded into HubSpot with custom properties: weight components, freight class, dimensions, cover type, foam series, and construction type. Automated sync keeps HubSpot pricing current with NetSuite changes.
 
 **NetSuite Integration**
 
 OAuth 2.0 M2M authentication. Customer data sync including credit status and payment terms. Price level synchronization. This is the data backbone connecting your ERP to your quoting interface.
 
-### Integration (Weeks 5-8)
+#### Integration (Weeks 5-8)
 
 Freight automation, weight calculation engine, and quote template design.
 
 **Kuebix Freight Integration**
 
-n8n workflow connects HubSpot quotes to Kuebix's multi-carrier LTL rate shopping API. For each quote, the system collects product weights and dimensions, determines the correct shipping origin, requests rates from all configured carriers, and writes the best rate as a freight line item. Manual override available for truckload or special situations.
+HubSpot custom code connects quotes to Kuebix's multi-carrier LTL rate shopping API. For each quote, the system collects product weights and dimensions, determines the correct shipping origin, requests rates from all configured carriers, and writes the best rate as a freight line item. Manual override available for truckload or special situations.
 
 **Dynamic Weight Calculation Engine**
 
-Replaces five Excel spreadsheets with automated n8n logic. Calculates shipping weight and cube volume from product specifications: panel dimensions, fabric weight by cover type (Anti-Bac Vinyl, SoFlux OX, Pinstripe Cloth), foam weight by density and thickness, innerspring weight by size, cotton batting, insulator pads, and packaging. Handles both standard and custom product configurations.
+Replaces five Excel spreadsheets with automated calculation logic. Calculates shipping weight and cube volume from product specifications: panel dimensions, fabric weight by cover type (Anti-Bac Vinyl, SoFlux OX, Pinstripe Cloth), foam weight by density and thickness, innerspring weight by size, cotton batting, insulator pads, and packaging. Handles both standard and custom product configurations.
 
 **Quote Template Design**
 
@@ -161,13 +167,13 @@ Custom HubSpot quote template matching your current NetSuite format. Line item t
 
 Volume discount automation, state-based tax calculation, payment terms workflow (prepay, net 10, net 30, net 60), and credit hold integration from NetSuite accounts receivable.
 
-### Launch (Weeks 9-12)
+#### Launch (Weeks 9-12)
 
 Quote-to-order automation, testing, training, and go-live.
 
 **Quote-to-Order Bridge**
 
-When a customer accepts a quote, n8n creates an Estimate in NetSuite. On approval, the Estimate converts to a Sales Order, triggering production work orders and shipping preparation. No manual re-entry between systems.
+When a customer accepts a quote, an Estimate is created in NetSuite. On approval, the Estimate converts to a Sales Order, triggering production work orders and shipping preparation. No manual re-entry between systems.
 
 **Testing and Validation**
 
@@ -181,59 +187,91 @@ Sales team sessions (Caleb, Don): new quoting workflow, product selection, freig
 
 Go-live cutover with 2-week hypercare period. Monitoring of integration flows, freight accuracy, and quote template rendering. Issue resolution and adjustment support.
 
+### Phase 2 (V2): Production Platform
+
+#### Hardening (Weeks 13-16)
+
+Migrate integration logic from HubSpot custom code to a dedicated cloud API for unlimited performance and long-term maintainability.
+
+**Production API Setup**
+
+Dedicated cloud-hosted API with automated deployment, environment management, health monitoring, and error logging. Version-controlled codebase that any developer can maintain.
+
+**Weight Engine Migration**
+
+All five product-line calculators migrated to the production API with comprehensive test coverage. Every calculation path verified against the original Excel baselines. No more execution time constraints -- handles any product configuration at any complexity.
+
+**Freight and NetSuite Migration**
+
+Kuebix freight orchestration and NetSuite integration logic migrated to the production API. Multi-line, multi-carrier quotes process without timeout risk. Proper retry logic for carrier API failures. OAuth token management with automatic refresh.
+
+#### Finalization (Weeks 17-18)
+
+**Integration Rewiring**
+
+HubSpot custom code actions updated to call the production API instead of running logic locally. HubSpot becomes a thin trigger layer -- all heavy processing happens on the dedicated platform.
+
+**Regression Testing**
+
+Full regression suite validates that every workflow from Phase 1 operates identically on the new platform. Load testing at production volume (65+ quotes/week). Performance benchmarking.
+
+**Documentation Update**
+
+Updated admin guide and architecture documentation reflecting the production platform. Handoff materials for ongoing maintenance.
+
 ---
 
 ## Timeline
 
-A 10-12 week implementation with clear milestones and a natural checkpoint at each phase transition.
+An 18-week implementation across two phases, with a natural go-live checkpoint between them.
 
-### Weeks 1-2
+### Phase 1 (V1): HubSpot-Native CPQ -- Weeks 1-12
 
-Kickoff, NetSuite data audit, product catalog extraction, CPQ module configuration, OAuth 2.0 setup, Kuebix API credential validation.
+**Weeks 1-2:** Kickoff, NetSuite data audit, product catalog extraction, CPQ module configuration, OAuth 2.0 setup, Kuebix API credential validation.
 
-### Weeks 3-4
+**Weeks 3-4:** Product catalog loaded into HubSpot with custom properties. NetSuite integration active. Customer data sync operational. Quote approval workflows configured. Milestone review with Mike and Patrick.
 
-Product catalog loaded into HubSpot with custom properties. NetSuite integration active. Customer data sync operational. Quote approval workflows configured. Milestone review with Mike and Patrick.
+**Weeks 5-6:** Dynamic weight calculation engine built for first 3 product lines. Kuebix freight integration operational. Origin routing configured. Quote template design in progress.
 
-### Weeks 5-6
+**Weeks 7-8:** Weight engine extended to all 5 product lines. Quote template finalized. Discount, tax, and payment terms logic active. Quote-to-order bridge tested. Milestone review with leadership.
 
-Dynamic weight calculation engine built for first 3 product lines. Kuebix freight integration operational. Origin routing configured. Quote template design in progress.
+**Weeks 9-10:** Integration testing complete. UAT sessions with Caleb and Don. Bug fix window. Training sessions delivered.
 
-### Weeks 7-8
+**Weeks 11-12:** Go-live. Hypercare monitoring. Documentation delivered. Phase 1 close-out.
 
-Weight engine extended to all 5 product lines. Quote template finalized. Discount, tax, and payment terms logic active. Quote-to-order bridge tested. Milestone review with leadership.
+### Phase 2 (V2): Production Platform -- Weeks 13-18
 
-### Weeks 9-10
+**Weeks 13-14:** Production API setup. Weight engine migration with full test coverage. Regression testing against Phase 1 baseline.
 
-Integration testing complete. UAT sessions with Caleb and Don. Bug fix window. Training sessions delivered.
+**Weeks 15-16:** Freight and NetSuite integration migration. HubSpot rewired to call production API. Load testing at production volume.
 
-### Weeks 11-12
-
-Go-live. Hypercare monitoring. Documentation delivered. Project close-out.
+**Weeks 17-18:** Final regression testing. Documentation update. Phase 2 close-out.
 
 ---
 
 ## Investment
 
-### $34,500
+| Phase | Scope | Timeline | Fee |
+|-------|-------|----------|-----|
+| Phase 1 (V1) | HubSpot-Native CPQ | Weeks 1-12 | $30,000 |
+| Phase 2 (V2) | Production Platform | Weeks 13-18 | $11,500 |
+| **Total** | | **18 weeks** | **$41,500** |
 
-Total project investment -- fixed fee for the complete Phase 1 CPQ implementation. No hourly billing. No overages within the defined scope.
-
-| Component | Model | Fee |
-|-----------|-------|-----|
-| Phase 1: Inside Sales CPQ (Weeks 1-12) | Fixed Fee | $34,500 |
+No hourly billing. No overages within the defined scope per phase.
 
 ### Payment Terms
 
-All invoices are Net-15. Payments are structured as equal installments invoiced every 15 days throughout the engagement.
+All invoices are Net-15. Payments are structured as equal installments invoiced every 15 days throughout each phase.
 
-- 5 equal payments of $6,900 invoiced every 15 days
+**Phase 1:** 5 equal payments of $6,000 invoiced every 15 days
+**Phase 2:** 3 equal payments of ~$3,835 invoiced every 15 days
 
 A 5% Technology and Administrative fee is applied to each invoice to offset costs of our technology stack and internal systems.
 
-### Additional License Recommendations
+### Additional License Requirements
 
-- **Operations Hub Professional** (~$800/month) -- enables custom code actions and data quality automation in HubSpot. Recommended but not required for the core build. If declined, all automation routes through n8n.
+- **Operations Hub Professional** (~$800/month) -- required for custom code actions that power the integration logic in HubSpot. This is essential for the Phase 1 build.
+- **Railway hosting** (~$5-20/month) -- production API hosting for Phase 2. Minimal ongoing cost.
 
 ---
 
@@ -242,19 +280,19 @@ A 5% Technology and Administrative fee is applied to each invoice to offset cost
 ### Sayer Responsibilities
 
 - Lead configuration, integration, and implementation across all workstreams
-- Build and maintain n8n middleware workflows
+- Build and maintain integration codebase (HubSpot custom code + production API)
 - Conduct weekly check-ins and milestone reviews
 - Provide documentation, training, and go-live support
 - Manage project timeline and proactively communicate risks or blockers
 - Deliver admin guide, user guide, and workflow documentation
-- 2-week hypercare post go-live
+- 2-week hypercare post go-live per phase
 
 ### American Bedding Responsibilities
 
 - Designate 1 primary point of contact (Sarah-Beth recommended)
 - Provide Kuebix API credentials (username, API key, Client ID)
 - Provide NetSuite admin access or create OAuth 2.0 M2M integration record
-- Provide all 5 Excel shipping calculator files for technical review
+- ~~Provide all 5 Excel shipping calculator files for technical review~~ -- COMPLETE (April 4, 2026)
 - Provide complete warehouse address list with routing rules
 - Confirm freight class per product line
 - Ensure Caleb and Don availability for UAT sessions
@@ -269,15 +307,17 @@ A 5% Technology and Administrative fee is applied to each invoice to offset cost
 ### In Scope
 
 - HubSpot Sales Hub Professional + Commerce Hub Professional (existing)
+- HubSpot Operations Hub Professional (required for custom code actions)
 - NetSuite ERP integration (REST API, bi-directional)
 - Kuebix TMS integration (Shipment API, freight rate automation)
-- n8n middleware (hosted by Sayer or client infrastructure)
+- Railway cloud platform (production API hosting -- Phase 2)
 - Up to 700 products in HubSpot product library
 - Dynamic weight calculation for 5 product lines
 - Up to 30 custom properties across deals, quotes, and line items
 - 1 branded quote template matching current NetSuite format
-- 10-12 week implementation timeline
+- Phase 1: 10-12 weeks | Phase 2: 4-6 weeks (18 weeks total)
 - All work conducted remotely
+- Production code delivered as a version-controlled codebase
 
 ### Out of Scope
 
@@ -289,7 +329,7 @@ A 5% Technology and Administrative fee is applied to each invoice to offset cost
 - NetSuite reimplementation or new module deployment
 - Ongoing Kuebix TMS administration or carrier management
 - HubSpot Marketing Hub configuration
-- Ongoing managed services beyond 2-week hypercare
+- Ongoing managed services beyond 2-week hypercare per phase
 - HubSpot or NetSuite license procurement (recommendations provided)
 
 Any scope changes require formal approval and may impact cost or timing.
@@ -302,7 +342,7 @@ Please confirm alignment on scope and structure so we can move forward with sche
 
 ### 1. Pre-Engagement Technical Review -- COMPLETE
 
-Sayer has reviewed and validated all 5 Excel shipping calculator files (April 4, 2026). The dynamic weight calculation engine scope is confirmed within the $34,500 fixed fee. No hidden complexity was found -- all calculator logic is deterministic and replicable.
+Sayer has reviewed and validated all 5 Excel shipping calculator files (April 4, 2026). The dynamic weight calculation engine scope is confirmed. No hidden complexity was found -- all calculator logic is deterministic and replicable.
 
 ### 2. Written Approval
 
@@ -355,19 +395,23 @@ These are conservative estimates based on current reported time spend (65 quotes
 
 This engagement pays for itself within 7-9 months through quantifiable savings alone -- before accounting for error reduction, faster turnaround, or increased quote capacity.
 
-### $34,500 -- Total Investment
+### $30,000 -- Phase 1 Investment
 
-Fixed fee for the complete Phase 1 CPQ implementation.
+Fixed fee for the HubSpot-native CPQ that delivers immediate time savings.
+
+### $41,500 -- Total Investment (Both Phases)
+
+Complete implementation including production platform hardening.
 
 ### $38,000 to $58,000 -- Year 1 Return
 
 Conservative Year 1 return from time savings alone.
 
-### 7-9 Months -- Payback Period
+### 6-8 Months -- Phase 1 Payback Period
 
-Using only quantifiable, conservative estimates.
+Phase 1 pays for itself before Phase 2 begins, using only quantifiable, conservative estimates.
 
-### 10% to 68% -- Year 1 ROI Range
+### 27% to 93% -- Year 1 ROI Range (Phase 1 only)
 
 Excluding revenue uplift from faster quote turnaround and increased capacity.
 
@@ -393,12 +437,12 @@ The current 65 quotes/week process is at capacity with Caleb handling it alone. 
 
 ---
 
-## Phase 2 Readiness
+## Future Phase Readiness
 
-Phase 1 builds the infrastructure that Phase 2 needs. The product catalog, freight integration, and n8n middleware are reusable components for:
+The production platform built in Phase 2 (V2) provides the foundation for future expansion. The product catalog, freight integration, and production API are reusable components for:
 
 - **Government RFP automation** -- Template-based RFP responses, contract clause checklists, teaming partner tracking
 - **Customer-facing configurator** -- Guided product selection for buyers who don't know mattress specifications
 - **External storefront** -- Shopify or HubSpot Commerce for direct online ordering
 
-Phase 2 scoping begins after Phase 1 demonstrates ROI.
+Future phase scoping begins after Phase 2 demonstrates production stability.

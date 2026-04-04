@@ -33,15 +33,15 @@
 - **Calibration source:** Top Down Auto -- ERP involvement adds 1.5-2x complexity multiplier
 - **Confidence:** high
 
-### D3: n8n as middleware over HubSpot custom code actions
+### D3: Hybrid architecture -- HubSpot custom code + Railway API (revised from n8n)
 - **Category:** approach
-- **Decision:** Use n8n as the integration middleware layer for all NetSuite and Kuebix API orchestration. Recommend Ops Hub Professional for simpler HubSpot-native automations.
-- **Alternatives considered:** HubSpot custom code actions (Ops Hub Pro) as primary middleware -- rejected due to 20-second execution limit and 128MB memory cap, which may not accommodate multi-carrier Kuebix rate calls + weight calculations; Celigo/Commercient connectors -- rejected, don't handle custom CPQ logic or Kuebix integration; Zapier -- rejected, less capable than n8n for complex orchestration
-- **Rationale:** n8n is Kyle's primary automation tool with deep expertise. No execution time limits. Full access to all three APIs (HubSpot, NetSuite REST, Kuebix). Visual workflow debugging. Self-hosted = no per-operation costs at 65 quotes/week volume.
-- **Assumption:** n8n instance is available (Sayer-hosted or client infrastructure TBD)
-- **Invalidation trigger:** Client refuses external middleware and insists on HubSpot-native only
-- **Estimate impact:** No net hour change vs. Ops Hub custom code, but significantly reduces risk of execution timeouts
-- **Calibration source:** none -- first n8n-as-middleware CPQ project
+- **Decision:** ~~Use n8n as the integration middleware layer~~ -- **REVISED (2026-04-04).** Production deliverable must be standalone code, not dependent on n8n. Two-tier hybrid architecture: HubSpot custom code actions for lightweight triggers and simple logic, Railway-hosted API for heavy orchestration (weight calculation, Kuebix multi-carrier calls, NetSuite integration). n8n may be used for prototyping/validation during development but is not the production runtime.
+- **Alternatives considered:** n8n as production middleware -- rejected, creates runtime dependency on n8n platform for a 65-quote/week operation; HubSpot custom code only -- risky, 20-second timeout may not accommodate weight calc + Kuebix API + NetSuite write-back in a single execution; Railway only -- possible but loses HubSpot-native workflow triggers; Celigo/Commercient -- rejected, don't handle custom CPQ logic
+- **Rationale:** Production code must be version-controlled, testable, and maintainable by any developer -- not tied to a specific workflow platform. Railway provides unlimited execution time for complex orchestration. HubSpot custom code handles simple in-workflow logic (discount calc, tax, triggers). Hybrid splits work at the natural complexity boundary.
+- **Assumption:** Railway hosting available (~$5-20/mo). HubSpot Ops Hub Professional for custom code actions.
+- **Invalidation trigger:** Railway becomes unavailable or client requires all logic inside HubSpot
+- **Estimate impact:** +36-64 hrs vs. original n8n approach. Absorbed into two-phase structure (see D11).
+- **Calibration source:** none -- first hybrid HubSpot + Railway architecture. Track actuals carefully.
 - **Confidence:** high
 
 ### D4: Dynamic weight calculation (replicate Excel formulas in n8n)
@@ -66,15 +66,15 @@
 - **Calibration source:** Strive Global -- Enterprise tier capabilities were underutilized; explicit tier recommendation prevents this
 - **Confidence:** medium
 
-### D6: Single fixed-fee pricing, not A/B options
+### D6: Two-phase pricing (revised from single fixed fee)
 - **Category:** pricing
-- **Decision:** Present a single $34,500 fixed fee for Phase 1. No A/B option structure.
-- **Alternatives considered:** A/B pricing (initial scope had A: $19,500 / B: $33,000) -- rejected because the revised scope has no natural subset that delivers standalone value. A "CPQ without freight automation" leaves reps in a fifth system (worse than today); Timeline-based options (standard vs. accelerated) -- unnecessary complexity
-- **Rationale:** Unlike Strive where Option A (CRM foundation) and Option B (full overhaul) were genuinely distinct deliverables, the revised American Bedding scope IS the CPQ integration. Freight automation via Kuebix is inseparable from the quoting workflow -- without it, reps still manually look up shipping, which is the #1 pain point. The initial A/B scope made sense when Cubics was at 45% confidence; now that Kuebix API is fully reviewed, the integration is core scope.
-- **Assumption:** Client is prepared for investment above Billy's $25K verbal benchmark
-- **Invalidation trigger:** Client pushback on $34.5K forces scope reduction
-- **Estimate impact:** No hour change -- pricing strategy only. $34,500 vs. initial Option B at $33,000 (+$1,500 for Sayer doing NetSuite work and dynamic weight calc)
-- **Calibration source:** Strive Global -- A/B works for naturally separable phases, not here
+- **Decision:** ~~Present a single $34,500 fixed fee~~ -- **REVISED (2026-04-04).** Two-phase pricing: Phase 1 (V1) at ~$30,000, Phase 2 (V2) at ~$11,500. Total ~$41,500. Reduces sticker shock vs. a single $41-42K fee.
+- **Alternatives considered:** Single $34,500 fixed fee -- no longer viable, architecture shift from n8n to hybrid HubSpot/Railway adds 36-64 hrs; single $41,500 fee -- sticker shock against $25K verbal anchor; A/B options (original) -- still rejected, CPQ without freight has no standalone value
+- **Rationale:** The two-phase split follows a natural maturity boundary, not an artificial scope cut. Phase 1 (V1) delivers a working HubSpot-native CPQ -- reps start quoting in HubSpot immediately. Phase 2 (V2) migrates the heavy orchestration to a Railway production platform for scalability and maintainability. Unlike the original A/B rejection (where Option A left reps in a fifth system), Phase 1 here delivers full standalone value with known limitations (HubSpot timeout risk on complex multi-line quotes). Phase 2 eliminates those limitations.
+- **Assumption:** Client commits to Phase 2 after seeing Phase 1 value. Phase 1 at ~$30K is close enough to Billy's $25K anchor to negotiate.
+- **Invalidation trigger:** Client has hard budget cap below $25K for Phase 1
+- **Estimate impact:** Phase 1: 168-240 hrs (median ~200) at ~$30,000. Phase 2: 60-90 hrs (median ~75) at ~$11,500. Total: 228-330 hrs / ~$41,500.
+- **Calibration source:** Strive Global -- phased "start A, plan B" approach validated. American Bedding original A/B rejection still holds (scope cut ≠ maturity phasing).
 - **Confidence:** high
 
 ### D7: Flat product catalog in HubSpot (one SKU per combination)
@@ -110,13 +110,34 @@
 - **Calibration source:** Top Down Auto -- NetSuite integration scoped at 28 hrs median for read-only. This project adds write-back so 22-40 hrs range.
 - **Confidence:** high
 
-### D10: Fixed fee at $34,500 with value-based justification
+### D10: ~~Fixed fee at $34,500~~ Superseded by D6 revision and D11
 - **Category:** pricing
-- **Decision:** Price Phase 1 at $34,500 fixed fee. Frame against value delivered, not hours consumed.
-- **Alternatives considered:** $25,000 (Billy's verbal benchmark) -- predates scope expansion; $28,000 (tightened scope) -- would require cutting dynamic weight calc or single-origin assumption; $33,000 (initial Option B) -- didn't include Sayer doing NetSuite or dynamic weight calc; $40,000+ -- exceeds what scope justifies
-- **Rationale:** Internal estimate: 168-284 hrs (median 226) at $150/hr = median $33,900. $34,500 rounds up slightly for integration unknowns. ROI: 65 quotes/week x 20-30 min avg savings = ~$38K-$58K/year in labor savings. Payback in ~7-9 months. Billy's $25K was a pre-discovery benchmark before understanding full scope.
-- **Assumption:** Client accepts value-based framing and doesn't anchor exclusively on $25K
-- **Invalidation trigger:** Client has hard budget cap below $30K
-- **Estimate impact:** $34,500 / $150 = 230 hrs budget -- aligns with 226 hr median with 4 hrs buffer. Tight but manageable if risks are controlled.
-- **Calibration source:** Top Down Auto median was $45,600 for larger scope. American Bedding is ~75% of complexity at ~75% of price -- consistent.
-- **Confidence:** medium
+- **Decision:** ~~Price Phase 1 at $34,500 fixed fee~~ -- **SUPERSEDED (2026-04-04).** Architecture shift from n8n to hybrid HubSpot/Railway changed the cost basis. See D6 (revised) and D11 for current pricing: Phase 1 ~$30,000, Phase 2 ~$11,500.
+- **Original rationale (preserved for calibration):** Internal estimate: 168-284 hrs (median 226) at $150/hr = median $33,900. $34,500 rounded up for integration unknowns. ROI: 65 quotes/week x 20-30 min avg savings = ~$38K-$58K/year. Payback ~7-9 months. Billy's $25K was a pre-discovery benchmark.
+- **Confidence:** superseded
+
+### D11: Two-phase architecture -- V1 HubSpot-native, V2 Railway production platform
+- **Category:** approach + pricing
+- **Decision:** Split the engagement into two phases along a maturity boundary. Phase 1 (V1) delivers a working HubSpot-native CPQ using custom code actions -- reps start quoting in HubSpot. Phase 2 (V2) migrates heavy orchestration (weight engine, Kuebix freight, NetSuite integration) to a Railway-hosted production API with proper codebase, unit tests, and CI/CD.
+- **Alternatives considered:** Single-phase delivery with Railway from day one -- higher upfront cost (~$41.5K single fee), sticker shock against $25K verbal anchor; n8n as production middleware -- rejected, creates platform dependency (see D3 revision); HubSpot custom code only (no Railway) -- risky at 65 quotes/week with multi-line orders hitting 20s timeout
+- **Rationale:** Phase 1 delivers immediate value: reps move from 4-system quoting to HubSpot. Known limitation is HubSpot's 20s execution timeout for complex multi-line quotes -- manageable with manual fallback. Phase 2 eliminates that limitation by moving heavy logic to Railway (unlimited execution time, proper error handling, retry logic). This is a maturity boundary, not a scope cut -- both phases deliver the same functionality, V2 makes it production-grade and scalable. Reduces sticker shock: ~$30K Phase 1 is closer to Billy's $25K anchor than ~$41.5K all-in.
+- **Phase 1 (V1) scope:**
+  - HubSpot CPQ architecture and configuration
+  - Product catalog sync (initial load + HubSpot custom code sync)
+  - Weight calculation engine in HubSpot custom code actions
+  - Kuebix freight integration via HubSpot custom code
+  - NetSuite quote-to-order via HubSpot custom code
+  - Quote templates, discount/tax/terms, training, testing, PM
+  - Known limitation: complex multi-line quotes may hit 20s timeout; manual fallback for edge cases
+- **Phase 2 (V2) scope:**
+  - Railway project setup (CI/CD, env config, monitoring, logging)
+  - Migrate weight engine to Railway API with unit test coverage
+  - Migrate Kuebix orchestration to Railway (multi-line, multi-carrier without timeout)
+  - Migrate NetSuite integration to Railway (proper OAuth token management, retry logic)
+  - Automated catalog sync (Railway cron)
+  - Eliminate all HubSpot timeout constraints
+- **Assumption:** Railway hosting available (~$5-20/mo). Phase 2 starts after Phase 1 go-live. Client sees Phase 1 value before committing Phase 2.
+- **Invalidation trigger:** Client requires all logic inside HubSpot (no external services) -- would need to accept timeout limitations
+- **Estimate impact:** Phase 1: 168-240 hrs (median ~200) / ~$30,000. Phase 2: 60-90 hrs (median ~75) / ~$11,500. Total: 228-330 hrs / ~$41,500.
+- **Calibration source:** Strive Global validated "start A, plan B" phasing. American Bedding original A/B rejection (D6 original) still holds -- scope cut ≠ maturity phasing. First hybrid HubSpot/Railway architecture.
+- **Confidence:** high
