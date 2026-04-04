@@ -31,7 +31,7 @@
 | Product Catalog Sync (NetSuite to HubSpot) | 20 | 32 | 26 | SuiteQL extraction of 700 SKUs, custom properties, HubSpot custom code sync trigger. Initial bulk load + incremental sync. |
 | NetSuite Quote-to-Order Integration | 22 | 36 | 29 | OAuth 2.0 M2M, quote -> estimate -> sales order via HubSpot custom code, credit hold check, price level sync |
 | Kuebix Freight Integration + Origin Routing | 22 | 34 | 28 | HubSpot custom code -> quickRate API, multi-carrier LTL, origin warehouse routing, manual override fallback |
-| Dynamic Weight Calculation Engine | 28 | 44 | 36 | Weight calc in HubSpot custom code actions. Validated (2026-04-04): no VBA/external refs/circular formulas. Dorm (HIGH -- 9-level nesting, 180+ paths), Camp (MED), Dura-Last (MED), SoFlux OX/Vinyl (LOW, ~80% reuse). Highest-complexity workstream. |
+| Dynamic Weight Calculation Engine | 28 | 44 | 36 | Composition architecture: shared utilities (fabric calc, cube volume, cover weights, packaging) + one module per product line. Dorm (HIGH -- 180+ paths, innerspring/foam/batting), Camp (MED -- 48 paths, foam series + fire barrier), Dura-Last (LOW-MED -- 12 paths, poly fiber only), SoFlux OX/Vinyl (LOW -- covers only, ~95% shared base). Each product has unique physics -- no single template. Validated 2026-04-04: no VBA/external refs/circular formulas. |
 | Quote Template Design | 12 | 20 | 16 | HubL/HTML/CSS matching NetSuite format. Line items, discounts, tax, shipping, terms, acceptance flow |
 | Discount, Tax & Payment Terms Logic | 10 | 18 | 14 | 10% volume discount, state-based tax, prepay/net 10/30/60, credit hold integration. HubSpot custom code. |
 | Training & Documentation | 10 | 16 | 13 | Sales (Caleb, Don) + Admin (Sarah-Beth, Patrick). Recorded sessions. Admin guide + user card. |
@@ -52,7 +52,7 @@ At $150/hr: $25,200 - $40,500 (median $32,850)
 | Workstream | Min | Max | Median | Notes |
 |---|---|---|---|---|
 | Railway Infrastructure Setup | 8 | 12 | 10 | Project setup, CI/CD pipeline, environment config, monitoring, logging, health checks |
-| Weight Engine Migration | 10 | 16 | 13 | Migrate all 5 calculators from HubSpot custom code to Railway API. Add unit test coverage for all calculation paths. Dorm Mattress sampling strategy for 180+ paths. |
+| Weight Engine Migration | 10 | 16 | 13 | Refactor 5 product modules + shared utilities into Railway API. Composition architecture: shared layer (fabricCalc, cubeVolume, coverWeights, packagingCalc) + per-product modules (dormMattress, campMattress, duraLast, sofluxCover, vinylCover). Unit test coverage for all calculation paths. Dorm Mattress sampling strategy for 180+ paths. |
 | Kuebix Freight Migration | 8 | 14 | 11 | Migrate freight orchestration to Railway. Multi-line, multi-carrier without timeout risk. Retry logic for carrier API failures. |
 | NetSuite Integration Migration | 10 | 16 | 13 | Migrate OAuth token management, catalog sync (Railway cron), quote-to-order flow. Proper retry and error handling. |
 | HubSpot Rewiring | 6 | 10 | 8 | Update HubSpot custom code actions to call Railway API instead of running logic locally. Thin trigger layer. |
