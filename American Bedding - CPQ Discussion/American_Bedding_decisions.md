@@ -49,11 +49,11 @@
 - **Decision:** Replicate Excel shipping calculator logic in n8n to dynamically calculate weight/volume for any product configuration, rather than pre-calculating and storing weight per SKU.
 - **Alternatives considered:** Pre-calculated weights stored as product properties -- rejected per Kyle; handles standard SKUs but fails for custom orders (non-standard sizes) that Caleb says are common; Hybrid approach (pre-calc for standard, dynamic for custom) -- adds maintenance burden of two systems
 - **Rationale:** American Bedding has 5 product-line calculators (Dorm, Camp, Dura-Last, Vinyl covers, SoFlux covers) with nested IF formulas calculating weight from foam density, cover material, innerspring type, dimensions, and packaging. Customers frequently request custom sizes. Dynamic calculation handles any configuration.
-- **Assumption:** The 5 Excel files do not contain VBA macros, external data references, or circular formulas that can't be expressed as deterministic n8n logic
-- **Invalidation trigger:** Excel files contain hidden complexity (VBA, external links, iterative calculations) that makes replication infeasible within budget
-- **Estimate impact:** +20-30 hrs vs. pre-calculated approach. Workstream 5 (Dynamic Weight Calculation Engine) at 28-44 hrs median 36. **HIGH-RISK workstream -- get Excel files before finalizing fee.**
-- **Calibration source:** none -- first dynamic weight calculation engine. No precedent in calibration system.
-- **Confidence:** medium
+- **Assumption:** ~~The 5 Excel files do not contain VBA macros, external data references, or circular formulas~~ -- **VALIDATED (2026-04-04).** All 5 Excel files received from Caleb and analyzed. Confirmed: no VBA macros, no external data references, no circular formulas. All logic is deterministic nested IF/AND formulas expressible in n8n.
+- **Invalidation trigger:** ~~Excel files contain hidden complexity (VBA, external links, iterative calculations) that makes replication infeasible within budget~~ -- **TESTED (2026-04-04): trigger did NOT fire.** Files contain nested IF/AND formulas only. Dorm Mattress is the primary complexity driver (9-level nesting, 180+ calculation paths: 3 construction types x 5 foam options x 4 batting options x 3 covers). Remaining risk: Dorm Mattress notes reference "#VALUE! errors" and "Special Case Check with Delbert" -- undocumented business logic requiring client clarification at kickoff.
+- **Estimate impact:** +20-30 hrs vs. pre-calculated approach. Workstream 5 (Dynamic Weight Calculation Engine) at 28-44 hrs median 36 (published). Validated estimate: 30-41 hrs (median ~35). Published range retained since validated range falls within it. Dorm Mattress accounts for ~40% of workstream hours. SoFlux OX and Vinyl Cover share ~80% code reuse.
+- **Calibration source:** First validated dynamic weight calculation engine. Per-calculator complexity: Dorm (HIGH -- 9-level nesting, 180+ paths), Camp (MEDIUM -- 5-9 level, 48+ paths), Dura-Last (MEDIUM -- 3-5 level, 12+ paths), SoFlux OX (LOW -- linear), Vinyl (LOW -- ~80% reuse from SoFlux).
+- **Confidence:** high
 
 ### D5: Recommend Operations Hub Professional
 - **Category:** tier
