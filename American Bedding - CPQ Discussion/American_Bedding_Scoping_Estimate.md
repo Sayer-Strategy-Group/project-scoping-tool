@@ -31,11 +31,11 @@
 | Product Catalog Sync (NetSuite to HubSpot) | 20 | 32 | 26 | SuiteQL extraction of 700 SKUs, custom properties, HubSpot custom code sync trigger. Initial bulk load + incremental sync. |
 | NetSuite Quote-to-Order Integration | 22 | 36 | 29 | OAuth 2.0 M2M, quote -> estimate -> sales order via HubSpot custom code, credit hold check, price level sync |
 | Kuebix Freight Integration + Origin Routing | 22 | 34 | 28 | HubSpot custom code -> quickRate API, multi-carrier LTL, origin warehouse routing, manual override fallback |
-| Dynamic Weight Calculation Engine | 28 | 44 | 36 | Composition architecture: shared utilities (fabric calc, cube volume, cover weights, packaging) + one module per product line. Dorm (HIGH -- 180+ paths, innerspring/foam/batting), Camp (MED -- 48 paths, foam series + fire barrier), Dura-Last (LOW-MED -- 12 paths, poly fiber only), SoFlux OX/Vinyl (LOW -- covers only, ~95% shared base). Each product has unique physics -- no single template. Validated 2026-04-04: no VBA/external refs/circular formulas. |
+| Dynamic Weight Calculation Engine | 28 | 44 | 36 | Composition architecture: shared utilities (fabric calc, cube volume, cover weights, packaging) + one module per product line. Dorm (HIGH -- 180+ paths, innerspring/foam/batting), Camp (MED -- 48 paths, foam series + fire barrier), Dura-Last (LOW-MED -- 12 paths, poly fiber only), SoFlux OX/Vinyl (LOW -- covers only, ~95% shared base). Each product has unique physics -- no single template. Build constraint: validate each module cell-by-cell against its own Excel file. Do not derive formulas by analogy -- seam allowances and construction constants differ across products even when formula shapes look similar. Validated 2026-04-04: no VBA/external refs/circular formulas. |
 | Quote Template Design | 12 | 20 | 16 | HubL/HTML/CSS matching NetSuite format. Line items, discounts, tax, shipping, terms, acceptance flow |
 | Discount, Tax & Payment Terms Logic | 10 | 18 | 14 | 10% volume discount, state-based tax, prepay/net 10/30/60, credit hold integration. HubSpot custom code. |
 | Training & Documentation | 10 | 16 | 13 | Sales (Caleb, Don) + Admin (Sarah-Beth, Patrick). Recorded sessions. Admin guide + user card. |
-| Testing & QA | 14 | 24 | 19 | E2E integration testing, weight calc validation against Excel baselines, freight validation, UAT, 2-week hypercare |
+| Testing & QA | 14 | 24 | 19 | E2E integration testing, weight calc validation against Excel baselines (cell-by-cell per product -- no cross-product shortcuts), freight validation, UAT, 2-week hypercare |
 | Project Management | 16 | 24 | 20 | Kickoff, weekly syncs, milestone reviews, scope creep prevention. ~10% of total. |
 | **PHASE 1 TOTAL** | **168** | **270** | **219** | |
 
