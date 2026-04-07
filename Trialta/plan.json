@@ -1,0 +1,326 @@
+{
+  "schemaVersion": "1.0",
+  "client": {
+    "name": "Trialta",
+    "industry": "PE Advisory (Transaction Services + CFO/F&A)",
+    "primaryContact": "Austin",
+    "contactEmail": "TBD"
+  },
+  "engagement": {
+    "name": "HubSpot CRM Implementation",
+    "scopeSource": "Trialta_Scoping_Estimate.xlsx",
+    "pricing": {
+      "model": "fixed",
+      "amount": 0,
+      "paymentTerms": "TBD"
+    },
+    "startDate": "2026-04-07",
+    "estimatedEndDate": "2026-05-15",
+    "totalHours": { "min": 45.25, "max": 93.5, "median": 69.375 }
+  },
+  "phases": [
+    {
+      "id": "phase-1",
+      "name": "CRM Foundation & Outlook Integration",
+      "order": 1,
+      "startDate": "2026-04-07",
+      "endDate": "2026-04-18",
+      "workstreams": [
+        {
+          "id": "CRM-01",
+          "name": "CRM Architecture & Setup",
+          "hours": { "min": 6.25, "max": 13.5, "median": 9.875 },
+          "owner": "sayer",
+          "tasks": [
+            "CRM-01: Internal prep (review scope, prep agenda, build data template)",
+            "CRM-02: Kickoff call with Trialta (Austin, Sam, Blake)",
+            "CRM-03: Document decisions & send data import template",
+            "CRM-04: Configure HubSpot environment & Trialta branding",
+            "CRM-05: Build contact properties (role, PE affiliation, strength) -- up to 20 custom properties",
+            "CRM-06: Build company properties & PE firm record types",
+            "CRM-07: Configure contact/company associations & labels (PE firm to portfolio company mapping)",
+            "CRM-08: Create segmentation views (PE vs sell-side vs portco)"
+          ]
+        },
+        {
+          "id": "INT-01",
+          "name": "Outlook Integration",
+          "hours": { "min": 2.0, "max": 4.5, "median": 3.25 },
+          "owner": "sayer",
+          "tasks": [
+            "INT-01: Set up Outlook integration for 3 users (Austin, Sam, Blake -- Office 365)",
+            "INT-02: Test email sync, meeting sync, auto-contact creation",
+            "INT-03: Outlook training & enablement (30-min session)"
+          ]
+        },
+        {
+          "id": "MIG-01",
+          "name": "Data Prep & Import Mapping",
+          "hours": { "min": 2.0, "max": 4.5, "median": 3.25 },
+          "owner": "shared",
+          "tasks": [
+            "MIG-01: Receive & audit raw data files from team (DEPENDENCY: Team submits data by end of W2)",
+            "MIG-02: Build import mapping -- map spreadsheet columns to HubSpot properties (contacts, companies, deals)"
+          ]
+        }
+      ],
+      "milestoneReview": true,
+      "successCriteria": [
+        "HubSpot portal configured with Trialta branding and up to 20 custom contact/company properties",
+        "PE firm to portfolio company parent-child associations are working with labeled relationship types",
+        "All 3 users have Outlook integration syncing email, calendar, and auto-creating contacts",
+        "Data import mapping documented and import template sent to client team",
+        "Segmentation views (PE vs sell-side vs portco) accessible to all users"
+      ]
+    },
+    {
+      "id": "phase-2",
+      "name": "Data Migration & Pipeline Configuration",
+      "order": 2,
+      "startDate": "2026-04-21",
+      "endDate": "2026-05-01",
+      "workstreams": [
+        {
+          "id": "MIG-02",
+          "name": "Data Migration & Cleanup",
+          "hours": { "min": 10.0, "max": 20.5, "median": 15.25 },
+          "owner": "shared",
+          "tasks": [
+            "MIG-03: Clean & deduplicate contact records (500-1K contacts across 3 lists -- RISK: biggest variable)",
+            "MIG-04: Clean & map company records",
+            "MIG-05: Import contacts & companies into HubSpot",
+            "MIG-06: Build PE firm to portfolio company associations post-import",
+            "MIG-07: Import historical deal records with PE attribution",
+            "MIG-08: Assign contact/deal ownership (Austin, Sam, Blake)"
+          ]
+        },
+        {
+          "id": "CRM-02",
+          "name": "Pipeline & Deal Management",
+          "hours": { "min": 8.0, "max": 16.5, "median": 12.25 },
+          "owner": "sayer",
+          "tasks": [
+            "CRM-09: Post-import QA & validation (spot-check associations, dedup review)",
+            "CRM-10: Team review & sign-off on imported data (async or 30-min call)",
+            "CRM-11: Configure buy-side pipeline & stages (Lead, Qualified, Proposal, Engaged, Completed)",
+            "CRM-12: Configure sell-side pipeline & stages",
+            "CRM-13: Build deal properties -- up to 25 custom (engagement type, characteristics)",
+            "CRM-14: Configure deal associations (PE firm, portco, contacts)",
+            "CRM-15: Set up association labels & test with sample deals",
+            "CRM-16: Pipeline walkthrough with team (30 min)"
+          ]
+        }
+      ],
+      "milestoneReview": true,
+      "successCriteria": [
+        "All contacts and companies imported with less than 5% duplicate rate",
+        "PE firm to portfolio company associations reflect actual portfolio structure",
+        "Historical deal records imported with correct PE attribution and ownership",
+        "Buy-side and sell-side pipelines configured with defined stages and required fields",
+        "Deal associations working -- PE firm, portco, and contacts linked per deal",
+        "Team has walked through both pipelines and confirmed stage definitions"
+      ]
+    },
+    {
+      "id": "phase-3",
+      "name": "Health Tracking, Reporting & Go-Live",
+      "order": 3,
+      "startDate": "2026-05-04",
+      "endDate": "2026-05-15",
+      "workstreams": [
+        {
+          "id": "CRM-03",
+          "name": "Relationship Health Tracking",
+          "hours": { "min": 6.0, "max": 12.5, "median": 9.25 },
+          "owner": "sayer",
+          "tasks": [
+            "CRM-17: Build PE firm health properties (last engagement date, last contact date)",
+            "CRM-18: Configure 'Days Since Last Engagement' calculated property",
+            "CRM-19: Build PE firm views (active / warm / cold / dormant)",
+            "CRM-20: Set up 90-day automated task creation (auto-assign to PE firm relationship owner)",
+            "CRM-21: Build saved filters for at-risk partnerships"
+          ]
+        },
+        {
+          "id": "CRM-04",
+          "name": "Reporting & Dashboards",
+          "hours": { "min": 5.5, "max": 10.0, "median": 7.75 },
+          "owner": "sayer",
+          "tasks": [
+            "CRM-22: Build primary sales dashboard (~8 reports: pipeline velocity, PE sponsor value, engagement metrics)",
+            "CRM-23: Build PE firm engagement health dashboard",
+            "CRM-24: Configure deal conversion & pipeline reports"
+          ]
+        },
+        {
+          "id": "UAT-01",
+          "name": "QA & Handoff",
+          "hours": { "min": 3.5, "max": 7.5, "median": 5.5 },
+          "owner": "shared",
+          "tasks": [
+            "UAT-01: End-to-end UAT walkthrough (test all workflows with real scenarios)",
+            "UAT-02: Fix/adjust based on UAT feedback (buffer for revisions & edge cases)",
+            "UAT-03: Formal handoff & begin 1-week async support (Slack/email through W7)"
+          ]
+        },
+        {
+          "id": "TRN-01",
+          "name": "Training & Enablement",
+          "hours": { "min": 2.0, "max": 4.0, "median": 3.0 },
+          "owner": "sayer",
+          "tasks": [
+            "TRN-01: Team enablement session -- full system walkthrough (60-90 min, recorded)",
+            "TRN-02: Create quick-reference documentation (daily CRM usage guide, key workflows)"
+          ]
+        }
+      ],
+      "milestoneReview": true,
+      "successCriteria": [
+        "PE firm health views showing active/warm/cold/dormant status based on engagement recency",
+        "90-day automated task creation triggering correctly for relationship owners",
+        "Sales dashboard live with pipeline velocity, PE sponsor value, and engagement metrics",
+        "UAT complete with all critical issues resolved",
+        "Team trained on daily CRM usage, pipeline management, and reporting",
+        "Quick-reference documentation delivered covering daily workflows and CRM hygiene"
+      ]
+    }
+  ],
+  "meetings": [
+    {
+      "type": "kickoff",
+      "phase": "phase-1",
+      "suggestedDate": "2026-04-07",
+      "cadence": null,
+      "duration": 60,
+      "attendees": ["Austin", "Sam", "Blake", "Cameron Taggart", "Kyle Harbuck"],
+      "agendaTemplate": "kickoff-deck.md"
+    },
+    {
+      "type": "standup",
+      "phase": "recurring",
+      "suggestedDate": null,
+      "cadence": "weekly",
+      "duration": 30,
+      "attendees": ["Austin", "Kyle Harbuck"],
+      "agendaTemplate": "standup-template.md"
+    },
+    {
+      "type": "phase-review",
+      "phase": "phase-1",
+      "suggestedDate": "2026-04-18",
+      "cadence": null,
+      "duration": 45,
+      "attendees": ["Austin", "Sam", "Blake", "Kyle Harbuck"],
+      "agendaTemplate": "phase-review-template.md"
+    },
+    {
+      "type": "phase-review",
+      "phase": "phase-2",
+      "suggestedDate": "2026-05-01",
+      "cadence": null,
+      "duration": 45,
+      "attendees": ["Austin", "Sam", "Blake", "Kyle Harbuck"],
+      "agendaTemplate": "phase-review-template.md"
+    },
+    {
+      "type": "training",
+      "phase": "phase-3",
+      "suggestedDate": "2026-05-11",
+      "cadence": null,
+      "duration": 90,
+      "attendees": ["Austin", "Sam", "Blake", "Kyle Harbuck"],
+      "agendaTemplate": null
+    },
+    {
+      "type": "uat",
+      "phase": "phase-3",
+      "suggestedDate": "2026-05-13",
+      "cadence": null,
+      "duration": 60,
+      "attendees": ["Austin", "Sam", "Blake", "Kyle Harbuck"],
+      "agendaTemplate": null
+    },
+    {
+      "type": "retro",
+      "phase": null,
+      "suggestedDate": "2026-05-29",
+      "cadence": null,
+      "duration": 45,
+      "attendees": ["Cameron Taggart", "Kyle Harbuck"],
+      "agendaTemplate": null
+    }
+  ],
+  "risks": [
+    {
+      "id": "R-1",
+      "name": "Data Quality Risk",
+      "severity": "medium",
+      "likelihood": "high",
+      "impact": "Contact data across multiple personal spreadsheets (500-1K contacts, 3 lists) may contain duplicates and inconsistent formatting, significantly increasing migration hours (W3 range: 10-20.5 hrs)",
+      "mitigation": "Send structured import template in W1; audit data quality before committing to migration plan; deduplicate in staging area; small test loads before full import",
+      "owner": "shared"
+    },
+    {
+      "id": "R-2",
+      "name": "Adoption Risk",
+      "severity": "medium",
+      "likelihood": "medium",
+      "impact": "3-person PE advisory team accustomed to personal networks and memory-based relationship management may resist structured CRM usage, undermining ROI",
+      "mitigation": "Start with Outlook integration for immediate value (email/calendar sync); minimize required fields; automate capture; show PE health tracking value early; make CRM the easiest path, not extra work",
+      "owner": "sayer"
+    },
+    {
+      "id": "R-3",
+      "name": "Data Submission Dependency",
+      "severity": "medium",
+      "likelihood": "medium",
+      "impact": "Team must submit raw data files by end of Week 2 or Week 3 migration timeline slips, compressing QA and pipeline work",
+      "mitigation": "Send data template during kickoff; set clear W2 deadline; follow up mid-week; if delayed, pull forward pipeline work from W4",
+      "owner": "client"
+    },
+    {
+      "id": "R-4",
+      "name": "Scope Creep from GTM Assessment",
+      "severity": "low",
+      "likelihood": "medium",
+      "impact": "GTM assessment identified 4 phases of work over 180+ days -- CRM is only phase 1. Client may want to pull demand gen, collateral, or positioning work into this engagement",
+      "mitigation": "Clearly scope this engagement as CRM infrastructure only (assessment phase 1); document future phases as separate engagements; use change order process for additions",
+      "owner": "sayer"
+    }
+  ],
+  "assumptions": [
+    "3 licensed HubSpot users (Austin, Sam, Blake)",
+    "Office 365 / Outlook as primary email and calendar platform",
+    "Up to 20 custom contact/company properties",
+    "Up to 25 custom deal properties",
+    "500-1,000 contacts to migrate from personal spreadsheets and lists",
+    "2 deal pipelines: buy-side and sell-side",
+    "PE firm parent-child company structure with labeled associations",
+    "6-week implementation timeline starting 2026-04-07",
+    "Client provides raw data files by end of Week 2",
+    "1 data import test load before full migration",
+    "8 reports across 2 dashboards (sales + PE health)",
+    "1-week async support post-handoff (Slack/email)"
+  ],
+  "exclusions": [
+    "GTM engine build (pitch deck, collateral, demand generation -- assessment phases 2-4)",
+    "Marketing automation, email campaigns, sequences, or landing pages",
+    "Website redesign or LinkedIn optimization",
+    "CFO/F&A launch positioning or service line branding",
+    "Custom API development or middleware (n8n/Zapier)",
+    "Ongoing managed services beyond 1-week post-launch async support",
+    "HubSpot Marketing Hub, Service Hub, or Operations Hub features",
+    "Integration with any system beyond Outlook (no ERP, no project management tools)"
+  ],
+  "clientResponsibilities": [
+    "Provide complete contact/company/deal data exports by end of Week 2",
+    "Designate Austin as primary point of contact for decisions and approvals",
+    "Ensure Austin, Sam, and Blake are available for kickoff, training, and UAT sessions",
+    "Procure HubSpot licenses before implementation begins",
+    "Provide Office 365 admin access for Outlook integration setup",
+    "Define buy-side and sell-side pipeline stages during Week 1",
+    "Review and sign off on imported data during Week 4",
+    "Complete UAT testing within agreed Week 6 timeline",
+    "Champion CRM adoption internally -- leadership sets expectations for daily usage"
+  ]
+}
