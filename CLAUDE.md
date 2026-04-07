@@ -43,10 +43,11 @@ This repo contains the full consulting engagement lifecycle for Harbuck Consulti
 3. Parse per the scoping skill: client profile, current state, desired future state, complexity indicators, unknowns
 4. Ask Kyle clarifying questions one at a time before generating estimates
 5. Generate Excel workbook (4 sheets + actuals columns) and scope summary markdown
-6. Flag open items, gotchas, and questions to go back to client with
-7. Always recommend specific HubSpot tier with reasoning (not generic "TBD")
-8. **Log key decisions** in the client's `_decisions.md` during the session
-9. **After scoping is complete:** Ask Kyle which version is the final delivery, record in `_final_estimate.md`, and add a new Project Baseline entry to `calibration/calibration.md`
+6. **Check for stale code:** When updating scoping docs, also check generator scripts (`build_estimate.py`, `generate_proposal.py`) and re-validate any prior analysis. Stale scripts can overwrite current workbooks.
+7. Flag open items, gotchas, and questions to go back to client with
+8. Always recommend specific HubSpot tier with reasoning (not generic "TBD")
+9. **Log key decisions** in the client's `_decisions.md` during the session
+10. **After scoping is complete:** Ask Kyle which version is the final delivery, record in `_final_estimate.md`, and add a new Project Baseline entry to `calibration/calibration.md`
 
 ## Learning System (Double-Loop Calibration)
 Claude maintains two feedback loops:

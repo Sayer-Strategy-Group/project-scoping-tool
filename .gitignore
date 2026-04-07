@@ -34,6 +34,12 @@ venv/
 # Claude local notes
 .claude/CLAUDE.local.md
 
+# Claude Code plugin (local-only, contains generated scripts and delivery state)
+consulting-delivery-plugin/
+
+# Delivery state files (contain external artifact IDs and URLs)
+**/delivery-state.json
+
 # Node
 node_modules/
 
