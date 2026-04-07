@@ -153,7 +153,7 @@ def fetch_existing_labels(api_key: str, team_id: str, dry_run: bool) -> Dict[str
     if dry_run:
         return {}
     query = """
-    query($teamId: String!) {
+    query($teamId: ID!) {
         issueLabels(filter: { team: { id: { eq: $teamId } } }) {
             nodes { id name }
         }
