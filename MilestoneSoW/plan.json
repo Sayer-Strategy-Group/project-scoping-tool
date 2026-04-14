@@ -8,11 +8,11 @@
   },
   "engagement": {
     "name": "HubSpot CRM Implementation",
-    "scopeSource": "The Milestone Group HubSpot CRM Proposal.docx",
+    "scopeSource": "Milestone Group HubSpot CRM Proposal - Signed.md",
     "pricing": {
       "model": "fixed",
-      "amount": 26075,
-      "paymentTerms": "50/50 with 5% tech admin fee"
+      "amount": 26000,
+      "paymentTerms": "4 installments of $6,500 every 15 days, Net-15. 5% technology & administrative fee applied to each invoice."
     },
     "startDate": "2026-04-13",
     "estimatedEndDate": "2026-06-12",
@@ -32,10 +32,15 @@
           "hours": { "min": 10, "max": 16, "median": 13 },
           "owner": "sayer",
           "tasks": [
-            "Configure HubSpot portal settings and branding",
-            "Set up user roles and permissions for 4 offices (Atlanta, Dallas, Denver, South Florida)",
-            "Create team structure matching Milestone org",
-            "Configure up to 10 user seats"
+            "Review current HubSpot portal access and document baseline state",
+            "Configure portal name, logo, favicon, timezone, currency, and date format",
+            "Define user role structure: Admin, Sales Manager, Sales Rep",
+            "Create user accounts for all 10 users across 4 offices (Atlanta, Dallas, Denver, South Florida)",
+            "Configure team structure: create teams by office location",
+            "Configure permission sets per role (contact visibility, deal access, report access)",
+            "Set up security settings: login notifications, 2FA requirements for admins",
+            "Establish naming conventions document for properties, lists, and workflows",
+            "QA: verify all 10 users can log in with correct role and data visibility"
           ]
         },
         {
@@ -44,36 +49,18 @@
           "hours": { "min": 10, "max": 18, "median": 14 },
           "owner": "sayer",
           "tasks": [
-            "Define custom properties (up to 30) for PE relationship tracking",
-            "Configure lifecycle stages for BD pipeline",
-            "Build parent-child company associations (PE firm to portfolio companies)",
-            "Set up association labels for relationship types",
-            "Define persona categories (broker, evangelist, investment partner, lender, competitor)",
-            "Configure deduplication strategy and rules"
-          ]
-        },
-        {
-          "id": "CRM-05",
-          "name": "Email & Communication Setup",
-          "hours": { "min": 8, "max": 14, "median": 11 },
-          "owner": "sayer",
-          "tasks": [
-            "Configure Microsoft 365 integration (Outlook email + Calendar)",
-            "Set up email tracking settings per user",
-            "Connect Outlook inboxes for each user (up to 10)",
-            "Configure email domain exclusion rules"
-          ]
-        },
-        {
-          "id": "INT-02",
-          "name": "Integration: Microsoft 365 (Outlook)",
-          "hours": { "min": 6, "max": 10, "median": 8 },
-          "owner": "sayer",
-          "tasks": [
-            "Configure Outlook calendar sync for meeting auto-logging",
-            "Set up Outlook contact sync automation",
-            "Validate bidirectional sync across all users",
-            "Test meeting capture with Outlook calendar events"
+            "Run properties workshop with Jason Wise: map all required custom contact and company fields",
+            "Create custom contact properties (persona, broker type, relationship tier, acquisition focus, etc.)",
+            "Create custom company properties (entity type, market, PE firm vs. portfolio company, AUM, etc.)",
+            "Configure lifecycle stages for BD pipeline (prospect → active → closed)",
+            "Configure lead statuses for pipeline progression",
+            "Build parent-child company hierarchy (PE firm → portfolio company structure)",
+            "Set up association labels: broker, lender, investment partner, evangelist, acquisition target",
+            "Configure persona picklist options: broker, evangelist, investment partner, lender, competitor",
+            "Configure deduplication detection rules (match on email, phone, name+company)",
+            "Build active list: acquisition target contacts",
+            "Build active list: broker contacts by office/territory",
+            "QA: create 5 sample companies with parent-child relationships and verify associations"
           ]
         },
         {
@@ -82,13 +69,53 @@
           "hours": { "min": 16, "max": 32, "median": 24 },
           "owner": "shared",
           "tasks": [
-            "Audit existing contacts from Outlook, Excel, Zoho CRM, and OneNote exports",
-            "Map source fields to HubSpot properties",
-            "Cleanse and deduplicate contacts across 4-5 sources (Outlook, Excel, Zoho, acquisition target lists)",
-            "Execute test load with sample batch (500 contacts)",
-            "Validate test load: field mapping, associations, dedup accuracy",
-            "Execute full migration (estimated 2,000-5,000 contacts)",
-            "Post-migration validation and cleanup"
+            "Export templates sent to all Milestone team members (complete — sent Apr 10)",
+            "Receive Outlook contact exports from Jason, Robert, David, Rich, Jim (target: Apr 18, hard deadline: Apr 25)",
+            "Receive Zoho CRM export (contacts and associated notes only; other Zoho modules excluded)",
+            "Audit received data: record counts per source, field coverage gaps",
+            "Build field mapping matrix: source columns → HubSpot property IDs",
+            "Define duplicate handling rules with Jason Wise (owner priority, cross-office contact logic)",
+            "Define contact ownership assignment rules by office/territory",
+            "Clean and normalize data: standardize company names, phone formats, email validation",
+            "Deduplicate in staging: apply ownership rules, flag unresolvable conflicts for manual review",
+            "Execute test load: ~500 contacts",
+            "Review test load results with Jason Wise: duplicate rate, field mapping, ownership accuracy",
+            "Fix mapping or deduplication issues identified in test load",
+            "Execute full production import",
+            "Post-migration QA: verify record count, associations, and owner assignments",
+            "Deliver migration summary to Jason Wise (record counts, duplicate rate, sources)"
+          ]
+        },
+        {
+          "id": "CRM-05",
+          "name": "Email & Communication Setup",
+          "hours": { "min": 8, "max": 14, "median": 11 },
+          "owner": "sayer",
+          "tasks": [
+            "Obtain Microsoft 365 admin credentials from Milestone",
+            "Configure email tracking domain settings in HubSpot",
+            "Connect each user's Outlook inbox to HubSpot (10 users, 10 connections)",
+            "Configure email tracking settings per user (auto-log, open tracking, click tracking)",
+            "Set up email domain exclusion rules (internal @milestonegroup.com, personal domains)",
+            "Configure auto-association rules (link emails to contacts and deals automatically)",
+            "QA: send test emails, verify activity logs appear on contact records",
+            "Document user-by-user connection status and any per-user configuration issues"
+          ]
+        },
+        {
+          "id": "INT-02",
+          "name": "Integration: Outlook Calendar & Contact Sync",
+          "hours": { "min": 6, "max": 10, "median": 8 },
+          "owner": "sayer",
+          "note": "Signed proposal phases this in Phase 3, but Phase 1 success criteria require calendar sync working. Keeping in Phase 1; can shift to Phase 3 if timeline is constrained.",
+          "tasks": [
+            "Configure Outlook Calendar sync in HubSpot (App Marketplace → Microsoft Calendar)",
+            "Set sync permissions: define which calendar events log to CRM (external meetings only vs. all)",
+            "Configure meeting auto-log rules: attendee matching to HubSpot contacts",
+            "Set up Outlook contact sync rules (HubSpot wins on conflict)",
+            "QA: create test meeting, verify it appears on contact timeline",
+            "Complete per-user calendar sync validation across all 10 users",
+            "Document known limitations: sync latency, contact match rules, known edge cases"
           ]
         },
         {
@@ -97,12 +124,17 @@
           "hours": { "min": 12, "max": 24, "median": 18 },
           "owner": "sayer",
           "tasks": [
-            "Build activity capture automation (auto-log emails, calls, meetings)",
-            "Configure task reminder triggers for follow-up workflows",
-            "Set up auto-contact creation rules from email/meeting interactions",
-            "Build domain exclusion rules (filter personal email, spam)",
-            "Configure lead routing by office/territory",
-            "Build up to 8 automation workflows"
+            "Workflow requirements session with Jason Wise: confirm all 8 automation use cases",
+            "WF1: Auto-log activity — trigger email/meeting logs on contact records",
+            "WF2: Auto-contact creation — create contact from new Outlook email (with domain exclusions)",
+            "WF3: Follow-up reminder — 30-day no-activity task trigger",
+            "WF4: Domain exclusion filter — suppress @milestonegroup.com and personal email interactions",
+            "WF5: Lead routing — assign owner by office/territory on contact creation",
+            "WF6: Deal stage notification — notify owner when deal advances to a new stage",
+            "WF7–WF8: TBD — confirm with Jason Wise in working session",
+            "QA: test each workflow with sample data (triggers, actions, enrollment criteria)",
+            "Fix bugs identified in workflow testing",
+            "Document each workflow: trigger logic, actions, and admin contact for changes"
           ]
         }
       ],
@@ -129,11 +161,18 @@
           "hours": { "min": 8, "max": 14, "median": 11 },
           "owner": "sayer",
           "tasks": [
-            "Build deal pipeline with 4-6 stages (to be defined in scoping call)",
+            "Pipeline design session with Jason Wise: confirm deal stages, required fields, and qualification criteria",
+            "Create deal pipeline with confirmed stage names (4–6 stages)",
             "Configure required fields per stage (stage gate enforcement)",
-            "Set up qualification criteria and deal properties",
-            "Configure multi-party deal associations (brokers, lenders, owners per deal)",
-            "Test pipeline flow with sample deals"
+            "Create custom deal properties (property type, investment thesis, acquisition target, market, etc.)",
+            "Configure deal owner assignment rules",
+            "Set up deal views and filters by office/team",
+            "Configure multi-party associations: broker, lender, owner, and acquisition target linked to deals",
+            "Set up auto-link rules: associate contacts by role when added to a deal",
+            "Configure deal close date requirements and stage progression rules",
+            "QA: run 3 sample deals through pipeline, verify stage gates enforce required fields",
+            "QA: verify multi-party associations work correctly on sample deals",
+            "Fix any pipeline configuration issues identified in QA"
           ]
         },
         {
@@ -142,11 +181,20 @@
           "hours": { "min": 8, "max": 16, "median": 12 },
           "owner": "sayer",
           "tasks": [
-            "Build BD activity dashboard (calls, meetings, emails per rep)",
-            "Build contact engagement overview dashboard",
-            "Build deal pipeline visibility dashboard for executives",
-            "Create up to 10 custom reports",
-            "Configure scheduled report delivery to stakeholders"
+            "Reporting requirements session with Jason Wise: confirm dashboard priorities and key metrics",
+            "BD Activity Dashboard — Report: activity by rep (calls, meetings, emails this week/month)",
+            "BD Activity Dashboard — Report: activity by office/territory",
+            "BD Activity Dashboard — Report: top reps by contact touches",
+            "Contact Engagement Dashboard — Report: lifecycle stage distribution",
+            "Contact Engagement Dashboard — Report: contacts with no activity in 30+ days",
+            "Contact Engagement Dashboard — Report: contacts created by source (migration vs. organic)",
+            "Deal Pipeline Dashboard — Report: pipeline by stage (count)",
+            "Deal Pipeline Dashboard — Report: deal age by stage",
+            "Deal Pipeline Dashboard — Report: new deals this month by owner",
+            "Configure scheduled report email delivery to Jason Wise (weekly digest)",
+            "Review all dashboards with Jason Wise: confirm metrics are reading correctly",
+            "Adjust reports based on feedback",
+            "Document report definitions and how to read each metric"
           ]
         }
       ],
@@ -171,11 +219,15 @@
           "hours": { "min": 6, "max": 12, "median": 9 },
           "owner": "sayer",
           "tasks": [
-            "Configure Fireflies-to-HubSpot native integration",
-            "Set up transcript mapping to CRM contact records",
-            "Configure contact matching logic for meeting participants",
-            "Validate activity logging rules with test meetings",
-            "Document known limitations and edge cases"
+            "Confirm Fireflies subscription status and API access with Jason Wise (client action — required before configuration)",
+            "Connect Fireflies to HubSpot: authenticate in Fireflies dashboard",
+            "Configure auto-logging rules: define which meetings log to CRM",
+            "Configure contact matching logic: match meeting participants to HubSpot records by email",
+            "Set up activity note creation: transcript summary auto-created on contact record",
+            "Configure meeting type tagging (BD vs. internal, deal-related vs. relationship-building)",
+            "QA: run 2–3 test meetings, verify transcripts appear on correct contact records",
+            "Validate contact matching edge cases (new contacts, partial email matches)",
+            "Document known limitations and troubleshooting steps for admin"
           ]
         },
         {
@@ -184,9 +236,11 @@
           "hours": { "min": 6, "max": 10, "median": 8 },
           "owner": "sayer",
           "tasks": [
-            "Deliver admin training session 1: settings, properties, user management",
-            "Deliver admin training session 2: workflows, reporting, troubleshooting",
-            "Provide admin reference documentation walkthrough"
+            "Identify 1–2 admin champions at Milestone",
+            "Build admin training agenda and materials",
+            "Training Session 1 (90 min): portal settings, user management, properties, lists",
+            "Training Session 2 (90 min): workflows, reports, troubleshooting common issues",
+            "Admin Q&A and sign-off: confirm admins can perform key tasks independently"
           ]
         },
         {
@@ -195,10 +249,12 @@
           "hours": { "min": 8, "max": 14, "median": 11 },
           "owner": "sayer",
           "tasks": [
-            "Deliver end-user training session 1: daily CRM usage and contact management",
-            "Deliver end-user training session 2: deal pipeline and task management",
-            "Deliver end-user training session 3: mobile app setup and on-the-go usage",
-            "Accommodate varying tech comfort levels (ages 25-65)"
+            "Build end-user training materials (designed for varying tech comfort, ages 25–65)",
+            "Training Session 1 (60 min): daily CRM usage — contacts, activity feed, task management",
+            "Training Session 2 (60 min): deal pipeline — creating deals, advancing stages, associating contacts",
+            "Training Session 3 (45 min): mobile app setup and on-the-go workflows",
+            "Record all sessions for async reference and future new-hire onboarding",
+            "Collect training feedback from attendees"
           ]
         },
         {
@@ -207,12 +263,18 @@
           "hours": { "min": 8, "max": 14, "median": 11 },
           "owner": "shared",
           "tasks": [
-            "Create UAT test scripts covering all configured features",
-            "Conduct UAT session 1 with power users",
-            "Conduct UAT session 2 with broader team",
-            "Fix bugs identified during UAT",
-            "Execute go-live cutover plan",
-            "Provide 2-week hypercare support post-launch"
+            "Create UAT test scripts covering all configured workstreams (CRM-01 through INT-01)",
+            "Share test scripts with Jason Wise and Robert Strong before UAT session",
+            "UAT Session 1: power users (Jason, Robert) — walk through test scripts, log issues",
+            "Triage bugs from Session 1: classify as critical / high / low",
+            "Fix critical and high-priority bugs from Session 1",
+            "UAT Session 2: full team (all offices) — role-specific flows and general walkthrough",
+            "Fix remaining critical bugs from Session 2",
+            "Kyle Harbuck sign-off: UAT complete",
+            "Jason Wise sign-off: UAT complete",
+            "Execute go-live: confirm all users active, send go-live announcement to Milestone team",
+            "Hypercare Week 1: daily monitoring, user questions, fix adoption blockers",
+            "Hypercare Week 2: monitor usage, close out remaining open items"
           ]
         },
         {
@@ -221,21 +283,22 @@
           "hours": { "min": 6, "max": 10, "median": 8 },
           "owner": "sayer",
           "tasks": [
-            "Create admin reference guide",
-            "Create end-user guide with daily workflows",
-            "Create mobile quick-start guide",
-            "Document CRM hygiene practices and weekly review process"
+            "Create admin reference guide (settings, user management, workflow editing, troubleshooting)",
+            "Create end-user daily workflow guide (logging activity, managing contacts, advancing deals, tasks)",
+            "Create mobile quick-start guide (app download, setup, key mobile actions)",
+            "Create CRM hygiene guide: weekly review process (contact cleanup, deal updates, task completion)",
+            "Deliver all documentation to Jason Wise in shared Google Drive data room"
           ]
         }
       ],
       "milestoneReview": true,
       "successCriteria": [
         "Fireflies integration auto-logging transcripts to correct contact records",
-        "All admins trained and able to manage properties, workflows, and reports",
-        "All end users trained across 4 offices including mobile app",
+        "All admins trained and able to manage properties, workflows, and reports independently",
+        "All end users trained across 4 offices including mobile app setup",
         "UAT complete with all critical bugs resolved",
         "Go-live executed with all users active",
-        "Documentation delivered: admin guide, user guide, mobile guide"
+        "Documentation delivered: admin guide, end-user guide, mobile quick-start guide"
       ]
     }
   ],
@@ -245,7 +308,7 @@
       "name": "Project Management",
       "hours": { "min": 14, "max": 22, "median": 18 },
       "owner": "sayer",
-      "cadence": "Weekly 30-min status syncs"
+      "cadence": "Weekly standups Monday 2:00 PM Central; phase reviews at end of each phase"
     }
   ],
   "meetings": [
@@ -397,33 +460,34 @@
     "Up to 8 automated workflows",
     "2-3 reporting dashboards with up to 10 custom reports",
     "2,000-5,000 contacts to migrate from 3-4 sources",
+    "Zoho migration includes contacts and associated notes only; other Zoho modules excluded",
     "1 test data load before final migration",
-    "Fireflies.ai integration TBD -- not confirmed at kickoff, needs verification",
-    "Zoho CRM used by small team segment -- data volume TBD",
+    "Fireflies.ai integration confirmed in signed proposal; client to provide API access before Phase 3",
     "6-8 week implementation timeline",
-    "Phased rollout: contacts/activity first, deals second, integrations third"
+    "Phased rollout: contacts/activity first, deals second, integrations and training third"
   ],
   "exclusions": [
     "Salesforce, Zoho, or any CRM other than HubSpot",
     "ERP or accounting system integration",
-    "Asana integration (recommended for Phase 3+)",
+    "Asana integration (recommended for future phase)",
     "Advanced deal flow management beyond basic pipeline (deal scoring, weighted pipeline)",
     "Custom API development or middleware (n8n/Zapier)",
     "Marketing automation (email campaigns, sequences, landing pages)",
     "DocuSign or e-signature integration",
     "HubSpot Service Hub or Operations Hub features",
     "Ongoing managed services beyond 2-week hypercare",
-    "Hardware procurement or IT infrastructure changes"
+    "Hardware procurement or IT infrastructure changes",
+    "Historical activity or deal data migration (contacts only)"
   ],
   "clientResponsibilities": [
-    "Provide complete contact exports from Excel, OneNote, and email by week 2",
+    "Provide complete contact exports from Excel, OneNote, and email by Apr 18 (hard deadline Apr 25)",
     "Primary point of contact for decisions: Jason Wise (confirmed at kickoff)",
     "Ensure stakeholder availability for discovery, UAT, and training sessions",
-    "Procure HubSpot licenses before implementation begins",
-    "Procure or confirm Fireflies.ai subscription with API access",
+    "Procure HubSpot licenses before implementation begins (confirmed at kickoff: licenses secured)",
+    "Procure or confirm Fireflies.ai subscription with API access before Phase 3",
     "Provide Microsoft 365 admin access for Outlook email/calendar integration setup",
-    "Champion CRM adoption internally -- leadership must set expectations for usage",
+    "Champion CRM adoption internally — leadership must set expectations for usage",
     "Complete UAT testing within agreed timeline",
-    "Communicate deal stages and qualification criteria during scoping call"
+    "Communicate deal stages and qualification criteria during pipeline design session (Phase 2)"
   ]
 }
