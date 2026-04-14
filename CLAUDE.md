@@ -92,6 +92,12 @@ Skills live in `~/.claude/skills/` and are invoked as slash commands:
 **Data flow:** Proposal/SOW → `/project-plan` → plan.json → downstream skills
 **Source of truth:** Proposal is authoritative for scope. Linear becomes operational truth during delivery. Google Sheet is a regenerable snapshot.
 
+**plan.json authoring rules:**
+- Always read the signed proposal file (`*Proposal*Signed*`) before generating or updating plan.json
+- `_final_estimate.md` is a working doc and may be superseded by the signed proposal -- verify pricing and payment terms against the signed version
+- Present phase-by-phase task breakdown and get Kyle's per-phase approval before writing plan.json
+- Do not shortcut the review -- write only after all phases are approved
+
 ## Credentials
 
 - **Linear API:** macOS Keychain (`security find-generic-password -a "harbuckconsulting" -s "LINEAR_API_KEY" -w`)
