@@ -9,6 +9,19 @@ This repo contains the full consulting engagement lifecycle for Harbuck Consulti
 3. Scoping packages include: Excel estimate (4 sheets + actuals columns), scope summary (markdown), risk register, approach comparison
 4. After project closes, Claude walks Kyle through a conversational retro and records actuals for calibration
 
+## Session Start Protocol
+
+At the start of every session in this repo:
+1. Read `PROJECT-STATE.md` — get a quick orientation on all active projects
+2. If working on a specific client, read `{Client}/STATE.md` before touching any files
+3. STATE.md is the in-repo source of truth for session handoff — do not rely on memory alone
+4. Update `{Client}/STATE.md` and `PROJECT-STATE.md` at the end of every session via `/wrap-up`
+
+**STATE.md convention:**
+- Every active client folder has a `STATE.md` tracking current phase, open items, and next session focus
+- Template: `templates/client-state-template.md`
+- These files are committed to git — they are version-controlled session handoffs, not scratch notes
+
 ## Key Files
 
 ### Scoping
