@@ -1,0 +1,864 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "Associations",
+    "description" : "Associations define the relationships between objects in HubSpot. These endpoints allow you to create, read, and remove associations.",
+    "version" : "v3",
+    "x-hubspot-product-tier-requirements" : {
+      "marketing" : "FREE",
+      "sales" : "FREE",
+      "service" : "FREE",
+      "cms" : "FREE",
+      "commerce" : "FREE",
+      "crmHub" : "FREE",
+      "dataHub" : "FREE"
+    },
+    "x-hubspot-api-use-case" : "When an existing contact has moved to a new company, update their associated company to keep your CRM up to date.",
+    "x-hubspot-related-documentation" : [ {
+      "name" : "Associations guide",
+      "url" : "https://developers.hubspot.com/docs/guides/api/crm/associations/associations-v3"
+    } ],
+    "x-hubspot-introduction" : "Use the associations API to create, retrieve, update, or delete associations between records, or between records and activities. "
+  },
+  "servers" : [ {
+    "url" : "https://api.hubapi.com"
+  } ],
+  "tags" : [ {
+    "name" : "Batch"
+  } ],
+  "paths" : {
+    "/crm/v3/associations/{fromObjectType}/{toObjectType}/batch/archive" : {
+      "post" : {
+        "tags" : [ "Batch" ],
+        "summary" : "Archive associations",
+        "description" : "This endpoint allows you to archive multiple associations between specified 'from' and 'to' object types in a single batch request.",
+        "operationId" : "post-/crm/v3/associations/{fromObjectType}/{toObjectType}/batch/archive_archive",
+        "parameters" : [ {
+          "name" : "fromObjectType",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : null
+          }
+        }, {
+          "name" : "toObjectType",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : null
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchInputPublicAssociation"
+              },
+              "example" : null
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "No content",
+            "content" : { }
+          },
+          "default" : {
+            "description" : "",
+            "$ref" : "#/components/responses/Error"
+          }
+        },
+        "security" : [ {
+          "app_cookie" : [ "crm-public-object-api-access" ]
+        }, {
+          "hapikey" : [ ]
+        }, {
+          "internal_cookie" : [ "crm-public-object-api-access" ]
+        }, {
+          "oauth2" : [ "crm-public-object-api-access" ]
+        }, {
+          "shhkey" : [ ]
+        } ],
+        "x-hubspot-auth-scoping-type" : "ALL",
+        "x-hubspot-rate-limit-exemptions" : [ "ten-secondly" ]
+      }
+    },
+    "/crm/v3/associations/{fromObjectType}/{toObjectType}/batch/create" : {
+      "post" : {
+        "tags" : [ "Batch" ],
+        "summary" : "Create associations",
+        "description" : "This endpoint allows you to create multiple associations between specified 'from' and 'to' object types in a single batch request.",
+        "operationId" : "post-/crm/v3/associations/{fromObjectType}/{toObjectType}/batch/create_create",
+        "parameters" : [ {
+          "name" : "fromObjectType",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : null
+          }
+        }, {
+          "name" : "toObjectType",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : null
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchInputPublicAssociation"
+              },
+              "example" : null
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchResponsePublicAssociation"
+                },
+                "example" : null
+              }
+            }
+          },
+          "207" : {
+            "description" : "multiple statuses",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchResponsePublicAssociationWithErrors"
+                },
+                "example" : null
+              }
+            }
+          },
+          "default" : {
+            "description" : "",
+            "$ref" : "#/components/responses/Error"
+          }
+        },
+        "security" : [ {
+          "app_cookie" : [ "crm-public-object-api-access" ]
+        }, {
+          "hapikey" : [ ]
+        }, {
+          "internal_cookie" : [ "crm-public-object-api-access" ]
+        }, {
+          "oauth2" : [ "crm-public-object-api-access" ]
+        }, {
+          "shhkey" : [ ]
+        } ],
+        "x-hubspot-auth-scoping-type" : "ALL",
+        "x-hubspot-rate-limit-exemptions" : [ "ten-secondly" ]
+      }
+    },
+    "/crm/v3/associations/{fromObjectType}/{toObjectType}/batch/read" : {
+      "post" : {
+        "tags" : [ "Batch" ],
+        "summary" : "Retrieve associations",
+        "description" : "This endpoint allows you to retrieve multiple associations between specified 'from' and 'to' object types in a single batch request.",
+        "operationId" : "post-/crm/v3/associations/{fromObjectType}/{toObjectType}/batch/read_read",
+        "parameters" : [ {
+          "name" : "fromObjectType",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : null
+          }
+        }, {
+          "name" : "toObjectType",
+          "in" : "path",
+          "description" : "",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : null
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BatchInputPublicObjectId"
+              },
+              "example" : null
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchResponsePublicAssociationMulti"
+                },
+                "example" : null
+              }
+            }
+          },
+          "207" : {
+            "description" : "multiple statuses",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BatchResponsePublicAssociationMultiWithErrors"
+                },
+                "example" : null
+              }
+            }
+          },
+          "default" : {
+            "description" : "",
+            "$ref" : "#/components/responses/Error"
+          }
+        },
+        "security" : [ {
+          "app_cookie" : [ "crm-public-object-api-access" ]
+        }, {
+          "hapikey" : [ ]
+        }, {
+          "internal_cookie" : [ "crm-public-object-api-access" ]
+        }, {
+          "oauth2" : [ "crm-public-object-api-access" ]
+        }, {
+          "shhkey" : [ ]
+        } ],
+        "x-hubspot-auth-scoping-type" : "ALL",
+        "x-hubspot-rate-limit-exemptions" : [ "ten-secondly" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "PublicObjectId" : {
+        "required" : [ "id" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The unique ID that identifies an object.",
+            "example" : null
+          }
+        },
+        "description" : "Contains the Id of a Public Object",
+        "example" : {
+          "id" : "37295"
+        }
+      },
+      "StandardError" : {
+        "required" : [ "category", "context", "errors", "links", "message", "status" ],
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "type" : "string",
+            "description" : "The main category of the error.",
+            "example" : null
+          },
+          "context" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "example" : null,
+              "items" : {
+                "type" : "string",
+                "example" : null
+              }
+            },
+            "description" : "Additional context-specific information related to the error.",
+            "example" : null
+          },
+          "errors" : {
+            "type" : "array",
+            "description" : "The detailed error objects.",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/ErrorDetail"
+            }
+          },
+          "id" : {
+            "type" : "string",
+            "description" : "The unique ID that identifies an object.",
+            "example" : null
+          },
+          "links" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : null
+            },
+            "description" : "URLs linking to documentation or resources associated with the error.",
+            "example" : null
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "A human-readable string describing the error and possible remediation steps.",
+            "example" : null
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "The HTTP status code associated with the error.",
+            "example" : null
+          },
+          "subCategory" : {
+            "type" : "object",
+            "properties" : { },
+            "description" : "A more specific error category within each main category.",
+            "example" : null
+          }
+        },
+        "description" : "Represents a standard error response in the HubSpot API, providing detailed information about an error that occurred during an API request.",
+        "example" : null
+      },
+      "Paging" : {
+        "type" : "object",
+        "properties" : {
+          "next" : {
+            "$ref" : "#/components/schemas/NextPage"
+          },
+          "prev" : {
+            "$ref" : "#/components/schemas/PreviousPage"
+          }
+        },
+        "example" : null
+      },
+      "Error" : {
+        "required" : [ "category", "correlationId", "message" ],
+        "type" : "object",
+        "properties" : {
+          "category" : {
+            "type" : "string",
+            "description" : "The error category",
+            "example" : null
+          },
+          "context" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "example" : null,
+              "items" : {
+                "type" : "string",
+                "example" : null
+              }
+            },
+            "description" : "Context about the error condition",
+            "example" : "{invalidPropertyName=[propertyValue], missingScopes=[scope1, scope2]}"
+          },
+          "correlationId" : {
+            "type" : "string",
+            "description" : "A unique identifier for the request. Include this value with any error reports or support tickets",
+            "format" : "uuid",
+            "example" : "aeb5f871-7f07-4993-9211-075dc63e7cbf"
+          },
+          "errors" : {
+            "type" : "array",
+            "description" : "further information about the error",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/ErrorDetail"
+            }
+          },
+          "links" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : null
+            },
+            "description" : "A map of link names to associated URIs containing documentation about the error or recommended remediation steps",
+            "example" : null
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "A human readable message describing the error along with remediation steps where appropriate",
+            "example" : "An error occurred"
+          },
+          "subCategory" : {
+            "type" : "string",
+            "description" : "A specific category that contains more specific detail about the error",
+            "example" : null
+          }
+        },
+        "example" : {
+          "message" : "Invalid input (details will vary based on the error)",
+          "correlationId" : "aeb5f871-7f07-4993-9211-075dc63e7cbf",
+          "category" : "VALIDATION_ERROR",
+          "links" : {
+            "knowledge-base" : "https://www.hubspot.com/products/service/knowledge-base"
+          }
+        }
+      },
+      "PublicAssociationMulti" : {
+        "required" : [ "from", "to" ],
+        "type" : "object",
+        "properties" : {
+          "from" : {
+            "$ref" : "#/components/schemas/PublicObjectId"
+          },
+          "paging" : {
+            "$ref" : "#/components/schemas/Paging"
+          },
+          "to" : {
+            "type" : "array",
+            "description" : "The IDs of objects that are associated with the object identified by the ID in 'from'.",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/AssociatedId"
+            }
+          }
+        },
+        "example" : {
+          "from" : {
+            "id" : "53628"
+          },
+          "to" : [ {
+            "id" : "12726",
+            "type" : "contact_to_company"
+          }, {
+            "id" : "61352",
+            "type" : "contact_to_company"
+          } ]
+        }
+      },
+      "PublicAssociation" : {
+        "required" : [ "from", "to", "type" ],
+        "type" : "object",
+        "properties" : {
+          "from" : {
+            "$ref" : "#/components/schemas/PublicObjectId"
+          },
+          "to" : {
+            "$ref" : "#/components/schemas/PublicObjectId"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of association between the 'from' and 'to' objects.",
+            "example" : null
+          }
+        },
+        "example" : {
+          "from" : {
+            "id" : "53628"
+          },
+          "to" : {
+            "id" : "12726"
+          },
+          "type" : "contact_to_company"
+        }
+      },
+      "BatchResponsePublicAssociationMultiWithErrors" : {
+        "required" : [ "completedAt", "results", "startedAt", "status" ],
+        "type" : "object",
+        "properties" : {
+          "completedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : null
+          },
+          "errors" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/StandardError"
+            }
+          },
+          "links" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : null
+            },
+            "example" : null
+          },
+          "numErrors" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : null
+          },
+          "requestedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : null
+          },
+          "results" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/PublicAssociationMulti"
+            }
+          },
+          "startedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : null
+          },
+          "status" : {
+            "type" : "string",
+            "example" : null,
+            "enum" : [ "CANCELED", "COMPLETE", "PENDING", "PROCESSING" ]
+          }
+        },
+        "example" : null
+      },
+      "BatchResponsePublicAssociationWithErrors" : {
+        "required" : [ "completedAt", "results", "startedAt", "status" ],
+        "type" : "object",
+        "properties" : {
+          "completedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : null
+          },
+          "errors" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/StandardError"
+            }
+          },
+          "links" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : null
+            },
+            "example" : null
+          },
+          "numErrors" : {
+            "type" : "integer",
+            "format" : "int32",
+            "example" : null
+          },
+          "requestedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : null
+          },
+          "results" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/PublicAssociation"
+            }
+          },
+          "startedAt" : {
+            "type" : "string",
+            "format" : "date-time",
+            "example" : null
+          },
+          "status" : {
+            "type" : "string",
+            "example" : null,
+            "enum" : [ "CANCELED", "COMPLETE", "PENDING", "PROCESSING" ]
+          }
+        },
+        "example" : null
+      },
+      "ErrorDetail" : {
+        "required" : [ "message" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "The status code associated with the error detail",
+            "example" : null
+          },
+          "context" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "array",
+              "example" : null,
+              "items" : {
+                "type" : "string",
+                "example" : null
+              }
+            },
+            "description" : "Context about the error condition",
+            "example" : "{missingScopes=[scope1, scope2]}"
+          },
+          "in" : {
+            "type" : "string",
+            "description" : "The name of the field or parameter in which the error was found.",
+            "example" : null
+          },
+          "message" : {
+            "type" : "string",
+            "description" : "A human readable message describing the error along with remediation steps where appropriate",
+            "example" : null
+          },
+          "subCategory" : {
+            "type" : "string",
+            "description" : "A specific category that contains more specific detail about the error",
+            "example" : null
+          }
+        },
+        "example" : null
+      },
+      "BatchInputPublicObjectId" : {
+        "required" : [ "inputs" ],
+        "type" : "object",
+        "properties" : {
+          "inputs" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/PublicObjectId"
+            }
+          }
+        },
+        "example" : null
+      },
+      "BatchResponsePublicAssociation" : {
+        "required" : [ "completedAt", "results", "startedAt", "status" ],
+        "type" : "object",
+        "properties" : {
+          "completedAt" : {
+            "type" : "string",
+            "description" : "The date and time when the batch operation was completed.",
+            "format" : "date-time",
+            "example" : null
+          },
+          "links" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : null
+            },
+            "description" : "A collection of URLs related to the batch operation.",
+            "example" : null
+          },
+          "requestedAt" : {
+            "type" : "string",
+            "description" : "The date and time when the batch operation was requested.",
+            "format" : "date-time",
+            "example" : null
+          },
+          "results" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/PublicAssociation"
+            }
+          },
+          "startedAt" : {
+            "type" : "string",
+            "description" : "The date and time when the batch operation started.",
+            "format" : "date-time",
+            "example" : null
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "The current status of the batch operation, with possible values: PENDING, PROCESSING, CANCELED, COMPLETE.",
+            "example" : null,
+            "enum" : [ "CANCELED", "COMPLETE", "PENDING", "PROCESSING" ]
+          }
+        },
+        "example" : null
+      },
+      "PreviousPage" : {
+        "required" : [ "before" ],
+        "type" : "object",
+        "properties" : {
+          "before" : {
+            "type" : "string",
+            "description" : "A paging cursor token for retrieving previous pages.",
+            "example" : null
+          },
+          "link" : {
+            "type" : "string",
+            "description" : "A URL that can be used to retrieve the previous pages' results.",
+            "example" : null
+          }
+        },
+        "description" : "specifies the paging information needed to retrieve the previous set of results in a paginated API response",
+        "example" : null
+      },
+      "BatchResponsePublicAssociationMulti" : {
+        "required" : [ "completedAt", "results", "startedAt", "status" ],
+        "type" : "object",
+        "properties" : {
+          "completedAt" : {
+            "type" : "string",
+            "description" : "The date and time when the batch operation was completed.",
+            "format" : "date-time",
+            "example" : null
+          },
+          "links" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "example" : null
+            },
+            "description" : "URLs linking to resources or documentation associated with the batch operation.",
+            "example" : null
+          },
+          "requestedAt" : {
+            "type" : "string",
+            "description" : "The date and time when the batch request was made.",
+            "format" : "date-time",
+            "example" : null
+          },
+          "results" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/PublicAssociationMulti"
+            }
+          },
+          "startedAt" : {
+            "type" : "string",
+            "description" : "The date and time when the batch operation started.",
+            "format" : "date-time",
+            "example" : null
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "The current status of the batch operation, with possible values: PENDING, PROCESSING, CANCELED, COMPLETE.",
+            "example" : null,
+            "enum" : [ "CANCELED", "COMPLETE", "PENDING", "PROCESSING" ]
+          }
+        },
+        "example" : null
+      },
+      "AssociatedId" : {
+        "required" : [ "id", "type" ],
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "The unique ID that identifies an object.",
+            "example" : null
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "The type of associations.",
+            "example" : "deal_to_contact"
+          }
+        },
+        "description" : "Contains the id and type of an association",
+        "example" : {
+          "id" : "172859",
+          "type" : "contact_to_company"
+        }
+      },
+      "NextPage" : {
+        "required" : [ "after" ],
+        "type" : "object",
+        "properties" : {
+          "after" : {
+            "type" : "string",
+            "description" : "A paging cursor token for retrieving subsequent pages.",
+            "example" : null
+          },
+          "link" : {
+            "type" : "string",
+            "description" : "A URL that can be used to retrieve the next page results.",
+            "example" : null
+          }
+        },
+        "description" : "Specifies the paging information needed to retrieve the next set of results in a paginated API response",
+        "example" : null
+      },
+      "BatchInputPublicAssociation" : {
+        "required" : [ "inputs" ],
+        "type" : "object",
+        "properties" : {
+          "inputs" : {
+            "type" : "array",
+            "example" : null,
+            "items" : {
+              "$ref" : "#/components/schemas/PublicAssociation"
+            }
+          }
+        },
+        "example" : null
+      }
+    },
+    "responses" : {
+      "Error" : {
+        "description" : "An error occurred.",
+        "content" : {
+          "*/*" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "example" : null
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "hapikey" : {
+        "type" : "apiKey",
+        "name" : "hapikey",
+        "in" : "query"
+      },
+      "developer_hapikey" : {
+        "type" : "apiKey",
+        "name" : "hapikey",
+        "in" : "query"
+      },
+      "oauth2" : {
+        "type" : "oauth2",
+        "flows" : {
+          "authorizationCode" : {
+            "authorizationUrl" : "https://app.hubspot.com/oauth/authorize",
+            "tokenUrl" : "https://api.hubapi.com/oauth/v1/token",
+            "scopes" : {
+              "crm-public-object-api-access" : ""
+            }
+          }
+        }
+      },
+      "private_apps_legacy" : {
+        "type" : "apiKey",
+        "name" : "private-app-legacy",
+        "in" : "header"
+      },
+      "private_apps" : {
+        "type" : "apiKey",
+        "name" : "private-app",
+        "in" : "header"
+      }
+    }
+  },
+  "x-hubspot-available-client-libraries" : [ "Node", "Python", "Ruby", "PHP" ],
+  "x-hubspot-product-tier-requirements" : {
+    "marketing" : "FREE",
+    "sales" : "FREE",
+    "service" : "FREE",
+    "cms" : "FREE",
+    "commerce" : "FREE",
+    "crmHub" : "FREE",
+    "dataHub" : "FREE"
+  }
+}
