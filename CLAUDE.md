@@ -29,6 +29,7 @@ At the start of every session in this repo:
 - `calibration/calibration.md` -- **READ FIRST before every scoping session.** Calibration data from past projects, estimation adjustments, and cross-project patterns.
 - `templates/post-project-retro.md` -- Post-project retrospective template
 - `Sayer_Proposal_examples/` -- Reference proposals for format/tone
+- `scripts/intake.py` -- **Client intake automation.** Given a HubSpot record URL, pulls company/deal/contacts/engagements from HubSpot, matches Fireflies transcripts by attendee email, and scaffolds the `{Client Name}/` folder per the convention below. Read `scripts/README.md` for usage.
 
 ### Delivery
 - `calibration/delivery-calibration.md` -- **READ FIRST before generating delivery plans.** Delivery patterns from completed projects.
@@ -51,6 +52,7 @@ At the start of every session in this repo:
   - `delivery-retro.md` -- Post-project delivery retrospective
 
 ## Scoping Workflow
+0. **Intake (when starting from a HubSpot record)** -- Run `python3 scripts/intake.py --url <HUBSPOT_URL>` to scaffold the client folder automatically. Verify credentials first with `--test-only`. Skip this step if discovery materials already exist in a client folder.
 1. **Read `calibration/calibration.md`** -- Check for similar past projects and estimation adjustments
 2. Read discovery notes and transcript thoroughly
 3. Parse per the scoping skill: client profile, current state, desired future state, complexity indicators, unknowns
@@ -114,8 +116,12 @@ Skills live in `~/.claude/skills/` and are invoked as slash commands:
 ## Credentials
 
 - **Linear API:** macOS Keychain (`security find-generic-password -a "harbuckconsulting" -s "LINEAR_API_KEY" -w`)
+- **HubSpot API:** macOS Keychain (`HUBSPOT_API_KEY` -- Private App token with `crm.objects.{owners,companies,contacts,deals}.read` scopes)
+- **Fireflies API:** macOS Keychain (`FIREFLIES_API_KEY`)
 - **Google Sheets:** Service account JSON via Keychain (`GOOGLE_SERVICE_ACCOUNT_JSON`)
 - **Google Calendar:** MCP tools (already authenticated)
+
+Scripts resolve credentials via `scripts/keychain.py` in this order: macOS Keychain → environment variable → repo-local `.env` file. Never commit `.env`.
 
 ## Testing
 
