@@ -156,3 +156,66 @@ Scripts resolve credentials via `scripts/keychain.py` in this order: macOS Keych
 - **Milestone Group** -- **ACTIVE DELIVERY.** Kickoff complete Apr 7, weekly Mon 2pm Central. See `MilestoneSoW/`
 - **Strive Global** -- Proposal in progress, A/B options presented. See `Strive_Global/`
 - **American Bedding** -- CPQ discussion only, not a full scope. See `American Bedding - CPQ Discussion/`
+
+<!-- GSD:project-start source:PROJECT.md -->
+## Project
+
+**HelloSpoke — HubSpot CRM Implementation**
+
+A full CRM implementation engagement for HelloSpoke, a 30-person VoIP company serving the multifamily real estate vertical. Migrating from Salesforce to HubSpot CRM with billing integration (Rev IO), accounting sync (QuickBooks Online), and commission automation (QuotaPath). 15-18 users across sales, operations, and bookkeeping will be on the new system by August 2026.
+
+**Core Value:** HelloSpoke's sales team has one system of record that connects pipeline, billing, commissions, and reporting — replacing the current fragmented toolchain that causes manual work, data errors, and poor adoption.
+
+### Constraints
+
+- **Timeline:** Salesforce contract expires October 2026 — must complete migration with buffer. 14-week timeline targets August completion.
+- **Pricing:** Fixed fee only, no hours shown to client (Cam directive). Payment terms: equal installments every 15 days, net-15, 5% tech/admin fee.
+- **Integration dependencies:** Rev IO data must flow into HubSpot before QuotaPath can calculate commissions. Salesforce data must be in HubSpot before QuickBooks integration (per discovery call agreement).
+- **API access:** Rev IO and QuickBooks integrations require client-provided credentials and sandbox access before development can begin.
+- **HubSpot tier:** Minimum Sales Hub Professional required for custom objects and workflows. Exact tier of existing instance TBD.
+- **Data migration order:** Phased: inactive customers → active pipeline → leads. Each phase validated before proceeding.
+<!-- GSD:project-end -->
+
+<!-- GSD:stack-start source:STACK.md -->
+## Technology Stack
+
+Technology stack not yet documented. Will populate after codebase mapping or first phase.
+<!-- GSD:stack-end -->
+
+<!-- GSD:conventions-start source:CONVENTIONS.md -->
+## Conventions
+
+Conventions not yet established. Will populate as patterns emerge during development.
+<!-- GSD:conventions-end -->
+
+<!-- GSD:architecture-start source:ARCHITECTURE.md -->
+## Architecture
+
+Architecture not yet mapped. Follow existing patterns found in the codebase.
+<!-- GSD:architecture-end -->
+
+<!-- GSD:skills-start source:skills/ -->
+## Project Skills
+
+No project skills found. Add skills to any of: `.claude/skills/`, `.agents/skills/`, `.cursor/skills/`, or `.github/skills/` with a `SKILL.md` index file.
+<!-- GSD:skills-end -->
+
+<!-- GSD:workflow-start source:GSD defaults -->
+## GSD Workflow Enforcement
+
+Before using Edit, Write, or other file-changing tools, start work through a GSD command so planning artifacts and execution context stay in sync.
+
+Use these entry points:
+- `/gsd-quick` for small fixes, doc updates, and ad-hoc tasks
+- `/gsd-debug` for investigation and bug fixing
+- `/gsd-execute-phase` for planned phase work
+
+Do not make direct repo edits outside a GSD workflow unless the user explicitly asks to bypass it.
+<!-- GSD:workflow-end -->
+
+<!-- GSD:profile-start -->
+## Developer Profile
+
+> Profile not yet configured. Run `/gsd-profile-user` to generate your developer profile.
+> This section is managed by `generate-claude-profile` -- do not edit manually.
+<!-- GSD:profile-end -->

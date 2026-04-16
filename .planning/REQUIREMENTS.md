@@ -108,6 +108,9 @@ Deferred to future engagement. Tracked but not in current roadmap.
 | CRM-08 | Phase 1 | Pending |
 | CRM-09 | Phase 1 | Pending |
 | CRM-10 | Phase 1 | Pending |
+| PM-01 | Phase 1 | Pending |
+| PM-02 | Phase 1 | Pending |
+| PM-03 | Phase 1 | Pending |
 | MIG-01 | Phase 2 | Pending |
 | MIG-02 | Phase 2 | Pending |
 | MIG-03 | Phase 2 | Pending |
@@ -115,6 +118,7 @@ Deferred to future engagement. Tracked but not in current roadmap.
 | MIG-05 | Phase 2 | Pending |
 | MIG-06 | Phase 2 | Pending |
 | MIG-07 | Phase 2 | Pending |
+| PM-04 | Phase 2 | Pending |
 | INT-01 | Phase 3 | Pending |
 | INT-02 | Phase 3 | Pending |
 | INT-03 | Phase 3 | Pending |
@@ -125,6 +129,7 @@ Deferred to future engagement. Tracked but not in current roadmap.
 | INT-08 | Phase 3 | Pending |
 | INT-09 | Phase 3 | Pending |
 | INT-10 | Phase 3 | Pending |
+| PM-05 | Phase 3 | Pending |
 | ENB-01 | Phase 4 | Pending |
 | ENB-02 | Phase 4 | Pending |
 | ENB-03 | Phase 4 | Pending |
@@ -132,11 +137,6 @@ Deferred to future engagement. Tracked but not in current roadmap.
 | ENB-05 | Phase 4 | Pending |
 | ENB-06 | Phase 4 | Pending |
 | ENB-07 | Phase 4 | Pending |
-| PM-01 | Phase 1 | Pending |
-| PM-02 | Cross-phase | Pending |
-| PM-03 | Cross-phase | Pending |
-| PM-04 | Cross-phase | Pending |
-| PM-05 | Phase 3 | Pending |
 | PM-06 | Phase 4 | Pending |
 
 **Coverage:**
@@ -146,4 +146,4 @@ Deferred to future engagement. Tracked but not in current roadmap.
 
 ---
 *Requirements defined: 2026-04-16*
-*Last updated: 2026-04-16 after initial definition*
+*Last updated: 2026-04-16 after roadmap creation — PM-02/03 assigned to Phase 1, PM-04 assigned to Phase 2*
