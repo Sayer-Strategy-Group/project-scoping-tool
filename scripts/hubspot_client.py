@@ -140,12 +140,12 @@ _OBJECT_SINGULAR_TO_PLURAL: Dict[str, str] = {
 
 # Shape 1: /contacts/{portal}/record/{objectTypeId}/{recordId}
 _URL_SHAPE_RECORD = re.compile(
-    r"^https?://app\.hubspot\.com/contacts/(\d+)/record/(0-\d+)/(\d+)/?(?:\?.*)?$"
+    r"^https?://app(?:-[a-z0-9]+)?\.hubspot\.com/contacts/(\d+)/record/(0-\d+)/(\d+)/?(?:\?.*)?$"
 )
 
 # Shape 2: /contacts/{portal}/{singular}/{recordId}
 _URL_SHAPE_LEGACY = re.compile(
-    r"^https?://app\.hubspot\.com/contacts/(\d+)/(contact|company|deal)/(\d+)/?(?:\?.*)?$"
+    r"^https?://app(?:-[a-z0-9]+)?\.hubspot\.com/contacts/(\d+)/(contact|company|deal)/(\d+)/?(?:\?.*)?$"
 )
 
 
@@ -184,8 +184,8 @@ def parse_record_url(url: str) -> Tuple[str, str, str]:
 
     raise ValueError(
         "HubSpot URL did not match either supported shape. Expected:\n"
-        "  https://app.hubspot.com/contacts/{portalId}/record/{0-1|0-2|0-3}/{id}\n"
-        "  https://app.hubspot.com/contacts/{portalId}/{contact|company|deal}/{id}\n"
+        "  https://app[-region].hubspot.com/contacts/{portalId}/record/{0-1|0-2|0-3}/{id}\n"
+        "  https://app[-region].hubspot.com/contacts/{portalId}/{contact|company|deal}/{id}\n"
         f"Got: {url!r}"
     )
 
