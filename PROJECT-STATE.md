@@ -1,6 +1,6 @@
 # Project Scoping Tool — Active Projects
 
-> **Last updated:** 2026-04-14
+> **Last updated:** 2026-04-16
 > Claude: read this file at session start to orient quickly. Each active project links to its own `STATE.md`.
 
 ---
@@ -20,6 +20,7 @@
 | **Strive Global** | V3 proposal complete | Schedule review call |
 | **Top Down Auto** | Scoped, pending ERP follow-up call | Clarify ERP questions |
 | **American Bedding** | CPQ discussion — two-phase proposal sent | Contract review, follow-up answered Apr 10 |
+| **HelloSpoke** | Proposal drafted v2 ($42K full / $22K reduced) -- CPQ workstream added | Review Gamma v2 + scope with Cameron, send to client | [STATE.md](HelloSpoke/STATE.md) |
 
 ---
 

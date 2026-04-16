@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A full CRM implementation engagement for HelloSpoke, a 30-person VoIP company serving the multifamily real estate vertical. Migrating from Salesforce to HubSpot CRM with billing integration (Rev IO), accounting sync (QuickBooks Online), and commission automation (QuotaPath). 15-18 users across sales, operations, and bookkeeping will be on the new system by August 2026.
+A full CRM implementation engagement for HelloSpoke, a 30-person VoIP company serving the multifamily real estate vertical. Migrating from Salesforce to HubSpot CRM with a net-new HubSpot CPQ build (native, incl. e-signature), billing integration (Rev IO), accounting sync (QuickBooks Online), and commission automation (QuotaPath). 15-18 users across sales, operations, and bookkeeping will be on the new system by August 2026.
 
 ## Core Value
 
@@ -23,10 +23,11 @@ HelloSpoke's sales team has one system of record that connects pipeline, billing
 - [ ] R5: Build Rev IO billing integration — custom object in HubSpot, REST API sync (accounts, invoices, payments, usage), deal association
 - [ ] R6: Build QuickBooks Online revenue actuals integration — custom sync for paid invoices → HubSpot deal properties (OAuth2, webhook)
 - [ ] R7: Configure HubSpot-side data flow for QuotaPath commission tracking (custom objects, deal properties, data architecture)
-- [ ] R8: Build automated workflows — lead routing, stage-change triggers, follow-up automation, notifications (up to 10)
-- [ ] R9: Deliver executive and sales dashboards — pipeline, forecasting, actuals vs targets (up to 2 dashboards, 20+ reports)
-- [ ] R10: Train 3 user groups — admin (Christina), sales reps, ops/bookkeeping — with recorded sessions
-- [ ] R11: Project management — kickoff, weekly syncs, milestone reviews, change management for 14-week engagement
+- [ ] R8: Build HubSpot CPQ with product library, dual dynamic templates (VoIP + Notify/SaaS), bulk line-item import (up to 300 lines), parent-child property auto-creation with dedup, 2-tier approval workflow, native e-signature (replacing DocuSign), and close-won amount auto-sync
+- [ ] R9: Build automated workflows — lead routing, stage-change triggers, follow-up automation, notifications (up to 10)
+- [ ] R10: Deliver executive and sales dashboards — pipeline, forecasting, actuals vs targets (up to 2 dashboards, 20+ reports)
+- [ ] R11: Train 3 user groups — admin (Christina), sales reps, ops/bookkeeping — with recorded sessions
+- [ ] R12: Project management — kickoff, weekly syncs, milestone reviews, change management for 14-week engagement
 
 ### Out of Scope
 
@@ -39,7 +40,8 @@ HelloSpoke's sales team has one system of record that connects pipeline, billing
 - Ongoing data sync maintenance post-go-live — engagement ends after hypercare
 - HubSpot licensing costs — client responsibility
 - QuotaPath platform implementation — QuotaPath handles their own; Sayer assists with HubSpot-side only
-- Native HubSpot CPQ build — only if QuotaPath falls through (would be a change order)
+- PandaDoc integration — fallback change order if HubSpot CPQ AI falls short during build (HubSpot CPQ native is primary)
+- DocuSign parallel run — HelloSpoke is sunsetting DocuSign; native HubSpot e-sig replaces it
 
 ## Context
 
@@ -94,10 +96,11 @@ HelloSpoke's sales team has one system of record that connects pipeline, billing
 |----------|-----------|---------|
 | Exclude Elastic/ALN | Jeremy self-de-scoped in March 26 discovery call; future aspiration not immediate need | — Pending |
 | Exclude Campfire ERP | ERP evaluation TBD on client side; prevents ERP complexity premium | — Pending |
-| QuotaPath-primary, CPQ fallback | QuotaPath further along (demo done, pricing received); CPQ is change order if QP falls through | — Pending |
-| First-time integration premium | Rev IO + QuickBooks are both new for Sayer; American Bedding NetSuite pattern applied (40-60 hrs precedent) | — Pending |
+| CPQ scoped as dedicated workstream, HubSpot CPQ native primary (D10, supersedes D4) | QuotaPath is commission tracking only, does NOT cover CPQ. Jeremy and Billy confirmed on-call: "CPQ is absolutely part of it" / "we're just going to use HubSpot CPQ for that because they have the AI CPQ". PandaDoc as change-order fallback. | — Pending |
+| QuotaPath trimmed to HubSpot-side data flow only | QuotaPath handles their own platform; Sayer builds the custom object + deal property feed | — Pending |
+| First-time integration premium | Rev IO + QuickBooks + HubSpot AI CPQ are all new for Sayer; American Bedding NetSuite pattern applied (40-60 hrs precedent) | — Pending |
 | Phased data migration | Reduces risk per load; agreed in discovery calls; allows validation between batches | — Pending |
-| Fixed fee $35K full / $22K reduced | No verbal quote given; priced above median to account for integration uncertainty | — Pending |
+| Fixed fee $42K full / $22K reduced | No verbal quote given; priced above median (234 hrs × $150 = $35,100 baseline) to account for integration uncertainty + first HubSpot AI CPQ build + DocuSign sunset migration | — Pending |
 | Existing HubSpot reconfig | Instance provisioned ~Feb 2026; audit in Week 1 to assess cleanup needed | — Pending |
 
 ## Evolution
@@ -118,4 +121,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-16 after initialization*
+*Last updated: 2026-04-16 (PM, CPQ scope correction) — added R8 (HubSpot CPQ build) after transcript re-read; pricing revised $35K → $42K*

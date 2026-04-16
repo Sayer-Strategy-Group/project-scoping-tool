@@ -43,6 +43,17 @@ Requirements for this engagement. Each maps to roadmap phases.
 - [ ] **INT-09**: End-to-end data chain tested: Rev IO → HubSpot custom object → deal → QuotaPath
 - [ ] **INT-10**: Sync monitoring and error alerting established for all integrations
 
+### CPQ & Quoting (HubSpot CPQ Native)
+
+- [ ] **CPQ-01**: HubSpot CPQ product library configured with up to 50 SKUs covering VoIP setup/MRR/equipment and Notify SaaS per-property pricing
+- [ ] **CPQ-02**: Two dynamic quote templates built with product-driven terms and conditions (VoIP T&C, Notify/SaaS T&C) plus one combined template for customers taking both services
+- [ ] **CPQ-03**: Bulk line-item import path operational for property management quotes — CSV validation with clear error messaging, supports up to 300 line items per quote
+- [ ] **CPQ-04**: Parent-child property auto-creation from quote line items with deduplication logic preventing duplicate sub-accounts on re-quote
+- [ ] **CPQ-05**: Quote approval workflow configured with up to 2 tiers (rep self-serve for standard pricing; routed approval for non-standard)
+- [ ] **CPQ-06**: HubSpot native e-signature live with templates for MSA, NDA, and SOW; DocuSign retired
+- [ ] **CPQ-07**: Close-won automation — final quoted amount auto-syncs to deal amount; close date auto-updates to signature date
+- [ ] **CPQ-08**: Closed-won quote handoff to Rev IO billing record creation configured
+
 ### Enablement
 
 - [ ] **ENB-01**: Up to 10 automated workflows deployed — lead routing, stage triggers, follow-ups, notifications
@@ -75,10 +86,11 @@ Deferred to future engagement. Tracked but not in current roadmap.
 
 ### Advanced Features
 
-- **ADV-01**: Native HubSpot CPQ build (if QuotaPath doesn't proceed)
+- ~~**ADV-01**: Native HubSpot CPQ build (if QuotaPath doesn't proceed)~~ — **Promoted to v1** as CPQ-01 through CPQ-08 after 2026-04-16 scope correction (QuotaPath never covered CPQ)
 - **ADV-02**: Campfire ERP integration (pending HelloSpoke's ERP evaluation)
 - **ADV-03**: AI-powered data preprocessing for varied file format imports
 - **ADV-04**: Advanced commission approval workflows beyond QuotaPath standard
+- **ADV-05**: PandaDoc migration (fallback if HubSpot CPQ AI falls short during Phase 3 build)
 
 ## Out of Scope
 
@@ -129,6 +141,14 @@ Deferred to future engagement. Tracked but not in current roadmap.
 | INT-08 | Phase 3 | Pending |
 | INT-09 | Phase 3 | Pending |
 | INT-10 | Phase 3 | Pending |
+| CPQ-01 | Phase 3 | Pending |
+| CPQ-02 | Phase 3 | Pending |
+| CPQ-03 | Phase 3 | Pending |
+| CPQ-04 | Phase 3 | Pending |
+| CPQ-05 | Phase 3 | Pending |
+| CPQ-06 | Phase 3 | Pending |
+| CPQ-07 | Phase 3 | Pending |
+| CPQ-08 | Phase 3 | Pending |
 | PM-05 | Phase 3 | Pending |
 | ENB-01 | Phase 4 | Pending |
 | ENB-02 | Phase 4 | Pending |
@@ -140,10 +160,10 @@ Deferred to future engagement. Tracked but not in current roadmap.
 | PM-06 | Phase 4 | Pending |
 
 **Coverage:**
-- v1 requirements: 38 total
-- Mapped to phases: 38
+- v1 requirements: 46 total
+- Mapped to phases: 46
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-16*
-*Last updated: 2026-04-16 after roadmap creation — PM-02/03 assigned to Phase 1, PM-04 assigned to Phase 2*
+*Last updated: 2026-04-16 (CPQ scope correction) — added CPQ-01 through CPQ-08 to Phase 3 after transcript re-read confirmed QuotaPath does not cover quoting; ADV-01 promoted to v1 and split into 8 atomic CPQ requirements*

@@ -2,7 +2,7 @@
 
 ## Overview
 
-A 14-week consulting engagement migrating HelloSpoke from Salesforce to HubSpot CRM with three integrated systems (Rev IO billing, QuickBooks Online revenue actuals, QuotaPath commissions). The engagement runs in four phases: establish the CRM foundation, migrate Salesforce data, build integrations, then enable the team and hand off a running system. Phase overlap is expected — migration begins while CRM configuration is being finalized, and integration build starts as migration validates.
+A 14-week consulting engagement migrating HelloSpoke from Salesforce to HubSpot CRM with a native HubSpot CPQ build and three integrated systems (Rev IO billing, QuickBooks Online revenue actuals, QuotaPath commissions). The engagement runs in four phases: establish the CRM foundation, migrate Salesforce data, build integrations and quoting, then enable the team and hand off a running system. Phase overlap is expected — migration begins while CRM configuration is being finalized, and integration/quoting build starts as migration validates.
 
 ## Phases
 
@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 1: CRM Foundation** - Audit, configure, and design the HubSpot instance for HelloSpoke's team and pipeline
 - [ ] **Phase 2: Salesforce Migration** - Audit SF data and execute phased migration of contacts, companies, deals, and activities
-- [ ] **Phase 3: Integration Build** - Connect Rev IO, QuickBooks, and QuotaPath to HubSpot with monitored data flows
+- [ ] **Phase 3: Integration & Quoting Build** - Connect Rev IO, QuickBooks, and QuotaPath to HubSpot with monitored data flows, and build the HubSpot native CPQ with e-signature
 - [ ] **Phase 4: Enablement & Go-Live** - Deploy automations, build dashboards, train all user groups, and hand off the system
 
 ## Phase Details
@@ -43,16 +43,19 @@ Decimal phases appear between their surrounding integers in numeric order.
   5. Post-migration integrity check confirms no data loss and scope change process is in place for any discovered gaps
 **Plans**: TBD
 
-### Phase 3: Integration Build
-**Goal**: Rev IO, QuickBooks Online, and QuotaPath data flows are operational and monitored in HubSpot
+### Phase 3: Integration & Quoting Build
+**Goal**: Rev IO, QuickBooks Online, and QuotaPath data flows are operational and monitored in HubSpot, and the sales team can configure, price, quote, and e-sign in HubSpot without admin intervention
 **Depends on**: Phase 1 (partial overlap with Phase 2 permitted once custom objects exist)
-**Requirements**: INT-01, INT-02, INT-03, INT-04, INT-05, INT-06, INT-07, INT-08, INT-09, INT-10, PM-05
+**Weeks**: 5-11
+**Requirements**: INT-01, INT-02, INT-03, INT-04, INT-05, INT-06, INT-07, INT-08, INT-09, INT-10, CPQ-01, CPQ-02, CPQ-03, CPQ-04, CPQ-05, CPQ-06, CPQ-07, CPQ-08, PM-05
 **Success Criteria** (what must be TRUE):
   1. Rev IO billing data (accounts, invoices, payments, usage) is syncing to HubSpot custom objects and associated with deals via REST API
   2. QuickBooks paid invoice revenue actuals are appearing on HubSpot deal properties with documented source-of-truth reconciliation rules
-  3. QuotaPath can pull commission-relevant data from HubSpot deal properties and custom objects — end-to-end chain (Rev IO → HubSpot → QuotaPath) is tested
-  4. All three integrations have error alerting and sync monitoring in place
-  5. Cross-vendor coordination with QuotaPath, Rev IO, and QuickBooks touchpoints is complete and documented
+  3. Sales reps can build standard quotes end-to-end without admin assistance; bulk imports of up to 300 line items succeed with clear validation
+  4. HubSpot native e-signature is live, DocuSign is retired, and close-won automation syncs the final quoted amount to the deal amount
+  5. QuotaPath can pull commission-relevant data from HubSpot deal properties and custom objects — end-to-end chain (Rev IO → HubSpot → QuotaPath) is tested
+  6. All three integrations have error alerting and sync monitoring in place
+  7. Cross-vendor coordination with QuotaPath, Rev IO, and QuickBooks touchpoints is complete and documented
 **Plans**: TBD
 
 ### Phase 4: Enablement & Go-Live
@@ -75,5 +78,5 @@ Phases execute in numeric order with allowed overlap between Phase 1/2 and Phase
 |-------|----------------|--------|-----------|
 | 1. CRM Foundation | 0/TBD | Not started | - |
 | 2. Salesforce Migration | 0/TBD | Not started | - |
-| 3. Integration Build | 0/TBD | Not started | - |
+| 3. Integration & Quoting Build | 0/TBD | Not started | - |
 | 4. Enablement & Go-Live | 0/TBD | Not started | - |
