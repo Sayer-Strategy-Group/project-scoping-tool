@@ -1,8 +1,8 @@
 # Milestone Group — Session State
 
 > **Status:** `Active Delivery`
-> **Last updated:** 2026-04-14
-> **One-liner:** 8-week HubSpot CRM implementation for PE real estate firm replacing scattered Outlook/Excel/Zoho tracking — Week 1 underway, first working session held today.
+> **Last updated:** 2026-04-20
+> **One-liner:** 8-week HubSpot CRM implementation for PE real estate firm replacing scattered Outlook/Excel/Zoho tracking — Linear project live (94/125 sub-issues + 9 milestones + 3 phase parents), blocked on Linear workspace upgrade for remaining 31 issues.
 
 ---
 
@@ -17,8 +17,16 @@
 
 ---
 
-## Done Last Session (2026-04-14)
+## Done Last Session (2026-04-20)
 
+- **Linear project created in Engagement/Support team:** https://linear.app/gosayer/project/milestone-group-hubspot-crm-implementation-2c60f3bede3a
+- Created 9 weekly milestones (Apr 18 → Jun 12 target dates) for progress rollup
+- Created 3 phase parent issues: ENG-44 (Phase 1), ENG-45 (Phase 2), ENG-46 (Phase 3) with success criteria descriptions
+- Created 94 of 125 sub-issues (ENG-47 through ENG-140) — CRM-01, CRM-02, MIG-01, CRM-05, INT-02, CRM-04, CRM-03, CRM-06, first 6 of INT-01 — each with milestone assignment, workstream prefix + owner labels, rounded-integer estimates
+- Added `DOC` workstream label (reused `CRM`, `MIG`, `INT`, `TRN`, `UAT`, `sayer`, `client`, `shared` from Trialta rebuild)
+- Wrote `delivery-state.json` (schema v2.0, mirrors Trialta structure) with all Linear IDs
+
+### Prior session (2026-04-14)
 - Rebuilt plan.json from signed proposal as source of truth (125 tasks, 13 workstreams, hours verified at 176h median)
 - Corrected pricing to $26,000 / 4 × $6,500 every 15 days Net-15 (was $26,075 / 50-50)
 - Created client-facing `Milestone_Project_Tracker.xlsx` (4-sheet XLSX, status dropdowns)
@@ -36,7 +44,9 @@
 - [ ] Set up shared Google Drive data room (promised Apr 10)
 - [ ] Send rules of engagement examples / short video (Jason flagged at kickoff)
 - [ ] Schedule next working session (smaller group: Jason + 1)
-- [ ] Create Linear project (`create_linear_project.py` exists, not yet executed)
+- [ ] **BLOCKER:** Upgrade Linear workspace (free-tier issue cap hit Apr 20). 31 sub-issues still to create: INT-01 final 2, TRN-01 (5), TRN-02 (6), UAT-01 (12), DOC-01 (5). Remaining payloads in `/tmp/milestone_issues.json` indices 94–124.
+- [ ] Wire `blockedBy` dependencies (~20 edges) after remaining issues created — see `~/.claude/plans/zany-moseying-ocean.md` for the dependency table
+- [ ] Rotate `LINEAR_API_KEY` in macOS Keychain — current token returns 401 (OAuth via claude.ai MCP still works)
 
 ### Client Owes
 - [ ] Outlook contact exports — Jason, Robert, David, Rich, Jim (deadline: **2026-04-18** soft / **2026-04-25** hard)
@@ -49,10 +59,10 @@
 
 ## Next Session Focus
 
-1. Capture data discovery answers from today's working session into `Data Discovery Template.md`
-2. Begin CRM-01 (portal setup, user accounts, roles) — HubSpot access confirmed
-3. Run properties workshop with Jason Wise (CRM-02 prerequisite)
-4. Execute `create_linear_project.py` to set up Linear project
+1. **Resolve Linear cap:** Confirm workspace upgrade (or activate free trial via sales@linear.app), then create remaining 31 sub-issues and wire `blockedBy` dependencies
+2. Capture data discovery answers from today's working session into `Data Discovery Template.md`
+3. Begin CRM-01 (portal setup, user accounts, roles) — HubSpot access confirmed
+4. Run properties workshop with Jason Wise (CRM-02 prerequisite)
 5. Begin repo restructure planning (dedicated session — see `PROJECT-STATE.md`)
 
 ---
@@ -67,7 +77,8 @@
 | `milestone-project-tracker.csv` | Flat CSV for Google Sheets |
 | `working-session-1-deck.md` | Working session deck (Gamma: https://gamma.app/docs/b3calyxkhao6z3z) |
 | `Data Discovery Template.md` | 23-question blueprint template — answers to be captured |
-| `create_linear_project.py` | Linear setup script (not yet executed) |
+| `create_linear_project.py` | Older flat-structure script — **superseded by Linear MCP approach Apr 20**, keep as reference only |
+| `delivery-state.json` | **New Apr 20** — schema v2.0 state file with Linear project/milestone/phase-parent IDs (mirrors Trialta structure) |
 
 ---
 
@@ -87,5 +98,5 @@
 - Microsoft 365 / Outlook only — NOT Google Workspace (corrected at kickoff)
 - Prior DealCloud abandonment after 2 months — adoption risk is real. Ages 25–65.
 - Robert's smart approach: export Outlook per broker, filter against acquisition target list
-- Linear project: https://linear.app — not yet created (run script above)
+- Linear project (live Apr 20): https://linear.app/gosayer/project/milestone-group-hubspot-crm-implementation-2c60f3bede3a
 - Weekly standups: Monday 2pm Central
