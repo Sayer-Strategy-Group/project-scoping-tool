@@ -2,6 +2,8 @@
 
 > **Last updated:** 2026-04-21
 > Claude: read this file at session start to orient quickly. Each active project links to its own `STATE.md`.
+>
+> Note: when working in a specific client, read `{Client}/STATE.md` for full context.
 
 ---
 
@@ -16,6 +18,7 @@
 
 | Client | Status | Next Action |
 |--------|--------|-------------|
+| **HelloSpoke** | $42k deal at Decision Maker Bought-In, close target 2026-04-30 | Thursday 2026-04-23 @ 3pm Central ops discovery walkthrough (Christina, Haley, Jeremy). See [HelloSpoke/STATE.md](HelloSpoke/STATE.md). |
 | **Arkview Capital** | Scoped, pending SOW delivery | Deliver SOW |
 | **Strive Global** | V3 proposal complete | Schedule review call |
 | **Top Down Auto** | Scoped, pending ERP follow-up call | Clarify ERP questions |
