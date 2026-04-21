@@ -9,7 +9,7 @@
 
 | Client | Status | Current Phase | Next Action | STATE.md |
 |--------|--------|---------------|-------------|----------|
-| **Milestone Group** | Active — Wk 2 | Phase 1: Contacts & Activity | Friday Apr 24 contacts upload; chase M365 creds + Robert's pipeline spreadsheet in today's call | [STATE.md](MilestoneSoW/STATE.md) |
+| **Milestone Group** | Active — Wk 2 | Phase 1: Contacts & Activity | Pipeline spec locked (Robert delivered); building properties. Friday contacts upload. M365 creds chase email pending send. | [STATE.md](MilestoneSoW/STATE.md) |
 | **Trialta** | Active — Wk 1–2 | Phase 1: CRM Foundation | Check phase progress, schedule discovery call | [STATE.md](Trialta/STATE.md) |
 
 ## Pre-Sale Pipeline

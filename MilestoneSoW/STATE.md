@@ -1,8 +1,8 @@
 # Milestone Group — Session State
 
 > **Status:** `Active Delivery`
-> **Last updated:** 2026-04-20
-> **One-liner:** 8-week HubSpot CRM implementation for PE real estate firm replacing scattered Outlook/Excel/Zoho tracking — Linear project fully live (125/125 sub-issues + 9 milestones + 3 phase parents + 42 blockedBy edges).
+> **Last updated:** 2026-04-21
+> **One-liner:** 8-week HubSpot CRM implementation for PE real estate firm replacing scattered Outlook/Excel/Zoho tracking — Wk 2, pipeline spec locked, properties build in flight.
 
 ---
 
@@ -11,13 +11,35 @@
 | Field | Value |
 |-------|-------|
 | Phase | Phase 1 — Contacts & Activity Capture |
-| Week | Wk 1 of 8 |
+| Week | Wk 2 of 8 |
 | Phase end date | 2026-05-08 |
-| On track? | Yes — blocked on client data exports |
+| On track? | Yes on property build (Robert delivered spec) — **blocked on M365 admin creds (ENG-83) for activity-capture workstream** |
 
 ---
 
-## Done Last Session (2026-04-20)
+## Done Last Session (2026-04-21)
+
+**Weekly sync call (14:00 CT, 27 min):**
+- **Pipeline spec locked** — Robert shared refined active-tab spreadsheet live; focus on **Status column only** (4th column). Priority/Active become optional dropdowns. Closed tab deleted from build scope.
+- **Data model confirmed:** Company → Seller (always), Broker (when marketed), Property = Project. Portfolios = multiple properties owned by one seller (Waterton example).
+- **Contact ownership: no rules.** All 3 (Jason, Robert, Jim) share. Bulk-import + most-complete-record dedup authorized.
+- **Jason delivered contact export** ✓. Dedup in progress. Friday Apr 24 upload target (one day ahead of hard deadline).
+- **Team roles named publicly:** Kyle still leads, Weston = day-to-day PM + HubSpot Build Lead. Robert stays day-to-day champion. Jason = exec stakeholder / sign-off.
+
+**Post-call workflow executed (via `/sayer-post-call Milestone`):**
+- HubSpot note `365516064504` logged — all 5 associations (Company + 3 Contacts + Milestone-CRM Deal) successful
+- HubSpot task `365551655672` created — "Chase Robert Strong for Microsoft 365 admin credentials (ENG-83)" — HIGH priority, due EOD 2026-04-21, owned by Kyle
+- Gmail draft #1 (`r-7133084316364069882`) — team recap + Drive link to Jason/Robert/Jim cc Weston/Cam
+- Gmail draft #2 (`r-4670589972762499888`) — M365 creds ask to Robert (short/direct)
+- Slack post to #milestone (C0AFYB270P8): https://sayerhq.slack.com/archives/C0AFYB270P8/p1776800860557289
+- Contact firstname cleanup: Jason Wise (was "Jwise Wise") + Jim Duey (was "Jduey") — HubSpot records now display correctly
+
+**What didn't happen in-call (carried to async):**
+- M365 admin creds ask — NOT raised live (critical path miss)
+- Drive URL — not announced in-call; recovered via draft #1 email
+- Workflow requirements session scheduling (ENG-98) — not scheduled; push to next Tuesday
+
+### Prior session (2026-04-20)
 
 - **Linear project live in Engagement/Support team:** https://linear.app/gosayer/project/milestone-group-hubspot-crm-implementation-2c60f3bede3a
 - Created 9 weekly milestones (Apr 18 → Jun 12 target dates) for progress rollup
@@ -42,26 +64,30 @@
 ## Open Items
 
 ### Sayer Owes
-- [x] ~~Set up shared Google Drive data room~~ — **Done 2026-04-21.** Link: https://drive.google.com/drive/folders/0ABostCjJJ6egUk9PVA
+- [ ] **Kyle: Send Gmail drafts `r-7133084316364069882` (team recap) and `r-4670589972762499888` (M365 ask to Robert)** — both staged, pending review
+- [ ] **Kyle: Share Drive folder with jwise@, rstrong@, jduey@ as editors** — promised in draft #1 body
+- [ ] **Kyle + Weston: Build HubSpot properties from Robert's active-tab spec** (ENG-57, ENG-58) — by next call 2026-04-28
+- [ ] **Kyle: Record Outlook-setup walkthrough video** OR schedule 1:1 setup calls — for next call onboarding
 - [ ] Send rules of engagement examples / short video (Jason flagged at kickoff)
-- [ ] Schedule next working session (smaller group: Jason + 1)
 - [ ] Rotate `LINEAR_API_KEY` in macOS Keychain — current token returns 401 (OAuth via claude.ai MCP works; direct scripts that need the key do not)
+- [ ] Forward Robert's active-tab spreadsheet to Claude for archival to Drive `/03-artifacts/phase-1-build-spec/`
 
 ### Client Owes
-- [ ] Outlook contact exports — Jason, Robert, David, Rich, Jim (deadline: **2026-04-18** soft / **2026-04-25** hard)
+- [ ] **Microsoft 365 admin credentials (ENG-83)** — **CRITICAL PATH.** Blocks ENG-84, 85, 86, 87, 88, 91 (tracking domain + per-user Outlook inbox + calendar sync). Chased via draft #2 to Robert — awaiting response.
+- [x] ~~Outlook contact exports — Jason~~ — **Delivered 2026-04-21.** Dedup in progress for Friday Apr 24 upload. Older team members backfill later (Robert OK'd).
+- [x] ~~Robert: refined deal pipeline spreadsheet~~ — **Delivered 2026-04-21 in-call.** Active tab is Phase 1 property-build spec.
 - [ ] Zoho CRM export — small team segment (deadline: **2026-04-25**)
-- [ ] Robert: broker contacts vs. acquisition target list (deadline: **2026-04-25**)
 - [ ] Confirm Fireflies subscription + API access (required before Phase 3)
-- [ ] Complete Data Discovery Template Q1–Q23 (working through live in session today)
 
 ---
 
-## Next Session Focus
+## Next Session Focus (Tuesday 2026-04-28 @ 2pm CT)
 
-1. Capture data discovery answers from today's working session into `Data Discovery Template.md`
-2. Begin CRM-01 (portal setup, user accounts, roles) — HubSpot access confirmed (ENG-47 through ENG-55)
-3. Run properties workshop with Jason Wise (ENG-56) — blocks contact/company property creation
-4. Begin repo restructure planning (dedicated session — see `PROJECT-STATE.md`)
+1. **Review built properties** — Kyle + Weston walk through what's in the portal (ENG-57, ENG-58) per Robert's active-tab spec. Robert confirms or redlines.
+2. **Kick off user provisioning** (CRM-01 workstream, ENG-47-55) — pending M365 creds resolution.
+3. **Outlook integration walkthrough** — video OR 1:1 calls; depends on creds timing.
+4. **Confirm Zoho export status + Fireflies API access** — light check-ins, push forward if not resolved.
+5. **Schedule workflow requirements session with Jason** (ENG-98) — find a 45-min slot this week or next.
 
 ---
 
@@ -82,6 +108,10 @@
 
 ## Key Decisions
 
+- **Pipeline spec source (2026-04-21):** Robert's refined active-tab spreadsheet is authoritative. Focus on Status column (4th). Priority/Active become optional dropdowns. Closed tab excluded from build.
+- **Data model (2026-04-21):** Company → Seller (always present), Broker (only when marketed), Property = Project. Portfolios = multiple properties under one seller.
+- **Contact ownership (2026-04-21):** No ownership rules. All users share. Bulk-import with "most complete record" dedup logic — Robert, Jason, Jim all explicitly OK'd.
+- **Calculated properties (2026-04-21):** TMG price per unit = Excel formula. HubSpot API cannot create rollups — must be manually configured in UI after property build.
 - **Pricing source of truth:** Signed proposal ($26,000) supersedes `Milestone_final_estimate.md` ($26,075)
 - **Fireflies phasing:** Confirmed in scope as Phase 3. Client must provide API access before Phase 3 starts.
 - **Outlook sync phasing:** Kept in Phase 1 (INT-02) despite proposal listing it in Phase 3 — Phase 1 success criteria requires calendar sync working
