@@ -42,7 +42,7 @@
 ## Open Items
 
 ### Sayer Owes
-- [ ] Set up shared Google Drive data room (promised Apr 10)
+- [x] ~~Set up shared Google Drive data room~~ — **Done 2026-04-21.** Link: https://drive.google.com/drive/folders/0ABostCjJJ6egUk9PVA
 - [ ] Send rules of engagement examples / short video (Jason flagged at kickoff)
 - [ ] Schedule next working session (smaller group: Jason + 1)
 - [ ] Rotate `LINEAR_API_KEY` in macOS Keychain — current token returns 401 (OAuth via claude.ai MCP works; direct scripts that need the key do not)
@@ -92,9 +92,11 @@
 ## Standing Context
 
 - 4 offices: Atlanta, Dallas, Denver, South Florida. 10 users.
-- Jason Wise = primary decision contact. Weston Baker = Sayer PM.
+- **Roles (as of 2026-04-21):** Robert Strong = day-to-day champion (Milestone). Jason Wise = exec stakeholder / sign-off (Milestone). Kyle Harbuck = Sayer Project Lead. Weston Baker = Sayer PM + HubSpot Build Lead. Cameron Taggart = Sayer Exec Sponsor.
+- **HubSpot Portal ID:** 245699062. **Tier:** Sales Hub Professional (1 seat) + Core Seats Professional (19 seats) = 20 total seats. 3,000 HubSpot credits/mo included. Custom 10% discount negotiated ($945/mo billed).
 - Microsoft 365 / Outlook only — NOT Google Workspace (corrected at kickoff)
 - Prior DealCloud abandonment after 2 months — adoption risk is real. Ages 25–65.
 - Robert's smart approach: export Outlook per broker, filter against acquisition target list
 - Linear project (live Apr 20): https://linear.app/gosayer/project/milestone-group-hubspot-crm-implementation-2c60f3bede3a
-- Weekly standups: Monday 2pm Central
+- Shared Drive (live Apr 21): https://drive.google.com/drive/folders/0ABostCjJJ6egUk9PVA
+- Weekly standups: Tuesday 2pm Central (confirmed 2026-04-14 Discovery)
