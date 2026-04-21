@@ -19,7 +19,7 @@
 | **Arkview Capital** | Scoped, pending SOW delivery | Deliver SOW |
 | **Strive Global** | V3 proposal complete | Schedule review call |
 | **Top Down Auto** | Scoped, pending ERP follow-up call | Clarify ERP questions |
-| **American Bedding** | CPQ discussion — two-phase proposal sent | Contract review, follow-up answered Apr 10 |
+| **American Bedding** | CPQ discussion — two-phase proposal sent | SB asked Apr 17 for HubSpot↔NetSuite CPQ client references; reference-follow-up drafted Apr 21 (awaiting internal clearance on contact share). |
 
 ---
 
