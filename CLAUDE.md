@@ -155,4 +155,4 @@ Scripts resolve credentials via `scripts/keychain.py` in this order: macOS Keych
 - **Trialta** -- **ACTIVE DELIVERY.** Kickoff complete Apr 7, discovery call next. See `Trialta/`
 - **Milestone Group** -- **ACTIVE DELIVERY.** Kickoff complete Apr 7, weekly Mon 2pm Central. See `Milestone Group/`
 - **Strive Global** -- Proposal in progress, A/B options presented. See `Strive Global/`
-- **American Bedding** -- CPQ discussion only, not a full scope. See `American Bedding - CPQ Discussion/`
+- **American Bedding** -- CPQ discussion only, not a full scope. See `American Bedding/`
