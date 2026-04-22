@@ -153,6 +153,6 @@ Scripts resolve credentials via `scripts/keychain.py` in this order: macOS Keych
 - **Top Down Auto** -- Scoped, pending follow-up call for ERP clarification. See `Top Down Auto/`
 - **Arkview Capital** -- Scoped, pending SOW delivery. See `Arkview Capital/`
 - **Trialta** -- **ACTIVE DELIVERY.** Kickoff complete Apr 7, discovery call next. See `Trialta/`
-- **Milestone Group** -- **ACTIVE DELIVERY.** Kickoff complete Apr 7, weekly Mon 2pm Central. See `MilestoneSoW/`
+- **Milestone Group** -- **ACTIVE DELIVERY.** Kickoff complete Apr 7, weekly Mon 2pm Central. See `Milestone Group/`
 - **Strive Global** -- Proposal in progress, A/B options presented. See `Strive_Global/`
 - **American Bedding** -- CPQ discussion only, not a full scope. See `American Bedding - CPQ Discussion/`

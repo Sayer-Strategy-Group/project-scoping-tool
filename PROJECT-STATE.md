@@ -11,7 +11,7 @@
 
 | Client | Status | Current Phase | Next Action | STATE.md |
 |--------|--------|---------------|-------------|----------|
-| **Milestone Group** | Active — Wk 2 | Phase 1: Contacts & Activity | Pipeline spec locked (Robert delivered); building properties. Friday contacts upload. M365 creds chase email pending send. | [STATE.md](MilestoneSoW/STATE.md) |
+| **Milestone Group** | Active — Wk 2 | Phase 1: Contacts & Activity | Pipeline spec locked (Robert delivered); building properties. Friday contacts upload. M365 creds chase email pending send. | [STATE.md](Milestone Group/STATE.md) |
 | **Trialta** | Active — Wk 1–2 | Phase 1: CRM Foundation | Check phase progress, schedule discovery call | [STATE.md](Trialta/STATE.md) |
 
 ## Pre-Sale Pipeline
@@ -30,7 +30,7 @@
 
 - [ ] **Repo restructure planned** — migrate to `clients/{kebab}/01-discovery → 05-delivery/phase/workstream` structure. Start with Trialta as dry run. See `project_repo-restructure.md` in memory.
 - [ ] **Trialta plan.json** — pricing is $0 / TBD, needs update with signed fee
-- [ ] **3 files need renaming** in MilestoneSoW (spaces/underscores → kebab-case) — defer to restructure session
+- [ ] **3 files need renaming** in Milestone Group (spaces/underscores → kebab-case) — defer to restructure session
 - [x] ~~Linear not yet created for Milestone Group~~ — **Done 2026-04-20.** Project live: https://linear.app/gosayer/project/milestone-group-hubspot-crm-implementation-2c60f3bede3a (125 sub-issues, 9 milestones, 42 blockedBy edges)
 
 ---

@@ -34,7 +34,7 @@ kyle@gosayer.com
 
 ## Send instructions (for Kyle)
 
-1. Attach `MilestoneSoW/Milestone_Governance_Framework.docx` (updated, committed `494e5b2`).
+1. Attach `Milestone Group/Milestone_Governance_Framework.docx` (updated, committed `494e5b2`).
 2. Send from Superhuman or Outlook under `kyle@gosayer.com`.
 3. CC Cameron and Weston so internal team has visibility.
 4. If Milestone set up a shared Drive data room per the Apr 10 follow-up, upload the .docx there as well.

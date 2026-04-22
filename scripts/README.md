@@ -36,7 +36,7 @@ python3 scripts/intake.py --url 'https://app.hubspot.com/contacts/12345/record/0
 python3 scripts/intake.py --url 'https://app.hubspot.com/contacts/12345/record/0-3/67890'
 
 # Override folder name (defaults to HubSpot company name)
-python3 scripts/intake.py --url '<URL>' --client-name 'MilestoneSoW'
+python3 scripts/intake.py --url '<URL>' --client-name 'Milestone Group'
 
 # Overwrite an existing folder
 python3 scripts/intake.py --url '<URL>' --force
