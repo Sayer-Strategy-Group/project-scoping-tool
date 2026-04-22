@@ -27,6 +27,10 @@ At the start of every session in this repo:
 ### Scoping
 - `scoping-skill.md` -- The scoping skill definition (workstream templates, estimation framework, risk register standards, Excel format spec)
 - `calibration/calibration.md` -- **READ FIRST before every scoping session.** Calibration data from past projects, estimation adjustments, and cross-project patterns.
+- `templates/scope-summary-template.md` -- Post-discovery scope writeup (tier recommendation, workstreams, risks, assumptions, outstanding items)
+- `templates/decisions-template.md` -- Scoping decisions log with worked examples (D1-D3 format)
+- `templates/final-estimate-template.md` -- What was sent to client, final price, pricing history, deviations
+- `templates/discovery-prep-template.md` -- Data discovery questionnaire for first working session
 - `templates/post-project-retro.md` -- Post-project retrospective template
 - `Sayer Proposal Examples/` -- Reference proposals for format/tone
 - `scripts/intake.py` -- **Client intake automation.** Given a HubSpot record URL, pulls company/deal/contacts/engagements from HubSpot, matches Fireflies transcripts by attendee email, and scaffolds the `{Client Name}/` folder per the convention below. Read `scripts/README.md` for usage.
@@ -34,6 +38,11 @@ At the start of every session in this repo:
 ### Delivery
 - `calibration/delivery-calibration.md` -- **READ FIRST before generating delivery plans.** Delivery patterns from completed projects.
 - `templates/plan-schema.json` -- JSON Schema for plan.json (the intermediate delivery format)
+- `templates/kickoff-deck-template.md` -- Gamma markdown for client-facing kickoff presentation
+- `templates/governance-framework-template.md` -- Working agreement, roles, communication, scope management, escalation
+- `templates/standup-template.md` -- Weekly standup structure (since last week, this week, blockers, hours)
+- `templates/phase-review-template.md` -- Phase completion review (objectives, hours, risks, next phase)
+- `templates/follow-up-email-template.md` -- Post-call follow-up email structure (action items, deliverables, next agenda)
 - `templates/delivery-retro.md` -- Delivery retrospective template (9 sections)
 - `templates/phase-pulse.md` -- Lightweight phase completion pulse template (2 questions)
 
