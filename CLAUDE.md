@@ -28,7 +28,7 @@ At the start of every session in this repo:
 - `scoping-skill.md` -- The scoping skill definition (workstream templates, estimation framework, risk register standards, Excel format spec)
 - `calibration/calibration.md` -- **READ FIRST before every scoping session.** Calibration data from past projects, estimation adjustments, and cross-project patterns.
 - `templates/post-project-retro.md` -- Post-project retrospective template
-- `Sayer_Proposal_examples/` -- Reference proposals for format/tone
+- `Sayer Proposal Examples/` -- Reference proposals for format/tone
 - `scripts/intake.py` -- **Client intake automation.** Given a HubSpot record URL, pulls company/deal/contacts/engagements from HubSpot, matches Fireflies transcripts by attendee email, and scaffolds the `{Client Name}/` folder per the convention below. Read `scripts/README.md` for usage.
 
 ### Delivery
