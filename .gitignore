@@ -45,3 +45,10 @@ node_modules/
 
 # Logs
 *.log
+
+# Client data folders (not committed — client-specific)
+Trialta/
+
+# HubSpot project template (nested repo, managed separately)
+hubspot-project-template copy/
+hubspot-project-template cop.textClipping

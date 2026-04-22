@@ -1,8 +1,8 @@
 # Milestone Group — Session State
 
 > **Status:** `Active Delivery`
-> **Last updated:** 2026-04-21
-> **One-liner:** 8-week HubSpot CRM implementation for PE real estate firm replacing scattered Outlook/Excel/Zoho tracking — Wk 2, pipeline spec locked, properties build in flight.
+> **Last updated:** 2026-04-22
+> **One-liner:** 8-week HubSpot CRM implementation for PE real estate firm replacing scattered Outlook/Excel/Zoho tracking — Wk 2, pipeline + properties built in portal 245699062.
 
 ---
 
@@ -13,11 +13,23 @@
 | Phase | Phase 1 — Contacts & Activity Capture |
 | Week | Wk 2 of 8 |
 | Phase end date | 2026-05-08 |
-| On track? | Yes on property build (Robert delivered spec) — **blocked on M365 admin creds (ENG-83) for activity-capture workstream** |
+| On track? | **Property build complete** (24 deal + 2 company + pipeline + associations). Still **blocked on M365 admin creds (ENG-83) for activity-capture workstream** |
 
 ---
 
-## Done Last Session (2026-04-21)
+## Done Last Session (2026-04-22)
+
+**HubSpot property build (portal 245699062):**
+- Created **TMG Deal Pipeline** (ID: 2215844548) with 10 stages matching Robert's Status column spec
+- Created **24 deal properties** in `tmg_deal_pipeline` group — includes 2 calculation properties (`tmg_broker_price_per_unit`, `tmg_price_per_unit`) that auto-compute Price/Units*1000
+- Created **2 company properties** in `tmg_company_info` group (Company Type dropdown: Seller/Broker/Lender/JV Partner, Sales Region text)
+- Created **labeled associations**: Company→Deal with "Seller" and "Broker" labels (v4 API)
+- All verified via `--verify-only` pass: 24/24 deal, 2/2 company, 2/2 associations, 10/10 pipeline stages
+- Scripts: `hubspot-project-template copy/scripts/milestone/01-04_*.py` — idempotent, safe to re-run
+- Pre/post audit saved: `scripts/milestone/audit_before.md` / `audit_after.md`
+- Label collision fix: `tmg_deal_description` and `tmg_priority` renamed to "TMG Deal Description" / "TMG Priority" to avoid conflict with HubSpot built-in labels
+
+### Prior Session (2026-04-21)
 
 **Weekly sync call (14:00 CT, 27 min):**
 - **Pipeline spec locked** — Robert shared refined active-tab spreadsheet live; focus on **Status column only** (4th column). Priority/Active become optional dropdowns. Closed tab deleted from build scope.
@@ -66,7 +78,7 @@
 ### Sayer Owes
 - [ ] **Kyle: Send Gmail drafts `r-7133084316364069882` (team recap) and `r-4670589972762499888` (M365 ask to Robert)** — both staged, pending review
 - [ ] **Kyle: Share Drive folder with jwise@, rstrong@, jduey@ as editors** — promised in draft #1 body
-- [ ] **Kyle + Weston: Build HubSpot properties from Robert's active-tab spec** (ENG-57, ENG-58) — by next call 2026-04-28
+- [x] ~~Kyle + Weston: Build HubSpot properties from Robert's active-tab spec~~ (ENG-57, ENG-58) — **Completed 2026-04-22.** 24 deal properties + pipeline + company properties + associations built via API scripts.
 - [ ] **Kyle: Record Outlook-setup walkthrough video** OR schedule 1:1 setup calls — for next call onboarding
 - [ ] Send rules of engagement examples / short video (Jason flagged at kickoff)
 - [ ] Rotate `LINEAR_API_KEY` in macOS Keychain — current token returns 401 (OAuth via claude.ai MCP works; direct scripts that need the key do not)
