@@ -24,6 +24,9 @@ venv/
 ~$*.docx
 *.tmp
 
+# Timestamped manual backups (e.g. `foo.docx.bak-2026-04-21`) — keep local, never commit
+*.bak-*
+
 # Editor
 .vscode/
 .idea/
@@ -31,8 +34,8 @@ venv/
 *.swo
 *~
 
-# Claude local notes
-.claude/CLAUDE.local.md
+# Claude local state — worktrees, plans, cache, session files
+.claude/
 
 # Claude Code plugin (local-only, contains generated scripts and delivery state)
 consulting-delivery-plugin/
