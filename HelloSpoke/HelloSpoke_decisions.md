@@ -44,6 +44,32 @@ Running log of scoping decisions and reasoning. Update during every substantive 
 
 ---
 
+## 2026-04-23 — Ops Discovery for HubSpot (32 min)
+
+**Fireflies:** https://app.fireflies.ai/view/01KPRXJ0AX07VPYY4T9EEBGZJD
+**Attendees:** Jeremy Wiley, Christina Edwards, Sarah Hines, Dalton Palmer (Implementation), Haley R (Ops) (HelloSpoke); Kyle Harbuck, Cameron Taggart (Sayer)
+
+**Trigger:** Scheduled walkthrough of current ClickUp onboarding flow to finalize MVP scope for the ClickUp↔HubSpot integration workstream committed to on the 4/21 call.
+
+**Decisions:**
+- **ClickUp integration workstream sharpened, not expanded.** The 4/21 decision to include "native HubSpot↔ClickUp connector + light workflows" in scope still holds. Today's discovery filled in specifics — the hours and task list are being detailed; no new workstream is being added.
+- **Status model: client-drafted, Sayer-facilitated.** Christina, Dalton, and Haley will propose the canonical status list (candidates from the call: Waiting for Survey → In Configuration → Training Scheduled → Call Forwarding → Complete) with % complete indicators for sales-team visibility. Sarah Hines will run a litmus test with sales reps once drafted.
+- **Propose HubSpot form as replacement for ClickUp implementation form (new recommendation).** Capture onboarding data directly in HubSpot via a HubSpot form that then pushes into ClickUp as a task with mapped fields. Eliminates the PDF-output problem Jeremy flagged, makes the data queryable in HubSpot immediately, and simplifies the reverse-sync requirement. Contingent on research confirming the native integration supports this flow.
+- **Mandatory field gating flagged but not committed.** Jeremy wants required fields at two handoffs (sales→implementation, implementation→billing) so records can't advance phases without them. This is process redesign, not integration — separate call-out in the revised scope with explicit in/out decision, not folded silently into integration hours.
+- **Legacy ClickUp↔Salesforce integration is explicitly out of scope.** Dalton confirmed it "broke along the way." Scope language must clarify Sayer is building net-new against HubSpot, not debugging legacy plumbing.
+- **10DLC training tracked separately.** Decoupled from the standard onboarding status flow per Dalton. Won't be in the integration status model.
+- **"Win properties" separate survey — 80/20 decision pending.** Dalton mentioned a special survey for Win-branded properties. Kyle's position: solve for 80/20 first; Win-specific flow is an in/out decision for the revised proposal.
+- **No billing-system changes scoped today.** Billing record creation was discussed but tied to the separate Rev IO / QuickBooks workstream (Apr 9 call). Not in this integration workstream.
+
+**Open at end of call:**
+- Sayer — ClickUp↔HubSpot native integration research (EOD 2026-04-23, Kyle)
+- Sayer — revised scope + proposal to Jeremy (AM 2026-04-24, Kyle)
+- HelloSpoke — Sarah Hines shares sales-stage definitions with Jeremy + Christina
+- HelloSpoke — Dalton sends Kyle the ClickUp implementation form link
+- HelloSpoke — Christina / Dalton / Haley draft canonical status list (post-research, for workshop)
+
+---
+
 ## Template — Add Each Call Below
 
 ### YYYY-MM-DD — {Call Title} ({duration})
