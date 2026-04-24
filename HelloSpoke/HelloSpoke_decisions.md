@@ -70,6 +70,34 @@ Running log of scoping decisions and reasoning. Update during every substantive 
 
 ---
 
+## 2026-04-24 — Revised Proposal Delivered
+
+**Fireflies:** n/a (async delivery)
+**Attendees (recipients):** Jeremy Wiley, Christina Edwards, Sarah Hines (HelloSpoke); cc Cameron Taggart (Sayer)
+
+**Trigger:** Kyle committed on 4/23 ops discovery to deliver revised scope + proposal by AM 4/24. Commitment met.
+
+**Decisions:**
+- **Pricing anchor held at $44,000** (not $43,750 sheet-calculated median). Aligned with Cameron. Rationale: HelloSpoke signaled discount intent (Jeremy's 50% joke → Sarah's 45% counter on 4/21). $44k round number absorbs an anticipated discount ask without eroding margin below the $175/hr × 250 hr baseline. Reduced scope option anchored at a corresponding round number.
+- **Revised Gamma deck generated** — new URL `https://gamma.app/docs/erumqig7pyx7rhm`. Supersedes prior deck at `9xsb2pq9nvfe8ij`. Prior deck stays live but is deprecated; follow-up email explicitly tells recipients to ignore the old one.
+- **ClickUp workstream landed in Phase 2** (not Phase 3) in the final deck and sheet. Nests inside Wk 3-6 migration phase — no timeline change.
+- **Legacy ClickUp ↔ Salesforce integration explicitly called out in email** as out of scope. Prevents scope creep ambiguity.
+
+**Delivered:**
+- Revised proposal Gamma deck (URL above)
+- Google Sheet scope doc updated (authoritative sheet `1Kctr6sIfFQY7PzMY-GAHopI7fOdjl_TEgUi8zSjh1uY`)
+- Follow-up email sent from kyle@gosayer.com (Superhuman thread `draft0092144722e8694f`; `kyle@sayer.com` not yet a verified alias — flagged as a Superhuman follow-up)
+
+**Open at end of delivery:**
+- **Jeremy**: written approval of full scope ($44k) or reduced scope ($24.5k, Phases 1-2 only with ClickUp included)
+- **HelloSpoke**: confirm ClickUp plan tier is Unlimited or higher
+- **Christina/Dalton/Haley**: draft canonical onboarding status list (candidates: Waiting for Survey → In Configuration → Training Scheduled → Call Forwarding → Complete with % complete indicators)
+- **Sarah**: share sales-stage definitions with Jeremy + Christina
+- **Dalton**: send current ClickUp implementation form link
+- **Kyle**: standing by for walkthrough call if requested
+
+---
+
 ## Template — Add Each Call Below
 
 ### YYYY-MM-DD — {Call Title} ({duration})

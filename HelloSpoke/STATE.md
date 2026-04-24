@@ -1,8 +1,8 @@
 # HelloSpoke — Session State
 
-> **Status:** `Pre-Sale`
-> **Last updated:** 2026-04-23
-> **One-liner:** $42k HubSpot implementation deal at Decision Maker Bought-In; close date 2026-04-30; ops discovery complete, revised proposal in flight with ClickUp integration workstream now specified.
+> **Status:** `Pre-Sale — Awaiting Decision`
+> **Last updated:** 2026-04-24
+> **One-liner:** $44k HubSpot implementation deal at Decision Maker Bought-In; close date 2026-04-30; revised proposal + scope delivered to Jeremy AM 2026-04-24 with ClickUp onboarding integration workstream included. Awaiting written approval.
 
 ---
 
@@ -10,54 +10,64 @@
 
 | Field | Value |
 |-------|-------|
-| Phase | Pre-sale — revising proposal post-ops-discovery |
+| Phase | Pre-sale — awaiting Jeremy's written approval |
 | Deal stage | Decision Maker Bought-In (`decisionmakerboughtin`) |
-| Deal amount | $42,000 (pre-revision) |
+| Deal amount | **$44,000** (revised, anchored above $43,750 sheet-median to absorb anticipated discount ask; aligned with Cameron 2026-04-24) |
+| Reduced scope option | $24,500 (Phases 1-2 only, including ClickUp integration, 8 weeks) |
 | Close date target | 2026-04-30 |
-| On track? | On track — Kyle commit: revised proposal EOD 2026-04-23 or AM 2026-04-24 |
+| On track? | On track — proposal + scope delivered AM 2026-04-24 as committed |
 
 ---
 
-## Done Last Session
+## Done Last Session (2026-04-24 AM)
+
+- **Delivered revised proposal + scope** to Jeremy Wiley (cc Christina, Sarah, Cameron) AM 2026-04-24 — commitment met
+- **New Gamma deck generated** — `https://gamma.app/docs/erumqig7pyx7rhm` (supersedes prior `9xsb2pq9nvfe8ij`)
+- **Google Sheet scope doc updated** — ClickUp workstream added to Phase 2 (16 hrs median / $2,800); rate updated to $175/hr
+- **Pricing decision locked at $44k** (aligned with Cameron 2026-04-24) — small cushion above $43,750 sheet math for expected discount ask
+- **Follow-up email sent** from kyle@gosayer.com via Superhuman (`kyle@sayer.com` not yet verified as a Superhuman alias)
+- **Decisions log updated** — 4/24 entry appended to `HelloSpoke_decisions.md`
+
+## Done Prior Session (2026-04-23)
 
 - Ran 2026-04-23 ops discovery with Christina, Jeremy, Sarah, Dalton (Implementation), Haley (Ops) — 32 min
 - Logged HubSpot note on company + 4 contacts + deal (note `366016513772`)
 - Created two HubSpot tasks on the active deal:
   - `366085682933` — ClickUp↔HubSpot native integration research — due 2026-04-23 6 PM CT
-  - `366054473408` — Deliver revised scope + proposal to Jeremy — due 2026-04-24 10 AM CT
-- Drafted follow-up email in Superhuman to Jeremy (cc Christina, Sarah, Cameron) — pending manual send
-- Drafted Slack post to `#project-hellospoke` (tagged Cameron) — Kyle to edit the tag artifact and send
-- Appended 4/23 decisions entry to `HelloSpoke_decisions.md`
-- Launched `/deep-research` agent on ClickUp↔HubSpot native integration + forms (running background)
+  - `366054473408` — Deliver revised scope + proposal to Jeremy — due 2026-04-24 10 AM CT (**delivered 2026-04-24 AM**)
+- Launched `/deep-research` agent on ClickUp↔HubSpot native integration + forms
+- Slack post to `#project-hellospoke` was drafted; status unknown (not tracked this session)
 
 ---
 
 ## Open Items
 
 ### Sayer Owes
-- [ ] ClickUp↔HubSpot native integration research (in progress — Kyle / background agent)
-- [ ] Revise Google Sheet scope doc to add the ClickUp integration workstream with calibrated hours (pending research)
-- [ ] Revise proposal with the form-replacement recommendation + explicit in/out decisions on mandatory field gating and Win-property survey (pending research + scope revision)
-- [ ] Send follow-up email in Superhuman (Kyle to review and send manually)
-- [ ] Send Slack update to `#project-hellospoke` (Kyle to edit tag + send)
-- [ ] Decide whether to update the HubSpot task title + Superhuman draft body from "ClickUp API" to "ClickUp HubSpot native integration" for wording consistency
-- [ ] Manual check in HubSpot UI for any orphan Lead objects on Jeremy/Ryan/Christina/Sarah contacts (MCP can't search leads; skipped)
+- [x] ~~ClickUp↔HubSpot native integration research~~ — complete
+- [x] ~~Revise Google Sheet scope doc to add the ClickUp integration workstream~~ — complete
+- [x] ~~Revise proposal~~ — delivered 2026-04-24 AM
+- [x] ~~Send follow-up email~~ — sent 2026-04-24 AM
+- [ ] Verify `kyle@sayer.com` as a Superhuman send-as alias (follow-up — sent from `kyle@gosayer.com` today)
+- [ ] Manual check in HubSpot UI for any orphan Lead objects on Jeremy/Ryan/Christina/Sarah contacts (MCP can't search leads; deferred)
+- [ ] Confirm `#project-hellospoke` Slack update went out (status unknown)
+- [ ] Stand by for walkthrough call if Jeremy requests
 
 ### Client Owes
-- [ ] Sarah Hines — share sales-stage definitions with Jeremy + Christina
-- [ ] Dalton Palmer — send Kyle the ClickUp implementation form link
-- [ ] Christina / Dalton / Haley — draft canonical status list (post-research, for the scoping workshop)
-- [ ] Jeremy — review revised proposal when delivered
+- [ ] **Jeremy** — written approval of full scope ($44k) or reduced scope ($24.5k)
+- [ ] HelloSpoke — confirm ClickUp plan tier is Unlimited or higher
+- [ ] **Christina / Dalton / Haley** — draft canonical onboarding status list (Waiting for Survey → In Configuration → Training Scheduled → Call Forwarding → Complete + % complete indicators)
+- [ ] **Sarah Hines** — share sales-stage definitions with Jeremy + Christina
+- [ ] **Dalton Palmer** — send Kyle current ClickUp implementation form link for reference during form redesign
 
 ---
 
 ## Next Session Focus
 
-1. Complete ClickUp integration research + draft `HelloSpoke_clickup_workstream.md` addendum
-2. Plug calibrated hours into the external Google Sheet scope doc
-3. Revise proposal + send to Jeremy
-4. Stand by for proposal walkthrough call if Jeremy requests
-5. Move deal to `contractsent` once Jeremy confirms the revised scope
+1. **Monitor for Jeremy's response** — written approval, walkthrough request, or discount counter
+2. If discount counter lands: check against $44k anchor (sheet median $43,750, floor = $175 × 250 hrs). Hold the line unless Cameron aligns on a concession
+3. Move deal to `contractsent` once Jeremy confirms the revised scope
+4. Verify `kyle@sayer.com` Superhuman alias (housekeeping — future emails should default to canonical sender)
+5. Close out client-owed items as they come in (status list workshop scheduling, ClickUp form link, sales-stage definitions)
 
 ---
 
@@ -80,6 +90,7 @@
 
 ## Key Decisions
 
+- **Pricing locked at $44,000 for full scope** (2026-04-24, aligned with Cameron). Anchor is $250 above the $43,750 sheet median to absorb anticipated discount ask without eroding below the $175/hr × 250 hr baseline. Reduced scope = $24,500.
 - **Post-sales ops / ClickUp integration is in scope** (confirmed 4/21, sharpened 4/23). Sayer builds native HubSpot↔ClickUp integration + light workflows to signal order→ops kickoff.
 - **Automation priority over dashboards** (confirmed 4/21). Ryan: customer-journey automations first.
 - **Status model: client-drafted, Sayer-facilitated** (4/23). Candidate list: Waiting for Survey → In Configuration → Training Scheduled → Call Forwarding → Complete, with % complete indicators. Sarah runs litmus test with sales reps.
