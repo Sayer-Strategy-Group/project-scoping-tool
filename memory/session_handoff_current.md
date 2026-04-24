@@ -1,42 +1,63 @@
 ---
-session_number: 3
-date: 2026-04-23
-type: client-work
-client: HelloSpoke
+session_number: 4
+date: 2026-04-24
+type: platform-work
+focus: Sayer brand enforcement + GitHub reconciliation
 ---
 
 ## How This Works
-This file is overwritten every session. Git is the history. Read PROJECT-STATE.md for dashboard, HelloSpoke/STATE.md for detail on today's active work.
+This file is overwritten every session. Git is the history. Read PROJECT-STATE.md for dashboard, client STATE.md files for client-specific context.
 
-## Last Session (3) — HelloSpoke ops discovery post-call + ClickUp workstream scope refinement
+## Last Session (4) — Sayer brand enforcement in Excel generators + main branch reconciliation
 
-Ran `/sayer-post-call HelloSpoke` on today's 32-min ops discovery (2026-04-23, Jeremy + Christina + Sarah + Dalton + Haley). Full post-call flow executed: HubSpot note + 2 tasks + Superhuman draft + Slack draft in `#project-hellospoke`. Then pivoted to scope work — Kyle directed research on ClickUp↔HubSpot native integration via `/deep-research` agent (cited report covering native integration limits, ClickUp forms PDF behavior, HubSpot-form-as-replacement architecture). Built three-tier architecture recommendation (A/B/C at 18-24 / 28-36 / 40-48 hrs). Updated `Hello Spoke SOW.xlsx` directly across all 4 sheets (Scoping Estimate, Phase Details with new Detailed Task Breakdown table, Risk Register, Assumptions & Exclusions). Applied Sayer brand upgrade (Grey 700 column headers + Yellow section banners + Rethink Sans font) across the full workbook. Final artifact set ready for Drive upload by Kyle (MCP has no update-in-place, tool parameter size blocked inline upload).
+Kyle opened the session asking to update `scoping-skill.md` so generated Excel workbooks follow Sayer brand guidelines. Scope expanded to also enforce the brand in the existing 7 generator scripts, and then to reconcile the git state (he'd spotted branches that looked out-of-sync on GitHub).
+
+**Track A — Brand enforcement (shipped).** Created `scripts/brand_styles.py` as the single source of truth for xlsx formatting — every generator now imports from it instead of hard-coding hex values. Refactored all 7 generator scripts (5 in `Strive Global/`, 2 in `American Bedding/`) with backwards-compat aliases so the existing data blocks and helper call sites stay intact. Brand decisions baked in:
+- Primary headers: Sayer Yellow (`#FEC700`) + Black (forecast columns)
+- Secondary headers: Grey 700 (`#2E2E2E`) + White (actuals columns) — preserves the two-tier "forecast vs reality" visual hierarchy but on-brand
+- Alt rows: Grey 300; Borders: Grey 500; Input affordance (rate cell, actuals entry): Cool Grey — one unified input color
+- Severity fills keep traffic-light semantics but MEDIUM now uses Sayer Yellow
+- Font: Calibri (Rethink Sans does not survive xlsx; Calibri is the sanctioned brand fallback, same rule as docx)
+
+`scoping-skill.md` Step 6 rewritten to point at the brand skill as authoritative and at `brand_styles.py` as the implementation source of truth. End-to-end smoke test generated `/tmp/sayer_brand_smoke_test.xlsx` and confirmed all 7 brand assertions pass.
+
+**Track B — GitHub reconciliation (shipped).**
+- Hardened `.gitignore` to block the whole `.claude/` dir and timestamped `.bak-*` backups (working-tree was dirty with a `.docx.bak-2026-04-21` that shouldn't have been stageable).
+- Pushed `main` with 7 topical commits (gitignore, brand feat, calibration, memory, hellospoke artifacts, milestone governance, hellospoke 4/24 revised proposal log).
+- Pushed two local-only branches to origin for preservation: `feat/trialta-linear-rebuild` (1 unique commit — Trialta Linear rebuild) and `docs/milestone-working-session-artifacts` (4 unique commits — milestone plan, client tracker, repo-based handoff system feat, CLAUDE.md plan.json rules).
+- Inspected legacy repo `kyleh-fwsayer/sayer-scoping`: turns out to be a **different project** (Claude Code / Second Brain experimentation) with ~25 features Kyle built (friction telemetry, log-friction CLI, delivery plugin framework, LLM router, Phase 7 Slack bot, etc.) that share ~10 early commits with this repo. **Decision deferred** — needs Kyle's call whether contents already migrated to AIVA (archive legacy), should be renamed (`claude-second-brain-archive`), or left alone.
 
 ## Files Touched This Session
 
-**HelloSpoke/ (new + modified):**
-- `Hello Spoke SOW.xlsx` — MODIFIED: ClickUp workstream added in Phase 3, Detailed Task Breakdown with Hours section (CLK-01..10) in Phase Details, 3 new risks, 4 new assumptions, ClickUp-to-HubSpot sync REMOVED from OUT OF SCOPE, 4 new client responsibilities, 3 new open items. Brand palette applied across all 4 sheets.
-- `HelloSpoke_decisions.md` — MODIFIED: appended 2026-04-23 ops discovery entry with 8 decisions
-- `STATE.md` — MODIFIED: rewritten for post-4/23 state; domain migration watchlist removed per Kyle @gosayer.com decision
-- `HelloSpoke_clickup_workstream.md` — NEW: three-tier architecture analysis + calibration anchor (partially obsoleted by later SOW.xlsx direct edits)
-- `HelloSpoke_sow_update_patch.md` — NEW: four-document sync patch for Drive docs. SOW-sheet section now obsolete (direct xlsx edits landed); proposal.md + scope_summary.md patches still pending
+**New:**
+- `scripts/brand_styles.py` — single source of truth for Sayer brand in xlsx
+- `memory/rename-gitignore-trap.md` (surfaced during the gitignore work)
+- `HelloSpoke/Hello Spoke SOW.xlsx`, `HelloSpoke_clickup_workstream.md`, `HelloSpoke_sow_update_patch.md` (carried in from 2026-04-23 session)
 
-**HubSpot artifacts (external):**
-- Note `366016513772` on HelloSpoke company + Jeremy + Christina + Sarah + Ryan + active deal
-- Task `366085682933` — ClickUp HubSpot native integration research, due 2026-04-23 6 PM CT
-- Task `366054473408` — Deliver revised HelloSpoke scope + proposal, due 2026-04-24 10 AM CT
+**Modified (brand refactor — all compile on Python 3.9):**
+- `scoping-skill.md` (Step 6 brand specs)
+- `Strive Global/build_estimate_a.py`, `build_estimate_b.py`, `build_estimate_a_v2.py`, `build_estimate_b_v2.py`, `build_comparison_v2.py`
+- `American Bedding/Proposal Details/build_estimate.py`, `American Bedding/scripts/build_project_plan.py`
 
-**Superhuman + Slack:**
-- Email draft `draft0069b301bd626b4f` to Jeremy (cc Christina, Sarah, Cameron)
-- Slack draft `Dr0AUY5E7P8A` in `#project-hellospoke` tagging Cameron
+**Modified (non-brand):**
+- `.gitignore` (added `.claude/` and `*.bak-*`)
+- `calibration/calibration.md`
+- `memory/MEMORY.md` + this file
+- `Milestone Group/Milestone_Governance_Framework.docx`
+- `HelloSpoke/HelloSpoke_decisions.md` + `HelloSpoke/STATE.md` (2026-04-24 revised-proposal delivery log)
+
+**Git state:**
+- `main` tip: `4c04792` — pushed to Sayer-Strategy-Group/project-scoping-tool
+- `feat/trialta-linear-rebuild` — now on remote, tip `6d8cdbb`
+- `docs/milestone-working-session-artifacts` — now on remote, tip `c764369`
+- Remote `pushedAt`: 2026-04-24T16:55+ UTC
 
 ## Open (max 3)
-1. **Apply the SOW.xlsx updates to Drive** — Kyle imports the xlsx manually (replace-spreadsheet or new-file upload). Also pending: apply markdown patch from `HelloSpoke_sow_update_patch.md` sections 1 + 2 to the Google Drive copies of `HelloSpoke_HubSpot_CRM_Proposal.md` and `HelloSpoke_Scope_Summary.md`.
-2. **Pricing decision before proposal goes to Jeremy** — straight math is $35,100 → $39,900 (+$4,800 Tier B). Jeremy's 45/50% discount signal from 4/21 call unresolved. Also need tier-selection framing decision (single-tier B recommended vs. A/B/C menu).
-3. **Field Gating add-on in/out decision** — Workstream 11a optional line item. Client conversation with Jeremy pending.
+1. **Legacy repo disposition (`kyleh-fwsayer/sayer-scoping`)** — decide archive / rename / leave. Verify first whether Second Brain + delivery plugin code migrated to AIVA. If yes, safe to archive. If no, legacy is the only copy of ~25 features.
+2. **HelloSpoke close-out** — Jeremy's written approval of $44k (full) or $24.5k (reduced, Phases 1-2 only with ClickUp). Pending response to the 4/24 AM follow-up email.
+3. **kyle@sayer.com Superhuman alias** — the 4/24 HelloSpoke proposal went from `kyle@gosayer.com` because the sayer.com alias isn't verified in Superhuman yet. Not blocking but worth closing.
 
 ## Next Action When Resuming
-1. Confirm Kyle imported the xlsx to Drive and visually validated styling renders correctly in Google Sheets (Rethink Sans will fall back without the font installed in Sheets).
-2. Apply the patch-doc markdown updates to the two Drive .md files (proposal + scope summary) so all four docs converge.
-3. Send the revised proposal to Jeremy — this is the AM 2026-04-24 commitment from today's call.
-4. If proposal goes out, move the deal stage on HubSpot deal `306004595439` from `decisionmakerboughtin` → `contractsent` when Jeremy confirms.
+1. Decide the legacy repo's fate — quick check of AIVA for Second Brain + delivery plugin code is the first step. If present, `gh repo archive kyleh-fwsayer/sayer-scoping`.
+2. Watch for Jeremy's response on HelloSpoke; if approved, move HubSpot deal `306004595439` from `decisionmakerboughtin` → `contractsent`.
+3. Any new client engagement that needs Excel: just run any existing generator (they all now pull from `brand_styles.py` — workbooks ship on-brand from creation). Add the `sys.path.insert` + `from brand_styles import ...` pattern to any new generator you write.
