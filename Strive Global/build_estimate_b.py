@@ -1,55 +1,36 @@
 """Generate Strive Global Full CRM Overhaul Scoping Estimate (Option B)"""
+import sys
+import pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'scripts'))
+
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, PatternFill, Alignment
+from brand_styles import (
+    HEADER_FONT, HEADER_FILL, BODY_FONT, BOLD_BODY_FONT, TOTAL_FONT,
+    INPUT_FILL, ALT_ROW_FILL, SECONDARY_HEADER_FONT, SECONDARY_HEADER_FILL,
+    THIN_BORDER, WRAP_ALIGN, TITLE_FONT, SECTION_FONT, CURRENCY_FMT,
+    FONT_FAMILY, SAYER_BLACK,
+    style_header_row, style_data_cell, apply_data_styles,
+    get_column_letter,
+)
 
 wb = openpyxl.Workbook()
 
-# ============================================================
-# STYLES
-# ============================================================
-header_font = Font(name='Arial', size=11, bold=True, color='FFFFFF')
-header_fill = PatternFill(start_color='1F4E79', end_color='1F4E79', fill_type='solid')
-body_font = Font(name='Arial', size=10)
-bold_font = Font(name='Arial', size=10, bold=True)
-total_font = Font(name='Arial', size=10, bold=True, color='1F4E79')
-rate_fill = PatternFill(start_color='DAEEF3', end_color='DAEEF3', fill_type='solid')
-alt_fill = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
-actuals_fill = PatternFill(start_color='E2EFDA', end_color='E2EFDA', fill_type='solid')
-green_header_fill = PatternFill(start_color='548235', end_color='548235', fill_type='solid')
-green_header_font = Font(name='Arial', size=11, bold=True, color='FFFFFF')
-section_font = Font(name='Arial', size=11, bold=True, color='1F4E79')
-thin_border = Border(
-    left=Side(style='thin'), right=Side(style='thin'),
-    top=Side(style='thin'), bottom=Side(style='thin')
-)
-wrap_align = Alignment(wrap_text=True, vertical='top')
-currency_fmt = '$#,##0'
-
-
-def style_header_row(ws, row, max_col):
-    for col in range(1, max_col + 1):
-        cell = ws.cell(row=row, column=col)
-        cell.font = header_font
-        cell.fill = header_fill
-        cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-        cell.border = thin_border
-
-
-def style_data_cell(ws, row, col, is_alt=False):
-    cell = ws.cell(row=row, column=col)
-    cell.font = body_font
-    cell.border = thin_border
-    cell.alignment = wrap_align
-    if is_alt:
-        cell.fill = alt_fill
-
-
-def apply_data_styles(ws, data_start, data_end, max_col):
-    for r in range(data_start, data_end + 1):
-        is_alt = (r - data_start) % 2 == 1
-        for c in range(1, max_col + 1):
-            style_data_cell(ws, r, c, is_alt)
+# Backwards-compat aliases — brand specs live in scripts/brand_styles.py.
+header_font = HEADER_FONT
+header_fill = HEADER_FILL
+body_font = BODY_FONT
+bold_font = BOLD_BODY_FONT
+total_font = TOTAL_FONT
+rate_fill = INPUT_FILL
+alt_fill = ALT_ROW_FILL
+actuals_fill = INPUT_FILL
+green_header_fill = SECONDARY_HEADER_FILL
+green_header_font = SECONDARY_HEADER_FONT
+section_font = SECTION_FONT
+thin_border = THIN_BORDER
+wrap_align = WRAP_ALIGN
+currency_fmt = CURRENCY_FMT
 
 
 # ============================================================
@@ -59,7 +40,7 @@ ws1 = wb.active
 ws1.title = 'Approach Comparison'
 
 ws1.merge_cells('A1:C1')
-ws1.cell(row=1, column=1, value='STRIVE Global -- Full CRM Overhaul: Approach Comparison').font = Font(name='Arial', size=14, bold=True, color='1F4E79')
+ws1.cell(row=1, column=1, value='STRIVE Global -- Full CRM Overhaul: Approach Comparison').font = TITLE_FONT
 
 headers = ['Dimension', 'Approach A: Phased (Recommended)', 'Approach B: Concurrent']
 for i, h in enumerate(headers, 1):
@@ -99,7 +80,7 @@ apply_data_styles(ws1, 4, 14, 3)
 
 # Recommendation
 ws1.merge_cells('A16:C16')
-ws1.cell(row=16, column=1, value='Recommendation').font = Font(name='Arial', size=11, bold=True, color='1F4E79')
+ws1.cell(row=16, column=1, value='Recommendation').font = SECTION_FONT
 ws1.merge_cells('A17:C17')
 ws1.cell(row=17, column=1, value=(
     'Approach A: Phased is strongly recommended. STRIVE\'s data quality issues make a concurrent '
@@ -140,7 +121,7 @@ for col in [11, 12, 13]:
     cell.font = green_header_font
 
 # Phase 1 label
-ws2.cell(row=4, column=1, value='PHASE 1: CRM FOUNDATION (Weeks 1-6)').font = Font(name='Arial', size=10, bold=True, color='1F4E79')
+ws2.cell(row=4, column=1, value='PHASE 1: CRM FOUNDATION (Weeks 1-6)').font = BOLD_BODY_FONT
 ws2.merge_cells('A4:J4')
 
 workstreams_p1 = [
@@ -225,7 +206,7 @@ ws2.cell(row=p1_total, column=6).value = '=$B$1'
 
 # Phase 2 label
 p2_label = p1_total + 2
-ws2.cell(row=p2_label, column=1, value='PHASE 2: CPQ, ENRICHMENT & INTEGRATIONS (Weeks 7-14)').font = Font(name='Arial', size=10, bold=True, color='1F4E79')
+ws2.cell(row=p2_label, column=1, value='PHASE 2: CPQ, ENRICHMENT & INTEGRATIONS (Weeks 7-14)').font = BOLD_BODY_FONT
 ws2.merge_cells(f'A{p2_label}:J{p2_label}')
 
 workstreams_p2 = [
@@ -314,7 +295,7 @@ ws2.cell(row=p2_total, column=6).value = '=$B$1'
 
 # Optional add-on
 addon_label = p2_total + 2
-ws2.cell(row=addon_label, column=1, value='OPTIONAL ADD-ON').font = Font(name='Arial', size=10, bold=True, color='548235')
+ws2.cell(row=addon_label, column=1, value='OPTIONAL ADD-ON').font = BOLD_BODY_FONT
 ws2.merge_cells(f'A{addon_label}:J{addon_label}')
 
 addon_row = addon_label + 1
@@ -333,11 +314,11 @@ for col in [11, 12, 13]:
 
 # Grand total
 grand_row = addon_row + 2
-ws2.cell(row=grand_row, column=1, value='PROJECT TOTAL (Phase 1 + Phase 2)').font = Font(name='Arial', size=11, bold=True, color='1F4E79')
+ws2.cell(row=grand_row, column=1, value='PROJECT TOTAL (Phase 1 + Phase 2)').font = SECTION_FONT
 for col in [3, 4, 5, 7, 8, 9]:
     cl = get_column_letter(col)
     ws2.cell(row=grand_row, column=col).value = f'={cl}{p1_total}+{cl}{p2_total}'
-    ws2.cell(row=grand_row, column=col).font = Font(name='Arial', size=11, bold=True, color='1F4E79')
+    ws2.cell(row=grand_row, column=col).font = SECTION_FONT
     ws2.cell(row=grand_row, column=col).border = thin_border
 ws2.cell(row=grand_row, column=6).value = '=$B$1'
 
@@ -371,9 +352,10 @@ for i, h in enumerate(headers3, 1):
     ws3.cell(row=1, column=i, value=h)
 style_header_row(ws3, 1, 8)
 
-sev_high_fill = PatternFill(start_color='FFC7CE', end_color='FFC7CE', fill_type='solid')
-sev_med_fill = PatternFill(start_color='FFEB9C', end_color='FFEB9C', fill_type='solid')
-sev_low_fill = PatternFill(start_color='C6EFCE', end_color='C6EFCE', fill_type='solid')
+from brand_styles import SEV_HIGH_FILL, SEV_MED_FILL, SEV_LOW_FILL
+sev_high_fill = SEV_HIGH_FILL
+sev_med_fill = SEV_MED_FILL
+sev_low_fill = SEV_LOW_FILL
 
 risks = [
     (1, '10 years of uncoded contact data -- AI enrichment scope may exceed estimates',

@@ -224,21 +224,25 @@ If the project involves multiple systems or has significant dependency risks, ge
 
 ### Step 6: Generate Excel Deliverables
 
-Read `/mnt/skills/public/xlsx/SKILL.md` before generating any Excel file.
+**Before generating any Excel:** Load the Sayer brand spec AND the xlsx mechanics skill in that order.
+
+1. **Brand spec (authoritative):** `~/projects/AIVA/skills/sayer-brand-guidelines/SKILL.md` — colors, typography, application rules. If this doc and the bullets below ever conflict, the brand skill wins.
+2. **Mechanics:** `/mnt/skills/public/xlsx/SKILL.md` — openpyxl patterns (freeze panes, print areas, formulas).
+3. **Shared style module (this repo):** `scripts/brand_styles.py` — the single source of truth for every generator in this repo. Import from it; never hard-code hex values. Add a `sys.path.insert` shim at the top of any new generator so it can `from brand_styles import ...`. All 7 existing generators (`Strive Global/*.py`, `American Bedding/**/*.py`) follow this pattern.
 
 **Output one or more Excel workbooks with these sheets:**
 
 #### Workbook: `{ClientName}_Scoping_Estimate.xlsx`
 
 **Sheet 1: "Scoping Estimate"**
-- Columns: Workstream | Description | Min Hours | Max Hours | Median Hours | Rate | Min Cost | Max Cost | Median Cost | Notes/Assumptions
+- Columns: Workstream | Description | Min Hours | Max Hours | Median Hours | Rate | Min Cost | Max Cost | Median Cost | Notes/Assumptions | Actual Hours | Actual Cost | Variance
 - Totals row at bottom
-- Rate modeling section (configurable rate cell)
-- Color coding: Blue for input cells (rate, assumptions), Black for formulas
+- Rate modeling section (configurable rate cell with Cool Grey fill to signal user input)
+- Forecast columns use the **primary header** (Sayer Yellow + black text). Actuals columns (Actual Hours / Actual Cost / Variance) use the **secondary header** (Grey 700 + white text). Two-tier hierarchy = forecast vs reality.
 
 **Sheet 2: "Risk Register"**
 - Columns: # | Risk | Severity | Likelihood | Impact | Mitigation | Owner | Status
-- Color-coded severity: Red fill for High, Yellow for Medium, Green for Low
+- Severity fills (semantic — imported from `brand_styles.severity_fill()`): Red for High, **Sayer Yellow (#FEC700)** for Medium, Green for Low
 - Filter-ready headers
 
 **Sheet 3: "Assumptions & Exclusions"**
@@ -249,18 +253,21 @@ Read `/mnt/skills/public/xlsx/SKILL.md` before generating any Excel file.
 
 **Sheet 4: "Approach Comparison" (if applicable)**
 - Side-by-side comparison matrix
-- Color coding: Green for advantage, Red for disadvantage
+- "Option X only" rows use a light-yellow tint (`#FFF3B3`) as a semantic marker — brand-compliant kin of Sayer Yellow
 - Recommendation section at bottom
 
-**Formatting Standards:**
-- Font: Arial 10pt body, 11pt headers
-- Header row: Dark blue background (#1F4E79), white text, bold
-- Alternating row shading: Light gray (#F2F2F2)
+**Formatting Standards (Sayer brand — enforced via `scripts/brand_styles.py`):**
+- Font: **Calibri** 11pt body, Semibold 14pt title, Semibold 11pt headers. Rethink Sans is the Sayer brand font but does not survive xlsx conversion — Calibri is the sanctioned fallback (same rule as docx per `.claude/rules/docx-generation.md`).
+- Primary header row: **Sayer Yellow (#FEC700) fill, black text (#000000), bold**
+- Secondary header row (Actuals columns): **Grey 700 (#2E2E2E) fill, white text, bold**
+- Alternating row shading: **Grey 300 (#E3E3E3)**
+- Input cells (rate, actuals entry): **Cool Grey (#D6D6D6) fill** — one unified input affordance
+- Borders: **Grey 500 (#BCBCBC) thin borders** on data cells
 - Currency format: $#,##0
-- Borders: Thin borders on data cells
-- Column widths: Auto-fit with padding
-- Freeze panes: Top row + first column
+- Column widths: auto-fit with padding
+- Freeze panes: top row + first column
 - Print area set on all sheets
+- Charts (if any): **Sayer Yellow primary series, Grey 500/600 for secondary series** — no non-brand colors
 
 ### Step 7: Generate Client-Ready Summary
 

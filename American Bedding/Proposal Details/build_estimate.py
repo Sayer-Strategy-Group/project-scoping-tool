@@ -6,63 +6,56 @@ Phase 2 (V2): Railway Production Platform (~$11,500)
 Architecture: HubSpot custom code + Railway API (not n8n).
 Weight engine: composition pattern -- shared utilities + per-product modules.
 """
+import sys
+import pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / 'scripts'))
+
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, PatternFill, Alignment
+from brand_styles import (
+    HEADER_FONT, HEADER_FILL, BODY_FONT, BOLD_BODY_FONT, TOTAL_FONT,
+    INPUT_FILL, ALT_ROW_FILL, SECONDARY_HEADER_FONT, SECONDARY_HEADER_FILL,
+    THIN_BORDER, WRAP_ALIGN, TITLE_FONT, SECTION_FONT, CURRENCY_FMT,
+    FONT_FAMILY, SAYER_BLACK, SAYER_YELLOW, GREY_600, GREY_300,
+    SEV_HIGH_FILL, SEV_MED_FILL, SEV_LOW_FILL,
+    style_header_row, apply_data_styles,
+    get_column_letter,
+)
 
 wb = openpyxl.Workbook()
 
-# ============================================================
-# STYLES
-# ============================================================
-header_font = Font(name='Arial', size=11, bold=True, color='FFFFFF')
-header_fill = PatternFill(start_color='1F4E79', end_color='1F4E79', fill_type='solid')
-body_font = Font(name='Arial', size=10)
-bold_font = Font(name='Arial', size=10, bold=True)
-total_font = Font(name='Arial', size=10, bold=True, color='1F4E79')
-rate_fill = PatternFill(start_color='DAEEF3', end_color='DAEEF3', fill_type='solid')
-alt_fill = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
-actuals_fill = PatternFill(start_color='E2EFDA', end_color='E2EFDA', fill_type='solid')
-green_header_fill = PatternFill(start_color='548235', end_color='548235', fill_type='solid')
-green_header_font = Font(name='Arial', size=11, bold=True, color='FFFFFF')
-phase1_fill = PatternFill(start_color='D6E4F0', end_color='D6E4F0', fill_type='solid')
-phase2_fill = PatternFill(start_color='E2EFDA', end_color='E2EFDA', fill_type='solid')
-grand_total_fill = PatternFill(start_color='F4B084', end_color='F4B084', fill_type='solid')
-total_fill = PatternFill(start_color='FFF2CC', end_color='FFF2CC', fill_type='solid')
-thin_border = Border(
-    left=Side(style='thin'), right=Side(style='thin'),
-    top=Side(style='thin'), bottom=Side(style='thin')
-)
-wrap_align = Alignment(wrap_text=True, vertical='top')
-currency_fmt = '$#,##0'
-section_font = Font(name='Arial', size=11, bold=True, color='1F4E79')
-phase_label_font = Font(name='Arial', size=12, bold=True, color='1F4E79')
+# Backwards-compat aliases — brand specs live in scripts/brand_styles.py.
+header_font = HEADER_FONT
+header_fill = HEADER_FILL
+body_font = BODY_FONT
+bold_font = BOLD_BODY_FONT
+total_font = TOTAL_FONT
+rate_fill = INPUT_FILL
+alt_fill = ALT_ROW_FILL
+actuals_fill = INPUT_FILL
+green_header_fill = SECONDARY_HEADER_FILL
+green_header_font = SECONDARY_HEADER_FONT
+thin_border = THIN_BORDER
+wrap_align = WRAP_ALIGN
+currency_fmt = CURRENCY_FMT
+section_font = SECTION_FONT
 
-sev_high_fill = PatternFill(start_color='FFC7CE', end_color='FFC7CE', fill_type='solid')
-sev_med_fill = PatternFill(start_color='FFEB9C', end_color='FFEB9C', fill_type='solid')
-sev_low_fill = PatternFill(start_color='C6EFCE', end_color='C6EFCE', fill_type='solid')
-resolved_font = Font(name='Arial', size=10, color='808080')
+# Semantic fills kept for phase/total differentiation. Tuned to the brand:
+#   - phase1_fill: Grey 300 (neutral light backdrop, matches alt rows)
+#   - phase2_fill: light yellow tint (keeps "additive / phase 2" semantic in-brand)
+#   - total_fill:  same light yellow tint (subtle emphasis on subtotal rows)
+#   - grand_total_fill: full Sayer Yellow (primary brand callout)
+phase1_fill = ALT_ROW_FILL
+phase2_fill = PatternFill(start_color='FFF3B3', end_color='FFF3B3', fill_type='solid')
+total_fill = PatternFill(start_color='FFF3B3', end_color='FFF3B3', fill_type='solid')
+grand_total_fill = PatternFill(start_color=SAYER_YELLOW, end_color=SAYER_YELLOW, fill_type='solid')
 
+phase_label_font = Font(name=FONT_FAMILY, size=12, bold=True, color=SAYER_BLACK)
 
-def style_header_row(ws, row, max_col):
-    for col in range(1, max_col + 1):
-        cell = ws.cell(row=row, column=col)
-        cell.font = header_font
-        cell.fill = header_fill
-        cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-        cell.border = thin_border
-
-
-def apply_data_styles(ws, data_start, data_end, max_col):
-    for r in range(data_start, data_end + 1):
-        is_alt = (r - data_start) % 2 == 1
-        for c in range(1, max_col + 1):
-            cell = ws.cell(row=r, column=c)
-            cell.font = body_font
-            cell.border = thin_border
-            cell.alignment = wrap_align
-            if is_alt:
-                cell.fill = alt_fill
+sev_high_fill = SEV_HIGH_FILL
+sev_med_fill = SEV_MED_FILL
+sev_low_fill = SEV_LOW_FILL
+resolved_font = Font(name=FONT_FAMILY, size=10, color=GREY_600)
 
 
 # ============================================================
@@ -72,9 +65,7 @@ ws1 = wb.active
 ws1.title = 'Approach Comparison'
 
 ws1.merge_cells('A1:C1')
-ws1.cell(row=1, column=1, value='American Bedding -- CPQ: Approach Comparison').font = Font(
-    name='Arial', size=14, bold=True, color='1F4E79'
-)
+ws1.cell(row=1, column=1, value='American Bedding -- CPQ: Approach Comparison').font = TITLE_FONT
 
 headers = ['Dimension', 'Recommended: HubSpot CPQ + Hybrid Architecture', 'Alternative: NetSuite Quoting + HubSpot Visibility']
 for i, h in enumerate(headers, 1):
@@ -370,19 +361,19 @@ row += 2
 
 # Grand total
 gt_row = row
-ws2.cell(row=row, column=1, value='GRAND TOTAL').font = Font(name='Arial', size=12, bold=True, color='1F4E79')
+ws2.cell(row=row, column=1, value='GRAND TOTAL').font = Font(name=FONT_FAMILY, size=12, bold=True, color=SAYER_BLACK)
 for c in range(1, 14):
     ws2.cell(row=row, column=c).fill = grand_total_fill
     ws2.cell(row=row, column=c).border = thin_border
 for col in [3, 4, 5]:
     cl = get_column_letter(col)
     ws2.cell(row=row, column=col).value = f'={cl}{p1_total}+{cl}{p2_total}'
-    ws2.cell(row=row, column=col).font = Font(name='Arial', size=12, bold=True)
+    ws2.cell(row=row, column=col).font = Font(name=FONT_FAMILY, size=12, bold=True, color=SAYER_BLACK)
 ws2.cell(row=row, column=6).value = '=$B$1'
 for col in [7, 8, 9]:
     cl = get_column_letter(col)
     ws2.cell(row=row, column=col).value = f'={cl}{p1_total}+{cl}{p2_total}'
-    ws2.cell(row=row, column=col).font = Font(name='Arial', size=12, bold=True)
+    ws2.cell(row=row, column=col).font = Font(name=FONT_FAMILY, size=12, bold=True, color=SAYER_BLACK)
     ws2.cell(row=row, column=col).number_format = currency_fmt
 for col in [11, 12]:
     cl = get_column_letter(col)
@@ -390,19 +381,19 @@ for col in [11, 12]:
 row += 2
 
 # Fee rows
-ws2.cell(row=row, column=1, value='PHASE 1 FIXED FEE:').font = Font(name='Arial', size=11, bold=True, color='1F4E79')
-ws2.cell(row=row, column=9, value=30000).font = Font(name='Arial', size=11, bold=True, color='1F4E79')
+ws2.cell(row=row, column=1, value='PHASE 1 FIXED FEE:').font = SECTION_FONT
+ws2.cell(row=row, column=9, value=30000).font = SECTION_FONT
 ws2.cell(row=row, column=9).number_format = currency_fmt
 ws2.cell(row=row, column=10, value='Fixed fee. Client sees this number only -- no hours breakdown in proposal.').font = body_font
 row += 1
-ws2.cell(row=row, column=1, value='PHASE 2 FIXED FEE:').font = Font(name='Arial', size=11, bold=True, color='1F4E79')
-ws2.cell(row=row, column=9, value=11500).font = Font(name='Arial', size=11, bold=True, color='1F4E79')
+ws2.cell(row=row, column=1, value='PHASE 2 FIXED FEE:').font = SECTION_FONT
+ws2.cell(row=row, column=9, value=11500).font = SECTION_FONT
 ws2.cell(row=row, column=9).number_format = currency_fmt
 ws2.cell(row=row, column=10, value='Fixed fee. Separate SOW or Phase 2 addendum.').font = body_font
 row += 1
-ws2.cell(row=row, column=1, value='COMBINED FIXED FEE:').font = Font(name='Arial', size=12, bold=True, color='1F4E79')
+ws2.cell(row=row, column=1, value='COMBINED FIXED FEE:').font = Font(name=FONT_FAMILY, size=12, bold=True, color=SAYER_BLACK)
 ws2.cell(row=row, column=9).value = f'=I{row - 2}+I{row - 1}'
-ws2.cell(row=row, column=9).font = Font(name='Arial', size=12, bold=True, color='1F4E79')
+ws2.cell(row=row, column=9).font = Font(name=FONT_FAMILY, size=12, bold=True, color=SAYER_BLACK)
 ws2.cell(row=row, column=9).number_format = currency_fmt
 
 widths = {1: 30, 2: 55, 3: 12, 4: 12, 5: 14, 6: 10, 7: 12, 8: 12, 9: 14, 10: 55, 11: 14, 12: 14, 13: 12}
@@ -510,7 +501,7 @@ for i, (_, _, sev, *_) in enumerate(risks, 2):
 
 # Resolved risk
 res_row = len(risks) + 3
-ws3.cell(row=res_row, column=1, value='RESOLVED').font = Font(name='Arial', size=10, bold=True, color='008000')
+ws3.cell(row=res_row, column=1, value='RESOLVED').font = BOLD_BODY_FONT
 res_row += 1
 ws3.cell(row=res_row, column=1, value='--').font = resolved_font
 ws3.cell(row=res_row, column=2, value='Excel weight calculator logic more complex than analyzed -- VBA macros, external references, or circular formulas').font = resolved_font

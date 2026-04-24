@@ -3,31 +3,48 @@ Build American Bedding CPQ project plan as Excel workbook for Google Sheets impo
 Three sheets: Project Plan (task-level), Workstream Summary, Milestones.
 """
 
+import sys
+import pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / 'scripts'))
+
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, PatternFill, Alignment
 from typing import Optional
 import os
 
-# --- Style constants ---
-HEADER_FONT = Font(name="Calibri", bold=True, size=11, color="FFFFFF")
-HEADER_FILL = PatternFill(start_color="2D3748", end_color="2D3748", fill_type="solid")
-PHASE1_FILL = PatternFill(start_color="EBF5FB", end_color="EBF5FB", fill_type="solid")
-PHASE2_FILL = PatternFill(start_color="FEF9E7", end_color="FEF9E7", fill_type="solid")
-MILESTONE_FILL = PatternFill(start_color="D5F5E3", end_color="D5F5E3", fill_type="solid")
-SECTION_FONT = Font(name="Calibri", bold=True, size=11)
-NORMAL_FONT = Font(name="Calibri", size=10)
-THIN_BORDER = Border(
-    bottom=Side(style="thin", color="D5D8DC")
+from brand_styles import (
+    HEADER_FONT as _BRAND_HEADER_FONT,
+    HEADER_FILL as _BRAND_HEADER_FILL,
+    SECTION_FONT as _BRAND_SECTION_FONT,
+    BODY_FONT as _BRAND_BODY_FONT,
+    ALT_ROW_FILL as _BRAND_ALT_ROW_FILL,
+    THIN_BORDER as _BRAND_THIN_BORDER,
+    SAYER_YELLOW,
+    get_column_letter,
+    style_header_row as _brand_style_header_row,
+    style_data_row as _brand_style_data_row,
 )
+
+# Bind module-local names to brand singletons so the rest of this file reads
+# the same as before. The original HEADER_FILL here was "2D3748" (dark slate) —
+# now Sayer Yellow + Black per brand.
+HEADER_FONT = _BRAND_HEADER_FONT
+HEADER_FILL = _BRAND_HEADER_FILL
+SECTION_FONT = _BRAND_SECTION_FONT
+NORMAL_FONT = _BRAND_BODY_FONT
+THIN_BORDER = _BRAND_THIN_BORDER
+
+# Semantic phase/milestone fills, tuned to brand palette:
+#   - PHASE1_FILL: neutral Grey 300 backdrop
+#   - PHASE2_FILL: light yellow tint (same marker used across repo for "add-on" phases)
+#   - MILESTONE_FILL: full Sayer Yellow (primary brand callout for key events)
+PHASE1_FILL = _BRAND_ALT_ROW_FILL
+PHASE2_FILL = PatternFill(start_color='FFF3B3', end_color='FFF3B3', fill_type='solid')
+MILESTONE_FILL = PatternFill(start_color=SAYER_YELLOW, end_color=SAYER_YELLOW, fill_type='solid')
 
 
 def style_header_row(ws: openpyxl.worksheet.worksheet.Worksheet, row: int, cols: int) -> None:
-    for col in range(1, cols + 1):
-        cell = ws.cell(row=row, column=col)
-        cell.font = HEADER_FONT
-        cell.fill = HEADER_FILL
-        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    _brand_style_header_row(ws, row, cols)
 
 
 def style_data_row(
@@ -37,13 +54,7 @@ def style_data_row(
     fill: Optional[PatternFill] = None,
     font: Optional[Font] = None,
 ) -> None:
-    for col in range(1, cols + 1):
-        cell = ws.cell(row=row, column=col)
-        cell.font = font or NORMAL_FONT
-        cell.border = THIN_BORDER
-        cell.alignment = Alignment(vertical="center", wrap_text=True)
-        if fill:
-            cell.fill = fill
+    _brand_style_data_row(ws, row, cols, fill=fill, font=font)
 
 
 def build_project_plan(ws: openpyxl.worksheet.worksheet.Worksheet) -> None:

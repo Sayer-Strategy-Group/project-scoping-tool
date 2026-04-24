@@ -1,32 +1,44 @@
 """Generate Strive Global V2 Side-by-Side Comparison -- Single Sheet"""
+import sys
+import pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / 'scripts'))
+
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, PatternFill, Alignment
+from brand_styles import (
+    HEADER_FONT, HEADER_FILL, BODY_FONT, BOLD_BODY_FONT, TOTAL_FONT,
+    ALT_ROW_FILL, SECONDARY_HEADER_FILL,
+    THIN_BORDER, WRAP_ALIGN, CENTER_WRAP_ALIGN,
+    TITLE_FONT, SECTION_FONT, CURRENCY_FMT,
+    FONT_FAMILY, SAYER_BLACK,
+    get_column_letter,
+)
 
 wb = openpyxl.Workbook()
 ws = wb.active
 ws.title = 'Option A vs Option B'
 
-# Styles
-header_font = Font(name='Arial', size=11, bold=True, color='FFFFFF')
-header_fill = PatternFill(start_color='1F4E79', end_color='1F4E79', fill_type='solid')
-body_font = Font(name='Arial', size=10)
-bold_font = Font(name='Arial', size=10, bold=True)
-total_font = Font(name='Arial', size=11, bold=True, color='1F4E79')
-section_font = Font(name='Arial', size=10, bold=True, color='1F4E79')
-alt_fill = PatternFill(start_color='F2F2F2', end_color='F2F2F2', fill_type='solid')
-b_only_fill = PatternFill(start_color='E2EFDA', end_color='E2EFDA', fill_type='solid')
-thin_border = Border(
-    left=Side(style='thin'), right=Side(style='thin'),
-    top=Side(style='thin'), bottom=Side(style='thin')
-)
-wrap = Alignment(wrap_text=True, vertical='top')
-center = Alignment(horizontal='center', vertical='center', wrap_text=True)
-currency_fmt = '$#,##0'
+# Backwards-compat aliases — brand specs live in scripts/brand_styles.py.
+header_font = HEADER_FONT
+header_fill = HEADER_FILL
+body_font = BODY_FONT
+bold_font = BOLD_BODY_FONT
+total_font = TOTAL_FONT
+section_font = SECTION_FONT
+alt_fill = ALT_ROW_FILL
+# "Option B only" rows get a distinct fill so the reader can see which
+# workstreams only appear in B. Treated the same way as severity fills in the
+# risk register — a semantic marker, tinted toward Sayer Yellow so it reads
+# as "brand attention" rather than an arbitrary color.
+b_only_fill = PatternFill(start_color='FFF3B3', end_color='FFF3B3', fill_type='solid')
+thin_border = THIN_BORDER
+wrap = WRAP_ALIGN
+center = CENTER_WRAP_ALIGN
+currency_fmt = CURRENCY_FMT
 
 # Title
 ws.merge_cells('A1:F1')
-ws.cell(row=1, column=1, value='STRIVE Global -- V2 Scope Comparison: Option A vs Option B').font = Font(name='Arial', size=14, bold=True, color='1F4E79')
+ws.cell(row=1, column=1, value='STRIVE Global -- V2 Scope Comparison: Option A vs Option B').font = TITLE_FONT
 
 # Headers
 headers = ['Workstream', 'Option A\nMedian Hrs', 'Option A\nMedian Cost', 'Option B\nMedian Hrs', 'Option B\nMedian Cost', 'Difference']
@@ -161,7 +173,7 @@ summary = [
     ('Phase 2 Deferrable', 'N/A', 'Yes -- Phase 1 delivers value independently'),
 ]
 
-ws.cell(row=r, column=1, value='SUMMARY COMPARISON').font = Font(name='Arial', size=12, bold=True, color='1F4E79')
+ws.cell(row=r, column=1, value='SUMMARY COMPARISON').font = Font(name=FONT_FAMILY, size=12, bold=True, color=SAYER_BLACK)
 ws.merge_cells(f'A{r}:C{r}')
 r += 1
 
@@ -192,7 +204,7 @@ ws.freeze_panes = 'A4'
 
 # Legend
 r += 1
-ws.cell(row=r, column=1, value='Green rows = Option B only (not included in Option A)').font = Font(name='Arial', size=9, italic=True, color='548235')
+ws.cell(row=r, column=1, value='Highlighted rows = Option B only (not included in Option A)').font = Font(name=FONT_FAMILY, size=9, italic=True, color=SAYER_BLACK)
 
 output = '/Users/harbuckconsulting/projects/Project Scoping Tool/Strive_Global/Strive_V2_Comparison.xlsx'
 wb.save(output)
