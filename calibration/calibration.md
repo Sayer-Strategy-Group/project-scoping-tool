@@ -64,6 +64,17 @@ add an "Actuals" section and move learnings into Estimation Adjustments above.
 - **Status:** Proposal in progress
 - **Actuals:** Not yet completed
 
+### HelloSpoke (VoIP / Multifamily Property Management)
+- **Scoped:** 2026-04-18 (initial), revised 2026-04-23 (ClickUp integration workstream added post-ops-discovery)
+- **System:** HubSpot Sales Hub Professional + Salesforce migration + Rev.io/QuickBooks/QuotaPath integrations + ClickUp↔HubSpot onboarding integration (Tier B architecture)
+- **Size:** 15-18 users, single entity, multifamily real estate VoIP
+- **Median estimate:** 266 hrs / $39,900 (revised)
+- **Range:** 190-360 hrs / $28,500-$54,000
+- **Approach:** Concurrent 4-phase, 12-16 weeks
+- **Notable factors:** October 2026 Salesforce contract expiration = hard deadline. Deal stage Decision Maker Bought-In when scope refined. Jeremy's 45-50% discount joke signals pricing pressure. Broken legacy ClickUp↔Salesforce integration explicitly excluded. **First Sayer ClickUp integration** — Tier B (HubSpot form + Make middleware + native integration) targets 28-36 hrs (median 32). Mandatory field gating flagged as process redesign scope creep, priced as optional add-on (8-14 hrs). Scope refinement pattern: originally "ClickUp-to-HubSpot sync" was in OUT OF SCOPE; moved to in-scope after 4/21 call commitment and 4/23 ops discovery specification.
+- **Status:** Revised proposal pending delivery to Jeremy (AM 2026-04-24 commitment)
+- **Actuals:** Not yet completed
+
 ### American Bedding (Manufacturing / CPQ)
 - **Scoped:** 2026-04-02 (revised same day from initial A/B structure to single fixed fee)
 - **System:** HubSpot CPQ (Sales Hub Pro + Commerce Hub Pro) + NetSuite ERP + Kuebix TMS + n8n middleware
