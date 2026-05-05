@@ -51,6 +51,8 @@ node_modules/
 
 # Client data folders (not committed — client-specific)
 Trialta/
+NAKS/
+FLM/
 
 # HubSpot project template (nested repo, managed separately)
 hubspot-project-template copy/
