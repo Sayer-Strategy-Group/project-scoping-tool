@@ -1,8 +1,8 @@
 # HelloSpoke — Session State
 
-> **Status:** `Pre-Sale — Awaiting Decision`
-> **Last updated:** 2026-04-24
-> **One-liner:** $44k HubSpot implementation deal at Decision Maker Bought-In; close date 2026-04-30; revised proposal + scope delivered to Jeremy AM 2026-04-24 with ClickUp onboarding integration workstream included. Awaiting written approval.
+> **Status:** `Pre-Sale — V3 Artifacts Drafted, Cameron Alignment Pending`
+> **Last updated:** 2026-05-07
+> **One-liner:** v3 patch doc + v3 proposal markdown + v3 scope summary all authored and uploaded to Drive (`hellospoke/` folder). SOW Sheet update spec uploaded as a manual-apply checklist. Pricing locked at $28,700 median ($25,375 – $32,900 range; 164 hrs at $175/hr). Cameron alignment, manual SOW Sheet apply, Gamma deck regen, and v3 follow-up email are the remaining steps before v3 ships to Jeremy.
 
 ---
 
@@ -10,64 +10,84 @@
 
 | Field | Value |
 |-------|-------|
-| Phase | Pre-sale — awaiting Jeremy's written approval |
+| Phase | Pre-sale — v3 artifacts drafted; Cameron alignment + manual artifact application pending |
 | Deal stage | Decision Maker Bought-In (`decisionmakerboughtin`) |
-| Deal amount | **$44,000** (revised, anchored above $43,750 sheet-median to absorb anticipated discount ask; aligned with Cameron 2026-04-24) |
-| Reduced scope option | $24,500 (Phases 1-2 only, including ClickUp integration, 8 weeks) |
-| Close date target | 2026-04-30 |
-| On track? | On track — proposal + scope delivered AM 2026-04-24 as committed |
+| Deal amount | **$28,700 median** at $175/hr (164 hrs); range $25,375 – $32,900. Supersedes 4/24 $44,000 / $24,500 anchors. Pending final Cameron sign-off. |
+| Close date target | TBD — reset target for week of 2026-05-12 send pending Cameron alignment + Gamma regen |
+| On track? | Recovering after rescope; v3 artifact set ready in Drive; ship blocker is Cameron alignment + manual SOW Sheet apply |
 
 ---
 
-## Done Last Session (2026-04-24 AM)
+## Done Last Session (2026-05-07)
 
-- **Delivered revised proposal + scope** to Jeremy Wiley (cc Christina, Sarah, Cameron) AM 2026-04-24 — commitment met
-- **New Gamma deck generated** — `https://gamma.app/docs/erumqig7pyx7rhm` (supersedes prior `9xsb2pq9nvfe8ij`)
-- **Google Sheet scope doc updated** — ClickUp workstream added to Phase 2 (16 hrs median / $2,800); rate updated to $175/hr
-- **Pricing decision locked at $44k** (aligned with Cameron 2026-04-24) — small cushion above $43,750 sheet math for expected discount ask
-- **Follow-up email sent** from kyle@gosayer.com via Superhuman (`kyle@sayer.com` not yet verified as a Superhuman alias)
-- **Decisions log updated** — 4/24 entry appended to `HelloSpoke_decisions.md`
+- **Authored v3 patch doc** `HelloSpoke_sow_update_patch_v2.md` (530 lines) — full strip-add-keep tables, 10 v3 workstreams + PM + optional QuotaPath, estimate range, hours table, phase reweighting, risk register (10 rows), revised assumptions (14 items), revised out-of-scope, application plan
+- **Commerce Hub CPQ research complete** — CSV upload supported (tier-priced products manual); native e-sig is Commerce Hub Professional+ only and quotes-only (caps 25/user/mo Pro, 50/user Enterprise); HubSpot Contracts beta is quote-tied, not a general-contract platform. Tier validation logged as Risk #1 in v3 risk register
+- **Pricing math locked** — 164 hrs × $175 = $28,700; 4-month installments of $7,175; range $25,375 – $32,900; lands inside $27–32k target zone. Net change from 4/24 anchor: −$15,300 (savings passed through)
+- **v3 proposal markdown delivered to Drive** — `1b2WOhxXmD1BrLI5JU-Xq0H00qR0ZNAT6` (`HelloSpoke_HubSpot_CRM_Proposal_v3.md` in `hellospoke/` Drive folder). 8-section Sayer format; Customer Story framing preserved on every workstream
+- **v3 scope summary delivered to Drive** — `1Q8ZnFSV4vW7oHhzz6J9534XiEn0dbyCs` (`HelloSpoke_Scope_Summary_v3.md`). Follows `templates/scope-summary-template.md`
+- **SOW Sheet v3 update spec delivered to Drive** — `1LUYTyEvmx2bgngdcy4D0AnN8M4EoHAzk` (`HelloSpoke_SOW_Sheet_v3_Update_Spec.md`). Tab-by-tab manual apply checklist
+- **v3 SOW project workbook built locally** — `HelloSpoke/HelloSpoke_v3_SOW_Project_Sheet.xlsx` (10 tabs: Cover & Pricing, Workstream Hours, Task Breakdown, Phase Matrix, Phase Requirements, Phase Success Criteria, Risk Register, Scope Assumptions, Out of Scope, Open Items). 67-task breakdown sums to 164 hrs median; QuotaPath optional adds 14 hrs. **Drive upload pending** (Service account JSON missing from Keychain; gcloud/ADC not installed on this machine. Kyle drags into `hellospoke/` Drive folder OR adds `GOOGLE_SERVICE_ACCOUNT_JSON` to Keychain to enable scripted upload.)
+- **Build script** `HelloSpoke/build_v3_sow_sheet.py` — re-runnable; openpyxl-based; brand-aware (Sayer yellow/grey)
+- **v3 Gamma deck generation submitted** — generation ID `id7ImQXlMdFQbi7OYghy3` · status https://gamma.app/generations/id7ImQXlMdFQbi7OYghy3 · Sayer Default Theme (`ivv3t2lgbk9anm2`) · 12 slides, 16:9, executive audience, preserve mode. Will supersede `erumqig7pyx7rhm` once live
+- **Logged 2026-05-07 entry** in `HelloSpoke_decisions.md` with Commerce Hub research findings, hours math, and v3 artifact decisions
 
-## Done Prior Session (2026-04-23)
+## Done Prior Session (2026-05-05)
 
-- Ran 2026-04-23 ops discovery with Christina, Jeremy, Sarah, Dalton (Implementation), Haley (Ops) — 32 min
-- Logged HubSpot note on company + 4 contacts + deal (note `366016513772`)
-- Created two HubSpot tasks on the active deal:
-  - `366085682933` — ClickUp↔HubSpot native integration research — due 2026-04-23 6 PM CT
-  - `366054473408` — Deliver revised scope + proposal to Jeremy — due 2026-04-24 10 AM CT (**delivered 2026-04-24 AM**)
-- Launched `/deep-research` agent on ClickUp↔HubSpot native integration + forms
-- Slack post to `#project-hellospoke` was drafted; status unknown (not tracked this session)
+- **Pulled and analyzed 5/4 walkthrough call** (Fireflies `01KQSVGHKNQ1PM7X5ZPWJ4GJJK`, 23 min, Jeremy + Christina + Sara + Cameron + Kyle)
+- **Built rescope plan** — see `~/.claude/plans/alright-now-i-need-virtual-pudding.md` (strip integration build / add Data QA + audit / pass pricing through)
+- **Logged 5/4 decisions** to `HelloSpoke_decisions.md` — strip Rev IO + ClickUp + Salesforce migration + QuickBooks + ALN integration build hours, replace with Data QA + Pre-Production Audit, elevate quoting/CPQ + dashboards + UX
+- **Pricing direction confirmed with Kyle** — pass savings through (target $26-32k, ~150-180 hrs at $175/hr); supersedes the 4/24 $44k anchor
+- **QuotaPath direction confirmed with Kyle** — surface as explicit optional add-on with 2026-05-08 deadline; do not wait on Jeremy's decision before sending v3
+
+## Done Prior Session (2026-05-05)
+
+- Pulled and analyzed 5/4 walkthrough call (Fireflies `01KQSVGHKNQ1PM7X5ZPWJ4GJJK`, 23 min)
+- Built initial rescope plan — `~/.claude/plans/alright-now-i-need-virtual-pudding.md`
+- Logged 5/4 decisions to `HelloSpoke_decisions.md`
+- Pricing direction confirmed with Kyle (pass savings through, $26-32k target)
+- QuotaPath direction confirmed (explicit optional add-on, 5/8 deadline)
+- Marked v2 patch and ClickUp workstream addendum as superseded
+
+## Done Prior Session (2026-04-24 AM)
+
+- Delivered revised proposal + scope to Jeremy Wiley (cc Christina, Sarah, Cameron)
+- Gamma deck generated — `https://gamma.app/docs/erumqig7pyx7rhm` (slated for replacement in v3)
+- Google Sheet scope doc updated; rate set to $175/hr
+- Pricing decision locked at $44k — **superseded 2026-05-05**
 
 ---
 
 ## Open Items
 
 ### Sayer Owes
-- [x] ~~ClickUp↔HubSpot native integration research~~ — complete
-- [x] ~~Revise Google Sheet scope doc to add the ClickUp integration workstream~~ — complete
-- [x] ~~Revise proposal~~ — delivered 2026-04-24 AM
-- [x] ~~Send follow-up email~~ — sent 2026-04-24 AM
-- [ ] Verify `kyle@sayer.com` as a Superhuman send-as alias (follow-up — sent from `kyle@gosayer.com` today)
-- [ ] Manual check in HubSpot UI for any orphan Lead objects on Jeremy/Ryan/Christina/Sarah contacts (MCP can't search leads; deferred)
-- [ ] Confirm `#project-hellospoke` Slack update went out (status unknown)
-- [ ] Stand by for walkthrough call if Jeremy requests
+- [ ] **Cameron alignment on $28,700 median pricing** — confirm number + send approval before v3 ships to Jeremy
+- [ ] **Upload `HelloSpoke_v3_SOW_Project_Sheet.xlsx` to Drive** (`hellospoke/` folder, Drive ID `16VrwmgEqJRSq1YIM3LmDJ0NX61Sq1Ss-`). Drag-upload from Finder (10 sec); Drive auto-converts xlsx → Google Sheet on import. OR add `GOOGLE_SERVICE_ACCOUNT_JSON` to Keychain (`security add-generic-password -a "harbuckconsulting" -s "GOOGLE_SERVICE_ACCOUNT_JSON" -w '<json>'`) for future scripted uploads
+- [ ] **Manually apply v3 changes to authoritative SOW Google Sheet** (`1Kctr6sIfFQY7PzMY-GAHopI7fOdjl_TEgUi8zSjh1uY`) per `HelloSpoke_SOW_Sheet_v3_Update_Spec.md` — OR if you upload the new xlsx as the new authoritative SOW, retire the old sheet and use the v3 workbook directly
+- [ ] **Mirror authoritative changes into working copy SOW** (`1JahJZ6tBuii1KyeE_D1SpMUk9NJtZClhwQHq5f-BcFs`) once authoritative is verified
+- [ ] **Verify v3 Gamma deck quality** once generation `id7ImQXlMdFQbi7OYghy3` completes (https://gamma.app/generations/id7ImQXlMdFQbi7OYghy3); record the new deck URL here and mark `erumqig7pyx7rhm` deprecated
+- [ ] **Draft + send v3 follow-up email** to Jeremy (cc Christina, Sara, Cameron) from `kyle@gosayer.com` after Cameron alignment + Gamma regen
+- [ ] Verify `kyle@sayer.com` as Superhuman send-as alias (housekeeping)
+- [ ] Manual check in HubSpot UI for orphan Lead objects on Jeremy/Ryan/Christina/Sarah contacts
+- [ ] Add v3 Project Baseline entry to `calibration/calibration.md` once final pricing locks
 
 ### Client Owes
-- [ ] **Jeremy** — written approval of full scope ($44k) or reduced scope ($24.5k)
-- [ ] HelloSpoke — confirm ClickUp plan tier is Unlimited or higher
-- [ ] **Christina / Dalton / Haley** — draft canonical onboarding status list (Waiting for Survey → In Configuration → Training Scheduled → Call Forwarding → Complete + % complete indicators)
-- [ ] **Sarah Hines** — share sales-stage definitions with Jeremy + Christina
-- [ ] **Dalton Palmer** — send Kyle current ClickUp implementation form link for reference during form redesign
+- [ ] **Jeremy** — answer on QuotaPath in/out by EOW 2026-05-08
+- [ ] **Jeremy** — confirm DocuSign replacement direction (Commerce Hub native vs PandaDoc)
+- [ ] **Jeremy** — grant Sayer access to HubSpot sandbox (Salesforce + Rev IO data) for W2 audit
+- [ ] **Jeremy** — confirm Commerce Hub Professional licensing (or upgrade decision) before W4 begins
+- [ ] **Sara Hines** — send finalized sales-stage definitions (week 1 of delivery)
+- [ ] **Christina** — confirm sales-stage definitions align with current ClickUp setup; Phase 2 ideas deferred
+- [ ] **Jeremy** — finalize ALN + QuickBooks integrations himself this week (informational; not in Sayer scope)
 
 ---
 
 ## Next Session Focus
 
-1. **Monitor for Jeremy's response** — written approval, walkthrough request, or discount counter
-2. If discount counter lands: check against $44k anchor (sheet median $43,750, floor = $175 × 250 hrs). Hold the line unless Cameron aligns on a concession
-3. Move deal to `contractsent` once Jeremy confirms the revised scope
-4. Verify `kyle@sayer.com` Superhuman alias (housekeeping — future emails should default to canonical sender)
-5. Close out client-owed items as they come in (status list workshop scheduling, ClickUp form link, sales-stage definitions)
+1. **Cameron alignment** — share the v3 patch doc + Drive artifacts; lock $28,700 median (or adjust)
+2. **Manual SOW Sheet apply** — Kyle works through `HelloSpoke_SOW_Sheet_v3_Update_Spec.md` tab-by-tab against the authoritative sheet
+3. **Gamma deck regen** — generate new v3 deck from the v3 proposal markdown content
+4. **v3 follow-up email** — draft to Jeremy from `kyle@gosayer.com`; QuotaPath as explicit optional checkbox; deadline reset
+5. **Working copy SOW mirror** — apply same updates after authoritative is verified
 
 ---
 
@@ -75,30 +95,51 @@
 
 | File | Purpose |
 |------|---------|
-| `HelloSpoke_decisions.md` | Decisions captured from 4/14 discovery, 4/21 next-steps, and 4/23 ops discovery calls |
-| `HelloSpoke_clickup_workstream.md` | *(pending research)* ClickUp workstream addendum with hour estimates |
+| `HelloSpoke_decisions.md` | Decisions log: 4/14, 4/21, 4/23, 4/24, 5/4, 5/7 |
+| `HelloSpoke_v3_SOW_Project_Sheet.xlsx` | **v3 SOW workbook (10 tabs)** — Cover, Hours, Task Breakdown (67 tasks), Phase Matrix, Requirements, Success Criteria, Risk Register, Assumptions, Out of Scope, Open Items. Pending Drive upload. |
+| `build_v3_sow_sheet.py` | Re-runnable workbook builder (openpyxl, Sayer brand colors) |
+| `HelloSpoke_sow_update_patch_v2.md` | **v3 patch doc (active)** — strip-add-keep tables, v3 workstreams, hours, risk register, application plan |
+| `HelloSpoke_clickup_workstream.md` | **Superseded 2026-05-05** — workstream stripped from v3 |
+| `HelloSpoke_sow_update_patch.md` | **Superseded 2026-05-05** — v2 patch (4/24) |
+| Rescope plan (Claude) | `~/.claude/plans/alright-now-i-need-virtual-pudding.md` (5/5), `~/.claude/plans/i-need-to-rescope-synchronous-sifakis.md` (5/7 execution plan) |
+| Drive: v3 Proposal | `1b2WOhxXmD1BrLI5JU-Xq0H00qR0ZNAT6` — `HelloSpoke_HubSpot_CRM_Proposal_v3.md` |
+| Drive: v3 Scope Summary | `1Q8ZnFSV4vW7oHhzz6J9534XiEn0dbyCs` — `HelloSpoke_Scope_Summary_v3.md` |
+| Drive: v3 SOW Sheet Update Spec | `1LUYTyEvmx2bgngdcy4D0AnN8M4EoHAzk` — `HelloSpoke_SOW_Sheet_v3_Update_Spec.md` (manual-apply checklist) |
+| Drive: Authoritative SOW Sheet | `1Kctr6sIfFQY7PzMY-GAHopI7fOdjl_TEgUi8zSjh1uY` — pending manual v3 apply |
+| Drive: Working Copy SOW Sheet | `1JahJZ6tBuii1KyeE_D1SpMUk9NJtZClhwQHq5f-BcFs` — defer until authoritative verified |
+| Drive: hellospoke folder | `16VrwmgEqJRSq1YIM3LmDJ0NX61Sq1Ss-` (parent for v3 artifacts) |
+| Fireflies 5/4 walkthrough | https://app.fireflies.ai/view/01KQSVGHKNQ1PM7X5ZPWJ4GJJK |
 | HubSpot Company `307857992394` | https://app.hubspot.com/contacts/46319964/record/0-2/307857992394 |
 | HubSpot Deal `306004595439` | $42k, Decision Maker Bought-In — https://app.hubspot.com/contacts/46319964/record/0-3/306004595439 |
-| HubSpot Note `366016513772` (4/23 call) | https://app.hubspot.com/contacts/46319964/companies/307857992394?engagement=366016513772 |
 | Fireflies 4/14 discovery | https://app.fireflies.ai/view/01KNT5ZFCGEYFFWTBZYS196RC7 |
 | Fireflies 4/21 next-steps | https://app.fireflies.ai/view/01KPRWATCQDV6NF29TWWHMKA1C |
 | Fireflies 4/23 ops discovery | https://app.fireflies.ai/view/01KPRXJ0AX07VPYY4T9EEBGZJD |
 | Slack channel (internal) | `#project-hellospoke` in sayerhq.slack.com |
-| External scope doc | Google Sheet (authoritative — Kyle maintains) |
 
 ---
 
 ## Key Decisions
 
-- **Pricing locked at $44,000 for full scope** (2026-04-24, aligned with Cameron). Anchor is $250 above the $43,750 sheet median to absorb anticipated discount ask without eroding below the $175/hr × 250 hr baseline. Reduced scope = $24,500.
-- **Post-sales ops / ClickUp integration is in scope** (confirmed 4/21, sharpened 4/23). Sayer builds native HubSpot↔ClickUp integration + light workflows to signal order→ops kickoff.
-- **Automation priority over dashboards** (confirmed 4/21). Ryan: customer-journey automations first.
-- **Status model: client-drafted, Sayer-facilitated** (4/23). Candidate list: Waiting for Survey → In Configuration → Training Scheduled → Call Forwarding → Complete, with % complete indicators. Sarah runs litmus test with sales reps.
-- **Propose HubSpot form as replacement for ClickUp implementation form** (new, 4/23). Strategic recommendation contingent on research: capture data in HubSpot first, push to ClickUp. Simplifies sync architecture, solves the PDF-output frustration.
-- **Mandatory field gating flagged but not committed** (4/23). Jeremy wants gated handoffs (sales→impl, impl→billing). Process redesign, not integration — explicit in/out line in revised proposal.
-- **Legacy ClickUp↔Salesforce integration is out of scope** (4/23). Sayer builds net-new against HubSpot; not debugging the broken legacy flow.
-- **10DLC training tracked separately** (4/23). Not in the standard onboarding status model.
-- **Win-property separate survey — 80/20 decision pending** (4/23).
+- **V3 pricing locked at $28,700 median** (2026-05-07). 164 hrs at $175/hr; range $25,375 – $32,900; 4-month installments of $7,175 + 5% tech fee. Pending Cameron sign-off before v3 ships to Jeremy. Honors the 4/21 discount signal (Sarah's 45% counter against the original v1 $52,500 target) without needing a separate discount conversation.
+- **Commerce Hub Professional is required** for the v3 quoting workstream (W4) (2026-05-07, validated via web research). Native e-signature lives in Commerce Hub specifically — Sales Hub Pro alone is insufficient. Caps: 25 sigs/user/mo (Pro), 50/user (Enterprise), pooled. Tier validation moves to Workstream 1; surfaced as Risk #1 in v3 risk register.
+- **DocuSign replacement is partial via Commerce Hub native** — quote signing only (2026-05-07). Non-quote contracts (SOWs, MSAs, NDAs) require PandaDoc, HubSpot Contracts beta (limited; not relied on), or keeping DocuSign. W5 hour range absorbs both paths.
+- **V3 rescope direction: strip integration build, add Data QA + audit, pass pricing through** (2026-05-05, post 5/4 call). Jeremy has built Rev IO + ClickUp + Salesforce migration himself; he's finalizing ALN; he doesn't want QuickBooks. Sayer's role on the data side becomes audit + validation before production push, not build.
+- **Pricing direction: pass savings through to client** (2026-05-05, confirmed with Kyle). Target $26-32k base at $175/hr, ~150-180 hrs. Final number aligned with Cameron before delivery. Supersedes 4/24 $44,000 / $24,500 anchors.
+- **QuotaPath = explicit optional add-on with EOW 2026-05-08 deadline** (2026-05-05, confirmed with Kyle). v3 ships without waiting on Jeremy's decision; QuotaPath appears as a checkbox line item.
+- **Quoting & CPQ workflow is the #1 priority** (5/4). Jeremy: "The big ones are the quoting like making sure that the reps can quote easily." CSV upload pain, validation, property mapping, Commerce Hub CPQ.
+- **DocuSign is being killed** (5/4). Jeremy: "I told DocuSign to eat a dick." Commerce Hub native signature is the leading replacement (Cameron's recommendation); PandaDoc is the backup.
+- **HubSpot foundational architecture in scope and elevated** (5/4). Cameron asked, Jeremy said "I think we're open to it" — objects, pipelines, lead status, lifecycle stages, properties become a named workstream.
+- **Phase 2 deliberately under-scoped** (5/4). Christina: "We just really don't know what we don't know." Phase 2 ideas deferred to a follow-on engagement.
+- **ClickUp workstream pivots from integration build → workflow refinement** (5/4). Integration exists; what's missing is workflow correctness and gating.
+- **Treat v3 as a new proposal, not a patch** (2026-05-05). Composition is changing materially. New Gamma deck supersedes `erumqig7pyx7rhm`; new Google Sheet revision supersedes 4/24.
+
+### Superseded by v3 (kept for trail)
+
+- ~~Pricing locked at $44,000 for full scope~~ (2026-04-24) — replaced by pass-through pricing 2026-05-05
+- ~~Reduced scope option = $24,500~~ — no longer the alternative; v3 base is the new floor
+- ~~Sayer builds native HubSpot↔ClickUp integration + Make middleware~~ (4/23) — Jeremy built it himself; stripped 5/5
+- ~~Propose HubSpot form as replacement for ClickUp implementation form~~ (4/23) — out with the integration workstream
+- Status model, mandatory field gating, legacy SF↔ClickUp out-of-scope, 10DLC, Win-property — all carry forward as decisions but no longer drive a dedicated integration workstream
 
 ---
 

@@ -1,5 +1,9 @@
 # HelloSpoke — SOW / Proposal Update Patch
 
+> **⚠️ SUPERSEDED 2026-05-05.** This v2 patch was built to incorporate the 4/23 ClickUp integration findings into the 4/24 proposal. On the 5/4 walkthrough call Jeremy asked to redirect the engagement away from the integration build entirely (he built it himself). A v3 patch document supersedes this one — see `HelloSpoke_sow_update_patch_v2.md` (in progress) and the 2026-05-04 entry in `HelloSpoke_decisions.md`. Retained for historical context.
+
+---
+
 **Date:** 2026-04-23
 **Author:** Kyle / Sayer
 **Purpose:** Four-document sync patch to incorporate the 2026-04-23 ops discovery findings and the ClickUp ↔ HubSpot native integration research. Apply this patch once; all four HelloSpoke client-facing artifacts converge.

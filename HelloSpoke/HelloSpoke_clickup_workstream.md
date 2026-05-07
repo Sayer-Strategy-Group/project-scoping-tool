@@ -1,5 +1,10 @@
 # HelloSpoke — ClickUp ↔ HubSpot Integration Workstream Addendum
 
+> **⚠️ SUPERSEDED 2026-05-05.** Entire workstream stripped from v3 scope. On the 5/4 walkthrough call, Jeremy confirmed he has already built the basic ClickUp deal-won → task automation himself in his sandbox; the v3 rescope no longer carries a ClickUp integration workstream. The ClickUp work that survives in v3 is workflow refinement (correctness, gating, who-does-what) — not integration build, form replacement, or middleware. This document is retained for historical context only. See `HelloSpoke_decisions.md` 2026-05-04 entry and the v2 patch document for current scope.
+
+---
+
+
 **Date:** 2026-04-23
 **Author:** Kyle / Sayer
 **Basis:** 4/23 ops discovery call (Fireflies: `01KPRXJ0AX07VPYY4T9EEBGZJD`) + `/deep-research` agent report on ClickUp↔HubSpot native integration + ClickUp/HubSpot forms

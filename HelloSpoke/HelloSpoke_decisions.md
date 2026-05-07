@@ -98,6 +98,99 @@ Running log of scoping decisions and reasoning. Update during every substantive 
 
 ---
 
+## 2026-05-04 — Scope Walkthrough Call (23 min)
+
+**Fireflies:** https://app.fireflies.ai/view/01KQSVGHKNQ1PM7X5ZPWJ4GJJK
+**Attendees:** Jeremy Wiley, Christina Edwards, Sara Hines (HelloSpoke); Cameron Taggart, Kyle Harbuck (Sayer)
+
+**Trigger:** First call after Kyle delivered the revised proposal (4/24). Jeremy walked the proposal and asked to redirect the engagement away from data-plumbing work he has already built himself, toward configuration, automation, UX, and enablement.
+
+**Decisions:**
+
+- **Strip integration build hours from scope.** Jeremy has already built (in his sandbox) the Rev IO integration, the basic ClickUp deal-won → task automation, and the Salesforce data dump. He is finalizing the ALN integration himself this week and has decided QuickBooks integration is not needed (financial data lives in Rev). All previously scoped integration build-out comes out of v3.
+- **Replace integration build with Data QA + Pre-Production Audit workstream** (confirmed with Kyle 2026-05-05). Sayer reviews the sandbox, validates data integrity / object & property mapping / associations / custom-object structure, designs error handling and a rollback plan, then green-lights the production push. This is the single workstream that absorbs all the audit-style work that used to be split across multiple integration build lines.
+- **HubSpot foundational architecture is in scope and elevated.** Cameron asked: "Are you still wanting us to go through and... set up all of your objects and looking at pipeline stages, lead status, lifecycle stages?" Jeremy: "I think we're open to it." This becomes a named workstream in v3.
+- **Quoting & CPQ workflow is the #1 named priority.** Jeremy: "The big ones are the quoting like making sure that the reps can quote easily." CSV upload pain, validation rules, property mapping, and the move to Commerce Hub CPQ are all in scope.
+- **DocuSign is being killed.** Jeremy: "I told DocuSign to eat a dick." Two replacement candidates: Commerce Hub native signature (Cameron's recommendation — would be bundled with CPQ work and eliminate a separate signature tool) and PandaDoc (HubSpot-native alternative). Decision pending Jeremy.
+- **Dashboards, views, and UX elevated.** Jeremy: "It's not helpful if it's not in the right spot, if the views don't look right." This is the "make it useful" pillar of the rescope.
+- **ClickUp workstream pivots from integration build to workflow refinement.** The integration exists; what's needed is workflow correctness and gating so the right people use it the right way. Hours come down accordingly.
+- **Phase 2 deliberately under-scoped.** Christina: "We just really don't know what we don't know... I'm sure we will have ideas once we live with the new system for a couple weeks." Phase 2 ideas are intentionally deferred to a follow-on engagement; v3 stays focused on Phase 1 essentials.
+- **Pricing direction: pass savings through** (confirmed with Kyle 2026-05-05). Target landing zone $26-32k base at $175/hr, ~150-180 hrs. Final number aligned with Cameron before delivery.
+- **QuotaPath surfaced as explicit optional add-on with EOW deadline** (confirmed with Kyle 2026-05-05). Jeremy: "I'll have an answer on that probably by the end of this week." v3 ships without waiting; QuotaPath appears as a checkbox line annotated "decision by 2026-05-08." Cameron flagged the implementation cost reality: "There's got to be somebody on your side configuring HubSpot and working through things with the sales engineers."
+- **Treat v3 as a new proposal, not a patch.** Composition is changing materially, not just the dollar amount. New Gamma deck supersedes `erumqig7pyx7rhm`; new Google Sheet revision supersedes the 4/24 version.
+
+**Open at end of call:**
+
+- **Sara Hines** — send finalized sales-stage definitions (this week, post sales-team validation)
+- **Jeremy Wiley** — grant Sayer access to HubSpot sandbox with Salesforce + Rev IO data
+- **Jeremy Wiley** — answer on QuotaPath (in or out) by EOW 2026-05-08
+- **Jeremy Wiley** — confirm DocuSign replacement direction (Commerce Hub native vs PandaDoc)
+- **Jeremy Wiley** — continue tweaking QuickBooks + ALN integrations himself; ALN expected finalized this week
+- **Christina Edwards** — confirm sales-stage definitions align with current ClickUp setup; flag any minor additions for Phase 2 (deferred)
+- **Sayer (Kyle)** — review sandbox once shared and adjust scope based on actual sandbox state
+- **Sayer (Kyle)** — update proposal + scope of work for v3 (focus on automations, quoting, dashboards, enablement)
+- **Sayer (Cameron)** — coordinate on QuotaPath decision; align on final v3 pricing before delivery
+
+---
+
+## 2026-05-07 — V3 Artifact Authoring (async, Sayer-internal)
+
+**Fireflies:** n/a (Sayer-internal authoring session, no client call)
+**Attendees:** Kyle Harbuck (Sayer); Claude (assist)
+
+**Trigger:** Execute the rescope direction agreed on 2026-05-05 — author the v3 patch doc, run the Commerce Hub CPQ research blocker, produce v3 client-facing artifacts in Drive, and prepare for Cameron alignment. Driven by the open items list in STATE.md and the rescope plan at `~/.claude/plans/alright-now-i-need-virtual-pudding.md`.
+
+**Decisions:**
+
+- **V3 hours and pricing locked at 164 hrs / $28,700 median** at $175/hr. Range $25,375 – $32,900 (low–high). 4-month installments of $7,175 + 5% tech fee. Pending Cameron sign-off before v3 ships to Jeremy. Lands inside the $27–32k target. Net change from 4/24 anchor: −$15,300.
+
+- **Commerce Hub Professional is required** for the v3 quoting workstream (W4). Validated via web research:
+  - **CSV product upload:** Supported via standard product import + bulk-update by product ID. Limitation: tier-priced products can't be bulk-imported (HubSpot platform constraint; surfaced as Risk #9).
+  - **Native e-signature:** Powered by Dropbox Sign; lives in **Commerce Hub Professional/Enterprise + Commerce Hub seat**. Caps: 25 sigs/user/mo (Pro), 50/user (Enterprise), pooled across users, monthly reset. Sales Hub Professional alone is **NOT** sufficient — the e-sig feature is Commerce Hub-specific.
+  - **Tier required:** Commerce Hub Professional minimum at $95/seat/mo. Tier validation moves to Workstream 1 kickoff and surfaces as Risk #1 in v3 risk register.
+
+- **DocuSign replacement is partial via Commerce Hub native — quote signing only.** Non-quote contracts (SOWs, MSAs, NDAs) need PandaDoc, HubSpot Contracts beta, or keeping DocuSign. W5 (DocuSign Replacement Evaluation + Setup) sized at 6 hrs median assuming Commerce Hub native; runs to 12 hrs at the high end if PandaDoc selected. HubSpot Contracts (Spring 2026 beta) is quote-tied — does NOT sign general contracts and is incompatible with HubSpot Payments + Stripe accounts; not relied on in v3.
+
+- **V3 workstream rebuild:** 10 workstreams + PM + optional QuotaPath:
+  - W1: HubSpot Foundational Architecture (18 med)
+  - W2: Data QA + Pre-Production Audit (18 med) — replaces all stripped integration build hours
+  - W3: Sales Stage Definitions + Gating (10 med)
+  - W4: Quoting & CPQ Workflow / Commerce Hub (24 med)
+  - W5: DocuSign Replacement Evaluation + Setup (6 med)
+  - W6: Automations & Workflows (20 med)
+  - W7: Reporting & Dashboards (18 med)
+  - W8: ClickUp Workflow Refinement (12 med)
+  - W9: Training & Enablement (12 med)
+  - W10: UAT & Go-Live (10 med)
+  - PM: Project Management (16 med)
+  - Optional: QuotaPath (14 med, decision pending Jeremy 5/8)
+
+- **Phase reweighting (12-week timeline):**
+  - Phase 1 — Foundation + Audit (Wk 1–4): W1 + W2 + W3 = 46 hrs
+  - Phase 2 — Build (Wk 5–9): W4 + W5 + W6 + W7 + W8 = 80 hrs
+  - Phase 3 — Enable + Go-Live (Wk 10–12): W9 + W10 = 22 hrs
+  - Cross-phase: PM = 16 hrs
+
+- **Treat v3 as a new proposal, not a patch.** Composition is changing materially. v3 client-facing artifacts uploaded to Drive (`hellospoke/` folder, `16VrwmgEqJRSq1YIM3LmDJ0NX61Sq1Ss-`):
+  - `HelloSpoke_HubSpot_CRM_Proposal_v3.md` (`1b2WOhxXmD1BrLI5JU-Xq0H00qR0ZNAT6`)
+  - `HelloSpoke_Scope_Summary_v3.md` (`1Q8ZnFSV4vW7oHhzz6J9534XiEn0dbyCs`)
+  - `HelloSpoke_SOW_Sheet_v3_Update_Spec.md` (`1LUYTyEvmx2bgngdcy4D0AnN8M4EoHAzk`) — manual-apply checklist for the live SOW sheet
+
+- **Authoritative SOW Sheet update is manual.** Google Drive MCP doesn't support Google Sheet cell edits, and a CSV-conversion approach would lose tab structure and formulas. Kyle applies v3 changes manually using the SOW Sheet Update Spec doc.
+
+**Open at end of session:**
+
+- Sayer (Cameron) — pricing alignment on $28,700 median before v3 ships to Jeremy
+- Sayer (Kyle) — manual application of v3 changes to authoritative Google Sheet (`1Kctr6sIfFQY7PzMY-GAHopI7fOdjl_TEgUi8zSjh1uY`)
+- Sayer (Kyle) — generate new Gamma deck to supersede `erumqig7pyx7rhm`
+- Sayer (Kyle) — draft + send v3 follow-up email to Jeremy (cc Christina, Sara, Cameron) from `kyle@gosayer.com`
+- HelloSpoke (Jeremy) — QuotaPath in/out by EOW 2026-05-08
+- HelloSpoke (Jeremy) — DocuSign replacement direction (Commerce Hub native vs PandaDoc)
+- HelloSpoke (Jeremy) — sandbox access for W2 audit
+- HelloSpoke (Jeremy) — Commerce Hub Professional licensing confirmation before W4
+
+---
+
 ## Template — Add Each Call Below
 
 ### YYYY-MM-DD — {Call Title} ({duration})
