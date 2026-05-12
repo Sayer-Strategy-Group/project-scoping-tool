@@ -1,55 +1,66 @@
 ---
-session_number: 11
-date: 2026-05-11
+session_number: 12
+date: 2026-05-12
 type: client-scoping
-focus: Top Down Auto 2pm scoping call prep — Phase 1 audit pivot
+focus: Top Down Auto 5/11 post-call wrap + Stephanie scoping prep
 ---
 
 ## How This Works
 This file is overwritten every session. Git is the history. Read PROJECT-STATE.md for dashboard, client STATE.md files for client-specific context.
 
-## Last Session (11) — Top Down Auto 2pm Call Prep + 4/29 Scope Pivot Capture
+## Last Session (12) — Top Down Auto Post-Call + Stephanie Setup
 
-Kyle opened with ~90 min until a 2pm CDT Top Down Auto scoping call. Tim Hainey wanted hard MVP requirements to draft a strong SOW for Stephanie. Prep work surfaced a **major scope pivot from the 4/29 call** that hadn't yet been captured in repo state: CRM platform decision shifted from HubSpot Sales Hub Pro to **NetSuite CRM**, Genesis (Ismael Cordero, gahh.com) confirmed as PIM owner, and Phase 1 work is now legacy Intuitive → NetSuite migration audit + CSR discovery, not HubSpot CRM build.
+Ran `/sayer-post-call` on Top Down Auto's 2026-05-11 2pm scoping call (Alexis Molina + Ismael Cordero, 47 min). Phase 1 (legacy Intuitive ERP → NetSuite migration) verbally agreed; Alexis silver-plattered the technical sequence — VM/SQL prep on client side, 12-user interview campaign + query capture on Sayer side, rationalization vs. 2022 NetSuite cutover, then CSV load. Phase 2 (NetSuite CRM build) explicitly deferred to a separate SOW.
 
-Fireflies surfaced two duplicate captures of the 4/29 "Topdown data discovery" call (IDs `01KQA5SA6TJ9K3RMT9ZGRR3N05` and `01KQD9YQPA4KKX7S106FF0Y1F3`) with Stephanie, Tim, Cameron, Ismael, and Alexis. Action items from that call basically drafted the Phase 1 SOW: phased audit + migration plan + internal NetSuite/data team coordination.
+Three Fireflies captures of the same meeting (same Meet link, same duration); picked the canonical `01KRC6JXCKWR5YNRZP6AEYA62Z` (`fred_joined: true`, 7 attendees). Filed memory `pattern_fireflies_duplicate_captures.md` for next time.
 
-**Shipped (commit 3fc8dc3 on main):**
-- `Top Down Auto/STATE.md` — rewritten to reflect 4/29 pivot, new stakeholders, stale-artifact flags
-- `Top Down Auto/2026-05-11_pre-call_email_draft.md` — pre-call email for Stephanie/Tim
-- `Top Down Auto/2026-05-11_call_runsheet.docx` — 60-min runsheet with strategic posture, agenda, 4 question blocks (A, B, C, D), watch-fors, and Block A.2 with Tim Hainey's 6 Intuitive→NetSuite migration questions
+**Shipped (commit c37d725 on main):**
+- `Top Down Auto/2026-05-11_post-call_recap.md` — full Phase 1 sequence, 12-user interview target list, open technical Qs for Tim (NetSuite import format, Google Meet "give control" gap), decisions D1–D6, pricing anchor. Structured as input for `/scope-project Top Down Auto`.
+- `Top Down Auto/STATE.md` — rewritten to reflect post-5/11 state, deal-name change, today's Stephanie call as next focus.
 
 **External actions:**
-- Superhuman draft pushed (`draft00a90ad8d2e2d54c`) for Stephanie + Tim, CC Cameron, from kyle@gosayer.com — pre-call email with Phase 1 framing
-- Fireflies 4/29 transcripts pulled and synthesized
-- Drive uploads attempted (2 stub `text/html` files in `top-down-auto` folder need cleanup)
+- HubSpot deal #283274309364 renamed → "Top Down Auto — NetSuite Migration + CRM" (was "TopDown Auto - Data Cleanup", stale pre-pivot label)
+- HubSpot note #369203261115 logged with 4 associations (Company 312829746899, Deal, Alexis 483051411148, Ismael 479134824122)
+- Superhuman draft `draft005b7b0ce791b84b` queued for Alexis + Ismael — Phase 1 framing recap, two asks (Alexis: access readiness + interview list; Ismael: pre-brief Stephanie), Whataburger gift card mailing addresses
 
-**Branch hygiene save:** session started on `docs/hellospoke-v3-cameron-alignment` (HelloSpoke PR branch) with stale state — origin/main was 2 commits ahead with HelloSpoke v3 work that landed since the PR was opened. Stashed Top Down work, switched to main, pulled, popped, committed on main cleanly. **The `feedback_pull_origin_before_session.md` memory worked exactly as intended this session.**
+**Tool gotchas surfaced (filed in project memory):**
+- HubSpot MCP rejects `objectType: "leads"` → see `feedback_hubspot_mcp_leads_gap.md`
+- Fireflies duplicate captures on multi-Sayer-attendee meetings → see `pattern_fireflies_duplicate_captures.md`
 
 ## Open (max 3 — new this session)
-1. **2pm Top Down call execution.** Email draft in Superhuman ready to send by 1pm. Runsheet docx ready to drag-drop into Drive as Google Doc. Two stub HTML files in Drive need cleanup (`1gHcBVO2NaaOiug_Gdi-1ee7rTmafnz6c`, `15ssRauiyDBW6ESJppUIB8TkbJQHL8dHj`).
-2. **Phase 1 SOW draft within 48 hours of 2pm call.** Sized from Block A + A.2 answers. Anchor band $15–25K but may widen — Tim's ETL/field-map questions can push it higher.
-3. **Google service account credential gap.** `GOOGLE_SERVICE_ACCOUNT_JSON` is referenced in CLAUDE.md as keychain-stored but is not actually in the keychain. Blocks programmatic Drive uploads via `sayer-gdoc`. See `memory/google_drive_upload_credential_gap.md`.
+1. **Send Superhuman draft** `draft005b7b0ce791b84b` (kyle@gosayer.com → Alexis + Ismael, subject "Top Down Auto — Phase 1 next steps + SOW timing"). Review voice, send before EOD.
+2. **Stephanie scoping call today (2026-05-12).** After the call, run `/scope-project Top Down Auto` against `Top Down Auto/2026-05-11_post-call_recap.md` to generate Phase 1 SOW + Excel estimate + scope summary.
+3. **Reconcile Ismael's record + Genesis affiliation.** HubSpot lists him as "Ismael Fernando Mata" at ismael@gahh.com; Fireflies + prior STATE.md had "Ismael Cordero." Same email — confirm legal name and update one. Separately, clarify with Stephanie whether Genesis (third-party PIM vendor) is still in the picture or has dropped out; the prior STATE.md framing of "Ismael = Genesis rep" no longer matches today's call behavior (he's operating as parent-co GAHH IT lead).
 
-## Carried forward from earlier today (S10 — HelloSpoke)
-- Cameron review feedback on v3 Superhuman draft → then send.
-- Jeremy's three open decisions: QuotaPath, DocuSign direction, sandbox access.
-- Google Sheet cleanup — remove stale $175/hr rows before client clicks source link.
+## Carried forward from S11
+- Phase 1 SOW draft — now subsumed under item 2 above (scoping pass today produces it)
+- **Google service account credential gap** — `GOOGLE_SERVICE_ACCOUNT_JSON` claim in CLAUDE.md is stale (not actually in Keychain); blocks `sayer-gdoc` programmatic Drive uploads
+- Two stub HTML files in Drive `top-down-auto` folder need cleanup (`1gHcBVO2NaaOiug_Gdi-1ee7rTmafnz6c`, `15ssRauiyDBW6ESJppUIB8TkbJQHL8dHj`)
+
+## Carried forward from S10 (HelloSpoke)
+- Cameron review feedback on v3 Superhuman draft → status unknown
+- Jeremy's three open decisions (QuotaPath, DocuSign direction, sandbox access)
+- Google Sheet cleanup — stale $175/hr rows before client clicks source link
 
 ## Carried forward from S8/S9
-- Linear estimate-scale reconfig (Fibonacci snap on hours issue).
-- NAKs proposal expiry 2026-06-04.
-- Scoping-tool branch push decision (now N/A — landed today's work on main; PR branch still has 2 commits unpushed for HelloSpoke v3).
-- Pre-existing repo churn triage (untracked: AmeriPouch/, Rise Run/, Trialta copy/, VestaFreight/, STATE.md at root, AGENTS.md, .cursor/, etc.).
-- AmeriPouch S9 kickoff follow-ups.
+- Linear estimate-scale Fibonacci snap issue
+- NAKs proposal expiry 2026-06-04
+- `docs/hellospoke-v3-cameron-alignment` branch — 2 unpushed commits, never pushed to origin; decide whether to push as-is or rebase onto current main first
+- Pre-existing repo churn (AmeriPouch/, Rise Run/, Trialta copy/, VestaFreight/, STATE.md at root, AGENTS.md, .cursor/, etc. — all untracked, none from this session)
+- AmeriPouch S9 kickoff follow-ups
+
+## System-level carry-forward
+- **Global session_handoff_current.md has unresolved merge conflict markers** (`<<<<<<< Updated upstream` / `=======` / `>>>>>>> Stashed changes`). At `~/.claude/memory/session_handoff_current.md`. Needs manual resolution; not safe to auto-overwrite from this skill.
 
 ## Git state
-- `main` tip: `3fc8dc3` — 1 unpushed commit (today's Top Down Auto prep)
-- `docs/hellospoke-v3-cameron-alignment` — 2 unpushed commits (S10 HelloSpoke v3 work); PR branch never pushed to origin yet
-- Repo has substantial untracked churn (8+ client folders/files outside this session's scope) — pre-existing, deferred
+- `main` tip: `c37d725` — **3 unpushed commits**
+  - `c37d725` — today's Top Down Auto post-call wrap
+  - `0e30c30` — Session 11 handoff
+  - `3fc8dc3` — Top Down Auto 5/11 prep
+- `docs/hellospoke-v3-cameron-alignment` — 2 unpushed commits (S10 HelloSpoke v3)
+- Repo has substantial pre-existing untracked churn — deferred to its own session
 
 ## Next Action When Resuming
-1. After 2pm call: write Block A + A.2 answers into `Top Down Auto/STATE.md`, draft Phase 1 SOW within 48 hours.
-2. Drag-drop runsheet docx to Drive + delete the two stub HTML files (≤1 min).
-3. Decide whether to push `docs/hellospoke-v3-cameron-alignment` to origin and open the PR, or rebase onto current main first.
-4. Address the Google service account credential — either add `GOOGLE_SERVICE_ACCOUNT_JSON` to Keychain so `sayer-gdoc` can complete the pipeline, or update CLAUDE.md to remove the claim that it's available.
+1. **Push:** `!git push` (3 commits on main waiting)
+2. **Send Superhuman draft** after voice review
+3. **Run Stephanie scoping call** → `/scope-project Top Down Auto`
