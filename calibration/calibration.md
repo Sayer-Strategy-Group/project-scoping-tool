@@ -117,6 +117,39 @@ Patterns observed across multiple scoping sessions. Updated as more projects com
 
 ---
 
+## Pricing Negotiation Patterns
+
+Patterns from proposals that entered a negotiation phase before signing. Read this alongside Project Baselines when a client pushes back on a delivered proposal.
+
+### Protocol (established HelloSpoke V3, 2026-05-14)
+
+**1. Internal BATNA alignment before any call.**
+Before getting on the phone, align Kyle + Cameron + Billy on three things: (a) rate floor for this engagement, (b) which workstreams can be trimmed or deferred without gutting value, (c) whether the client qualifies as a "good logo" that justifies a relationship discount.
+
+**2. Get off email.**
+Acknowledge the feedback, signal flexibility, propose a 15-minute call. Do not negotiate price in writing — one reply email to schedule, then close on the call.
+
+**3. Two levers: scope trim before rate cut.**
+- Training/Enablement hours are almost always the first trim — they're deferrable and addable as Phase 2.
+- Data QA / foundational architecture workstreams are typically non-negotiable — they protect Sayer's delivery risk.
+- Cut rate only if scope trimming alone won't close. Frame any rate cut as a "relationship investment," not a correction of an overpriced proposal. Billy's floor call (HelloSpoke): $150/hr (Associate rate).
+
+**4. Sandbox ≠ production argument.**
+When a client self-builds integrations and says "I thought the price would drop more since we removed integrations" — the counter is: connecting and validating in a sandbox is not the same as a production go-live. Data QA / Pre-Production Audit hours don't track 1:1 with integration build hours removed. Sandbox → production issues become a Sayer liability if not explicitly audited.
+
+**5. Billy's close pattern.**
+When a client is a good logo (brand value, campfire/expansion potential), Billy gets on the call as the senior voice. Core values applied: "Win the work, not the relationship" / "Zero In > Move Fast > Win Big." First-round relationship discount is a calculated bet on future work, not a margin concession.
+
+### HelloSpoke — V3 Negotiation Reference (2026-05-14)
+
+- **Proposal delivered:** $28,700 (164 hrs × $175/hr, already −$15K from v1 anchor)
+- **Client push:** Jeremy targets ~$25K via email; cites removed integrations as justification
+- **Sayer response:** Billy calls it a good logo + campfire implementation play. Floor: $150/hr → ~$26,400. Get on a call.
+- **Negotiating room:** Training/Enablement (W9, 12 hrs median) is first trim. QuotaPath optional add-on already excluded. Sandbox-to-production argument defends Data QA hours.
+- **Decision:** Internal BATNA + 15-min close call with Kyle + Cameron + Billy + Jeremy
+
+---
+
 ## How to Use This File
 
 1. **Before scoping:** Read this file. Check if the new client resembles any baselined project (industry, system, size, complexity).
