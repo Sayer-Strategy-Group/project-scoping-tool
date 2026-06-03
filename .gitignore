@@ -1,0 +1,76 @@
+# ============================================================================
+# ALLOWLIST MODEL — this is a SHARED PRODUCT repo.
+# Everything at the repo root is ignored by default; only the shareable product
+# files/dirs are explicitly un-ignored below. This means client engagement
+# folders (current AND future), the local wiki, operational state, and example
+# proposals are NEVER committed — without having to name a single client here.
+# Add a new product file/dir? Add a matching `!/path` line below.
+# ============================================================================
+/*
+
+# --- Product (shared) — explicitly tracked ---
+!/.gitignore
+!/.env.example
+!/.api-specs/
+!/.claude-plugin/
+!/CLAUDE.md
+!/README.md
+!/SETUP-FOR-TEAM.md
+!/calibration/
+!/hubspot-schema-notes.md
+!/requirements.txt
+!/scoping-skill.md
+!/scripts/
+!/skills/
+!/templates/
+!/tests/
+
+# ============================================================================
+# Nested protections — apply at any depth, including inside tracked dirs above.
+# (The root allowlist only governs top-level entries; these guard subpaths.)
+# ============================================================================
+
+# Secrets — never commit (the .env.example above is the only allowed env file)
+.env
+.env.*
+!.env.example
+*.env
+credentials
+credentials.*
+*.pem
+*.key
+*.p12
+*.p8
+
+# Delivery state files (contain external artifact IDs and URLs)
+**/delivery-state.json
+
+# macOS
+.DS_Store
+**/.DS_Store
+._*
+
+# Audio/video recordings (too large for git)
+*.mp3
+*.mp4
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Office temp files / manual backups / ephemeral call-prep docs
+~$*.xlsx
+~$*.docx
+*.tmp
+*.bak-*
+*_call_runsheet.docx
+
+# Logs / Node
+*.log
+node_modules/
+
+# Legacy client-specific proposal generator (Milestone) — client data, keep local
+scripts/generate_proposal.py

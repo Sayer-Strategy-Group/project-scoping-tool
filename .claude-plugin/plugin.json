@@ -1,0 +1,10 @@
+{
+  "name": "project-scoping",
+  "description": "Sayer pre-sale scoping toolkit — client intake (Fireflies/Gmail/HubSpot), workstream-based hour estimates, risk registers, and formatted Excel scope packages. Run from a clone of the project-scoping-tool repo; skills read shared calibration and templates from the repo working directory.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Sayer Strategy Group"
+  },
+  "homepage": "https://github.com/Sayer-Strategy-Group/project-scoping-tool",
+  "repository": "https://github.com/Sayer-Strategy-Group/project-scoping-tool"
+}
