@@ -1,6 +1,6 @@
 # Project Scoping & Delivery Tool
 
-Sayer's pre-sale **scoping** toolkit (and post-sale delivery workflow) for systems
+Sayer's pre-sale **scoping** toolkit for systems
 implementation engagements — primarily HubSpot CRM, plus ERP, marketing automation,
 VoIP, data migrations, and integrations. It produces workstream-based hour estimates,
 risk registers, approach comparisons, and formatted Excel scope packages, and learns
@@ -25,7 +25,8 @@ Quick version once you've cloned and installed deps:
 /plugin install project-scoping@sayer-scoping
 ```
 
-You'll get `/client-intake`, `/scope-project`, and `/sayer-rates`.
+You'll get `/client-intake`, `/scope-project`, `/sayer-rates`, and the
+`sayer-brand-guidelines` reference skill (applied automatically to Excel/docx output).
 
 > **Always launch Claude Code from inside your clone of this repo.** The skills read
 > shared calibration data and templates relative to the repo, and write client folders
@@ -37,7 +38,7 @@ You'll get `/client-intake`, `/scope-project`, and `/sayer-rates`.
 
 | Path | What it is |
 |------|------------|
-| `skills/` | The plugin's scoping skills (`scope-project`, `client-intake`, `sayer-rates`). Auto-discovered when the plugin is installed. |
+| `skills/` | The plugin's skills (`scope-project`, `client-intake`, `sayer-rates`, `sayer-brand-guidelines`). Auto-discovered when the plugin is installed. |
 | `.claude-plugin/` | Plugin + marketplace manifests (`plugin.json`, `marketplace.json`). |
 | `calibration/` | **Shared learning loop** — estimate baselines and adjustments from past projects. Single source of truth; read before scoping, append after closing one. |
 | `templates/` | Scope summary, decisions log, estimate, discovery prep, delivery, and retro templates. |
@@ -57,11 +58,15 @@ credentials that aren't wired for team distribution. Adding them is a future pha
 
 ## Credentials
 
-Scripts resolve secrets in order **macOS Keychain → env var → repo-local `.env`**. The
-Keychain account is overridable per machine via `SAYER_KEYCHAIN_ACCOUNT` (default
-`harbuckconsulting`). The `/client-intake` skill instead uses the HubSpot / Fireflies /
-Gmail **MCP connectors** under each user's own account. Full details in
-[`SETUP-FOR-TEAM.md`](SETUP-FOR-TEAM.md) and [`scripts/README.md`](scripts/README.md).
+**No personal API keys needed.** Scripts resolve secrets in order
+**macOS Keychain → env var → repo-local `.env` → shared Sayer 1Password vault**
+(`op read "op://Shared/<KEY_NAME>/credential"`). Install the 1Password CLI, sign in to
+the Sayer account, and the Fireflies/HubSpot keys resolve from the `Shared` vault.
+Keychain/env/.env act as personal overrides (`SAYER_KEYCHAIN_ACCOUNT` overrides the
+Keychain account; `SAYER_OP_VAULT` overrides the vault). The `/client-intake` skill
+instead uses the HubSpot / Fireflies / Gmail / Notion **MCP connectors** under each
+user's own account. Full details in [`SETUP-FOR-TEAM.md`](SETUP-FOR-TEAM.md) and
+[`scripts/README.md`](scripts/README.md).
 
 ## Requirements
 

@@ -1,12 +1,25 @@
 # Project Scoping & Delivery Tool - CLAUDE.md
 
 ## Project Purpose
-This repo contains the full consulting engagement lifecycle for Harbuck Consulting / Sayer systems implementation projects (primarily HubSpot CRM). It covers scoping (pre-sale), delivery management (post-sale), and calibration (learning from outcomes). Two calibration systems learn from past projects: one for scoping accuracy, one for delivery effectiveness.
+This repo contains the full consulting engagement lifecycle for Sayer systems implementation projects (primarily HubSpot CRM). It covers scoping (pre-sale), delivery management (post-sale), and calibration (learning from outcomes). Two calibration systems learn from past projects: one for scoping accuracy, one for delivery effectiveness.
+
+## Bundled Plugin Skills (what teammates get)
+
+This repo doubles as the `project-scoping` Claude Code plugin (marketplace `sayer-scoping`). Installing it provides:
+
+| Skill | Purpose |
+|-------|---------|
+| `/client-intake` | Scaffold client folder; pull Fireflies/Gmail/HubSpot discovery; mirror to the Notion "Client Engagements" database |
+| `/scope-project` | Generate workstream estimates, risk register, branded 5-sheet Excel package |
+| `/sayer-rates` | Rate card, blended rates, staffing bios |
+| `sayer-brand-guidelines` | Brand specs (colors, typography, logo) — auto-read before any client-facing artifact |
+
+Setup runbook: `SETUP-FOR-TEAM.md`. Delivery skills are NOT bundled — see the Delivery Skills section below.
 
 ## How This Project Works
 1. Cameron Taggart runs discovery calls with clients, produces transcripts and summary notes
 2. Kyle and Claude analyze discovery materials and generate scoping packages
-3. Scoping packages include: Excel estimate (4 sheets + actuals columns), scope summary (markdown), risk register, approach comparison
+3. Scoping packages include: Excel estimate (5 sheets + actuals columns), scope summary (markdown), risk register, approach comparison
 4. After project closes, Claude walks Kyle through a conversational retro and records actuals for calibration
 
 ## Session Start Protocol
@@ -124,17 +137,17 @@ Claude maintains two feedback loops:
 - Flag scope creep risk explicitly when relationship is close
 - Ensure SOW is signed by budget authority, not just the champion who attended discovery
 
-## Delivery Skills (6 skills + orchestrator)
+## Delivery Skills (Kyle's machine only — not part of the shared plugin)
 
-Skills live in `~/.claude/skills/` and are invoked as slash commands:
+These post-sale skills live in Kyle's `~/.claude/skills/` and are NOT distributed with the `project-scoping` plugin — teammates can ignore this section. The delivery templates in `templates/` ARE shared; only the skills are not.
 
 | Skill | Purpose | Trigger |
 |-------|---------|---------|
 | `/project-plan` | Translate proposal → plan.json + Linear project | "plan [client]", "set up [client]" |
 | `/project-sheet` | Generate client-facing Google Sheets | "create sheet for [client]" |
 | `/meeting-calendar` | Generate Gamma decks + calendar events | "set up meetings for [client]" |
-| `/project-kickoff` | Orchestrate plan → sheet → meetings | "kick off [client]" |
-| `/project-status` | Pull Linear data, generate status update | "status on [client]", "where are we" |
+| `/sayer-project-kickoff` | Orchestrate plan → sheet → meetings | "kick off [client]" |
+| `/sayer-project-status` | Pull Linear data, generate status update | "status on [client]", "where are we" |
 | `/delivery-retro` | Conversational retro, feed calibration | "retro on [client]", "close out [client]" |
 
 **Data flow:** Proposal/SOW → `/project-plan` → plan.json → downstream skills
@@ -154,9 +167,9 @@ Skills live in `~/.claude/skills/` and are invoked as slash commands:
 - **Google Sheets:** Service account JSON via Keychain (`GOOGLE_SERVICE_ACCOUNT_JSON`)
 - **Google Calendar:** MCP tools (already authenticated)
 
-Scripts resolve credentials via `scripts/keychain.py` in this order: macOS Keychain → environment variable → repo-local `.env` file. Never commit `.env`.
+Scripts resolve credentials via `scripts/keychain.py` in this order: macOS Keychain → environment variable → repo-local `.env` file → **shared Sayer 1Password vault** (`op read "op://Shared/<KEY_NAME>/credential"`). Never commit `.env`.
 
-The Keychain **account** defaults to `harbuckconsulting` but is overridable per machine via the `SAYER_KEYCHAIN_ACCOUNT` env var (e.g. a teammate sets it to their macOS username). Teammates who keep tokens in env vars or `.env` can ignore the account entirely. See `SETUP-FOR-TEAM.md` for the full teammate onboarding runbook.
+**Teammates need no personal API keys for Fireflies/HubSpot scripts** — the 1Password fallback resolves them from the Sayer `Shared` vault once the teammate installs the 1Password CLI and signs into the Sayer account (vault overridable via `SAYER_OP_VAULT`). The Keychain **account** defaults to `harbuckconsulting` but is overridable per machine via the `SAYER_KEYCHAIN_ACCOUNT` env var. See `SETUP-FOR-TEAM.md` for the full teammate onboarding runbook.
 
 ## Testing
 

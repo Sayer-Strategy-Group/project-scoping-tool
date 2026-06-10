@@ -5,8 +5,9 @@ This repo is three things at once:
 1. A **working repo** — you clone it and run Claude Code *from inside it*. Client
    folders, the shared `calibration/` learning data, and `templates/` all live here.
 2. A **Claude Code plugin** (`project-scoping`) — bundles the scoping skills
-   (`/client-intake`, `/scope-project`, `/sayer-rates`) so they show up as slash
-   commands in Claude Code.
+   (`/client-intake`, `/scope-project`, `/sayer-rates`) plus the
+   `sayer-brand-guidelines` reference skill (applied automatically to Excel/docx
+   output — no slash command needed) so they show up in Claude Code.
 3. A **plugin marketplace** (`sayer-scoping`) — so you install the plugin with one
    command and update it with another.
 
@@ -23,13 +24,15 @@ This guide gets you from zero to producing a scope package.
 
 - **macOS** with **Claude Code** installed.
 - **Python 3.9+** (`python3 --version`). Scripts target 3.9 for compatibility.
-- Your **own Sayer credentials**:
-  - **HubSpot** Private App token with `crm.objects.{owners,companies,contacts,deals}.read` scopes.
-  - **Fireflies** API key.
-  - These are used by `scripts/intake.py`. The `/client-intake` *skill* uses the
-    HubSpot/Fireflies/Gmail **MCP connectors** instead — connect those in Claude Code
-    (`/mcp`) under your own account.
+- **1Password** — the Sayer account, desktop app, and CLI. The shared Fireflies and
+  HubSpot API keys live in the Sayer `Shared` vault; **you do not need your own API
+  keys.** Setup in step 2 below.
+- **MCP connectors** — the `/client-intake` *skill* uses the HubSpot / Fireflies /
+  Gmail / Notion **MCP connectors** under your own account — connect those in Claude
+  Code (`/mcp`). (The 1Password keys cover the Python scripts like `intake.py`.)
 - GitHub access to `Sayer-Strategy-Group/project-scoping-tool` (your org membership).
+- *Optional:* the **Rethink Sans** Google Font for decks — Excel/docx output falls
+  back to Calibri automatically, so this is never blocking.
 
 ---
 
@@ -43,30 +46,37 @@ cd project-scoping-tool
 pip3 install -r requirements.txt
 ```
 
-### 2. Provide your credentials
+### 2. Connect to the shared credentials (1Password)
 
-Pick **one** of three ways (the scripts try them in this order: Keychain → env → `.env`):
-
-**Option A — macOS Keychain (recommended).** Point the lookup at your own account:
+The scripts resolve secrets in this order: **Keychain → env → `.env` → 1Password**.
+The team default is 1Password — the shared keys are already in the Sayer `Shared`
+vault, so this is sign-in, not key management:
 
 ```bash
-export SAYER_KEYCHAIN_ACCOUNT="$(whoami)"          # add this to your ~/.zshrc to persist
-security add-generic-password -a "$SAYER_KEYCHAIN_ACCOUNT" -s HUBSPOT_API_KEY   -w 'pat-na1-...'
-security add-generic-password -a "$SAYER_KEYCHAIN_ACCOUNT" -s FIREFLIES_API_KEY -w '...'
+brew install 1password-cli
 ```
 
-**Option B — environment variables:**
+Then in the **1Password desktop app**: sign in to the Sayer account →
+Settings → Developer → **Integrate with 1Password CLI**. Verify:
 
 ```bash
+op read "op://Shared/FIREFLIES_API_KEY/credential"
+op read "op://Shared/HUBSPOT_API_KEY/credential"
+```
+
+Both should print a token. If you get a vault/item error, ask Kyle for access to
+the `Shared` vault. (A different vault name can be set via `SAYER_OP_VAULT`.)
+
+**Personal overrides (optional).** Anything found in Keychain, env vars, or a
+repo-local `.env` (gitignored — never commit it) wins over 1Password:
+
+```bash
+# Keychain (point the lookup at your own account):
+export SAYER_KEYCHAIN_ACCOUNT="$(whoami)"          # add to ~/.zshrc to persist
+security add-generic-password -a "$SAYER_KEYCHAIN_ACCOUNT" -s HUBSPOT_API_KEY -w 'pat-na1-...'
+
+# Or env vars:
 export HUBSPOT_API_KEY='pat-na1-...'
-export FIREFLIES_API_KEY='...'
-```
-
-**Option C — a repo-local `.env`** (already gitignored — never commit it):
-
-```
-HUBSPOT_API_KEY=pat-na1-...
-FIREFLIES_API_KEY=...
 ```
 
 ### 3. Verify credentials work (no writes, no fetch)
@@ -87,7 +97,10 @@ In Claude Code:
 /plugin install project-scoping@sayer-scoping
 ```
 
-You'll now have `/client-intake`, `/scope-project`, and `/sayer-rates`.
+You'll now have `/client-intake`, `/scope-project`, `/sayer-rates`, and the
+`sayer-brand-guidelines` reference skill (read automatically before client-facing
+output — Excel needs no logo; deck/doc covers fetch logos from the Sayer shared
+Google Drive when needed).
 
 ---
 
@@ -112,9 +125,14 @@ Then, typically:
 3. `/sayer-rates` is consulted automatically for the rate card; invoke it directly to
    review tiers or the pricing-negotiation protocol.
 
-> **No Obsidian vault?** Fine. `client-intake` and `intake.py` mirror to a SayerBrain
-> vault *only if one exists*; otherwise they skip the mirror with a notice and the repo
-> folder is the source of truth.
+> **Team visibility:** `/client-intake` also creates a page in the shared
+> **Client Engagements** Notion database (under Sayer Home) with status, intake date,
+> and a discovery digest — connect the Notion connector in `/mcp` to enable it. If
+> Notion isn't connected, intake still works; it just skips the mirror with a notice.
+> The repo client folder is always the source of truth.
+>
+> **No Obsidian vault?** Fine — the Obsidian mirror is an optional operator extra;
+> it skips silently when no vault exists.
 
 ---
 
@@ -133,7 +151,10 @@ Then, typically:
 | Symptom | Fix |
 |---|---|
 | Skill says "NOT in repo root" | `cd` into your `project-scoping-tool` clone before running it. |
-| `intake.py --test-only` → `FAIL` | Token missing/expired or wrong scopes. Re-add per step 2; HubSpot needs the four `crm.objects.*.read` scopes. |
-| `Secret 'X' not found` | No credential resolved. Check `SAYER_KEYCHAIN_ACCOUNT`, your env vars, or `.env`. |
-| `/scope-project` not found after install | Run `/plugin marketplace update` then `/plugin install project-scoping@sayer-scoping` again. |
+| `intake.py --test-only` → `FAIL` | Token missing/expired or wrong scopes. Verify the `op read` commands from step 2 work; if you used a personal override, re-add it. |
+| `Secret 'X' not found` | No credential resolved anywhere. Most common: `op` CLI not installed, CLI integration not enabled in the 1Password app, or no access to the `Shared` vault — re-run step 2. |
+| `op read` → "isn't a vault" / "no item" | You don't have the Sayer `Shared` vault yet — ask Kyle to grant access in 1Password. |
+| `/scope-project` not found after install | Run `/plugin marketplace update sayer-scoping` then `/plugin install project-scoping@sayer-scoping` again. |
+| Plugin out of date | `/plugin marketplace update sayer-scoping` then `/plugin update project-scoping`. |
+| "Notion mirror skipped" notice | Notion connector not connected in `/mcp` — intake still completed; connect Notion to enable the team-visible index. |
 | `[vault] skipped` notice | Expected if you have no Obsidian vault — not an error. |
