@@ -5,7 +5,7 @@ description: >
   Gmail, and HubSpot. Use when onboarding a new client for scoping.
   Trigger: "intake [ClientName]", "new client [ClientName]", "set up [ClientName]"
 argument-hint: "[ClientName]"
-allowed-tools: Read, Write, Bash, Glob, Grep, mcp__claude_ai_Fireflies__*, mcp__claude_ai_Gmail__*, mcp__claude_ai_HubSpot__*
+allowed-tools: Read, Write, Bash, Glob, Grep, mcp__claude_ai_Fireflies__*, mcp__claude_ai_Gmail__*, mcp__claude_ai_HubSpot__*, mcp__claude_ai_Notion__*
 ---
 
 # Client Intake Skill
@@ -19,9 +19,10 @@ Pull discovery materials from Fireflies, Gmail, and HubSpot into a standardized 
   should exist in the current directory. If not, tell the user to `cd` into their
   `project-scoping-tool` clone first.
 - **Connectors required.** This skill pulls live data through the Fireflies, Gmail,
-  and HubSpot MCP connectors. Each user authenticates their own connectors in
-  Claude Code — there are no shared API tokens here. If a connector isn't
-  connected, report it and continue with the others (see Error Handling).
+  and HubSpot MCP connectors, and mirrors to Notion through the Notion connector.
+  Each user authenticates their own connectors in Claude Code — there are no
+  shared API tokens here. If a connector isn't connected, report it and continue
+  with the others (see Error Handling).
 
 ## Input Handling
 
@@ -43,11 +44,12 @@ Wait for confirmation before creating anything.
 **Primary (project repo):** `{ClientName}/` at the repo root (the current working
 directory). Use the original client-name casing for the folder (e.g., `Acme Corp`).
 
-**Optional mirror (Obsidian vault):** if — and only if — the user maintains a
-SayerBrain vault, also mirror to `$SAYER_VAULT_PATH/03-accounts/{client-name}`
+**Optional operator vault mirror (Obsidian):** if — and only if — the user
+maintains a SayerBrain vault, also mirror to `$SAYER_VAULT_PATH/03-accounts/{client-name}`
 (default `~/Obsidian/SayerBrain/03-accounts/`, kebab-case, e.g. `acme`).
 **Skip the mirror silently if that path does not exist** — most teammates have no
-vault, and the repo folder is the source of truth.
+vault, and the repo folder is the source of truth. The team-visible mirror is
+Notion (Step 5), not Obsidian.
 
 Create this structure in the repo folder (and the vault mirror if present):
 ```
@@ -159,7 +161,36 @@ Repeat the contact section for each associated contact.
 
 **If HubSpot auth fails or company not found:** Report it in the summary. Do not fail — the folder and other data are still valuable.
 
-## Step 5: Summary Report
+## Step 5: Mirror to Notion (team-visible index)
+
+Create the client's page in the shared **Client Engagements** database in the
+Sayer Notion workspace (parent: Sayer Home).
+
+- **Database ID:** `1ee8290de7bc415a8afd62cc22b43fa7`
+- **Data source:** `collection://365887c7-a250-40fb-8421-d97a2ecab24b`
+
+1. **Check for an existing page first** — search the data source for the client
+   name. If a page already exists, update it instead of creating a duplicate.
+2. Create (or update) the page with properties:
+   - **Client Name:** `{ClientName}`
+   - **Status:** `Intake`
+   - **Intake Date:** today
+   - **HubSpot URL:** the company record URL (if HubSpot pull succeeded)
+   - **Owner:** the current user
+3. Add two sub-pages under the client page:
+   - **Discovery Notes** — a bullet list of the meetings and email threads pulled
+     (titles + dates + one-line takeaways). Do NOT paste full transcripts into
+     Notion — the repo folder holds the raw material.
+   - **Scope Summary** — stub with "Pending — populated after /scope-project."
+4. **Status lifecycle** (updated by later skills/sessions, not re-set by intake):
+   `Intake → Scoping → Proposal Sent → Signed / Lost`.
+
+**If the Notion connector is not connected or the database is unreachable:**
+skip with an explicit notice in the summary ("Notion mirror skipped — connector
+not available"). The local repo folder remains the source of truth; never fail
+the intake over the mirror.
+
+## Step 6: Summary Report
 
 Print a summary of everything collected:
 
@@ -169,9 +200,11 @@ Print a summary of everything collected:
 - {N} Gmail threads pulled → emails/
 - 1 company + {N} contacts pulled → hubspot/
 - decisions.md template created
+- Notion: Client Engagements page created (Status: Intake) — or "skipped, connector not available"
 
 Written to:
   Repo:     {ClientName}/   (in the project-scoping-tool repo)
+  Notion:   Client Engagements → {ClientName}  (team-visible index)
   Obsidian: {vault path}    (only if a SayerBrain vault is present; omit otherwise)
 
 Ready to scope when you are. Run /scope-project with the discovery materials when you want to start.
