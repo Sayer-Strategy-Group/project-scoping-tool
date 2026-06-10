@@ -102,9 +102,9 @@ Include a comparison matrix (hours, cost, timeline, risk level, dependencies per
 
 ### Step 6: Generate Excel Deliverables
 
-Reference: `${CLAUDE_SKILL_DIR}/references/excel-formatting.md` for sheet specs, formatting standards, and openpyxl generation instructions.
+Read the `sayer-brand-guidelines` skill first, then reference `${CLAUDE_SKILL_DIR}/references/excel-formatting.md` for sheet specs, formatting standards, and openpyxl generation instructions. Style everything via `scripts/brand_styles.py` (repo root) — never hard-code hex values.
 
-Output: `{ClientName}_Scoping_Estimate.xlsx` with up to 4 sheets (Scoping Estimate, Risk Register, Assumptions & Exclusions, Approach Comparison).
+Output: `{ClientName}_Scoping_Estimate.xlsx` with 5 sheets by default (Scoping Estimate, Task Breakdown, Deliverables & Acceptance, Risk Register, Assumptions), plus an optional Approach Comparison sheet when multiple approaches are presented.
 
 ### Step 7: Generate Client-Ready Summary
 

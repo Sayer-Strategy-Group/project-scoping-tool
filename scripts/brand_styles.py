@@ -1,8 +1,8 @@
 """Sayer brand styles for openpyxl workbooks.
 
 Single source of truth for every Excel generator in this repo.
-Authoritative brand spec:
-  /Users/harbuckconsulting/projects/AIVA/skills/sayer-brand-guidelines/SKILL.md
+Authoritative brand spec: skills/sayer-brand-guidelines/SKILL.md (repo root).
+If the skill and this module ever disagree, fix both in the same commit.
 
 Design notes:
   - Primary header = Sayer Yellow + Black (forecast/scoping columns).

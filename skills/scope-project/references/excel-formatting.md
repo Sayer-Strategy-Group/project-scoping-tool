@@ -1,8 +1,19 @@
 # Excel Deliverable Specifications
 
+## Brand
+
+All workbooks follow the Sayer brand (see the `sayer-brand-guidelines` skill).
+The executable spec lives in `scripts/brand_styles.py` at the repo root — **import
+styles from there; never hard-code hex values in generator scripts.** If the brand
+skill and `brand_styles.py` ever disagree, fix both in the same commit.
+
 ## Workbook Structure
 
 Output file: `{ClientName}_Scoping_Estimate.xlsx`
+
+Default to **5 sheets** (validated standard — include Task Breakdown and
+Deliverables & Acceptance without being asked). Approach Comparison is an
+optional 6th sheet when multiple implementation approaches are on the table.
 
 ### Sheet 1: "Scoping Estimate"
 
@@ -21,9 +32,31 @@ Output file: `{ClientName}_Scoping_Estimate.xlsx`
 **Requirements:**
 - Totals row at bottom with SUM formulas
 - Rate modeling section: single configurable rate cell that all cost columns reference
-- Color coding: Blue fill (#DCE6F1) for input cells (rate, assumptions), black text for formula cells
+- Input cells (rate, assumptions): Cool Grey fill (`INPUT_FILL`); formula cells plain
+- Actuals columns (post-project calibration): secondary header style (`SECONDARY_HEADER_FILL`, Grey 700 + white text) to preserve the forecast-vs-reality visual split
 
-### Sheet 2: "Risk Register"
+### Sheet 2: "Task Breakdown"
+
+Per-workstream task detail with hours per task.
+
+**Requirements:**
+- Tasks grouped under workstream section rows
+- Formula-based integrity checks: workstream subtotals must reference back to
+  Sheet 1 ("Scoping Estimate") and surface any mismatch (e.g., a `CHECK` column
+  comparing the subtotal against the Sheet 1 median hours)
+- Phase subtotal rows styled with `BOLD_BODY_FONT`; use `apply_data_styles_rows`
+  so striping skips section/subtotal rows
+
+### Sheet 3: "Deliverables & Acceptance"
+
+**Columns:**
+- A: # (sequential)
+- B: Deliverable
+- C: Description
+- D: Workstream
+- E: Acceptance Criteria
+
+### Sheet 4: "Risk Register"
 
 **Columns:**
 - A: # (sequential)
@@ -36,13 +69,13 @@ Output file: `{ClientName}_Scoping_Estimate.xlsx`
 - H: Status
 
 **Requirements:**
-- Color-coded severity column:
-  - HIGH: Red fill (#FF0000), white text
-  - MEDIUM: Yellow fill (#FFD700), black text
-  - LOW: Green fill (#00B050), white text
+- Color-coded severity column via `severity_fill(level)`:
+  - HIGH: light red fill (`SEV_HIGH`, #FFC7CE), black text
+  - MEDIUM: Sayer Yellow fill (`SEV_MEDIUM`, #FEC700), black text
+  - LOW: light green fill (`SEV_LOW`, #C6EFCE), black text
 - Filter-ready headers (auto-filter on header row)
 
-### Sheet 3: "Assumptions & Exclusions"
+### Sheet 5: "Assumptions"
 
 **Sections (use merged header rows for each):**
 1. Scope Assumptions -- what's included
@@ -50,65 +83,79 @@ Output file: `{ClientName}_Scoping_Estimate.xlsx`
 3. Client Responsibilities -- what client must provide
 4. Open Items -- unresolved questions that could affect scope
 
-### Sheet 4: "Approach Comparison" (if applicable)
+### Sheet 6: "Approach Comparison" (optional, if applicable)
 
 **Layout:**
 - Side-by-side comparison matrix
-- Color coding: Green fill (#C6EFCE) for advantages, Red fill (#FFC7CE) for disadvantages
+- Color coding: light green fill (`SEV_LOW`, #C6EFCE) for advantages, light red fill (`SEV_HIGH`, #FFC7CE) for disadvantages
 - Recommendation section at bottom (merged cells, bold)
 
 ## Formatting Standards
 
 | Property | Value |
 |----------|-------|
-| Body font | Arial 10pt |
-| Header font | Arial 11pt, bold |
-| Header row fill | Dark blue (#1F4E79), white text |
-| Alternating rows | Light gray (#F2F2F2) on even rows |
-| Currency format | $#,##0 |
-| Borders | Thin borders on all data cells |
+| Font | Calibri (brand fallback — Rethink Sans does not survive xlsx round-tripping) |
+| Title | Calibri 14pt bold (`TITLE_FONT`) |
+| Header row | Sayer Yellow fill (#FEC700), black bold 11pt (`HEADER_FILL` + `HEADER_FONT`) |
+| Secondary header (actuals) | Grey 700 fill (#2E2E2E), white bold 11pt (`SECONDARY_HEADER_FILL` + `SECONDARY_HEADER_FONT`) |
+| Body | Calibri 11pt (`BODY_FONT`) |
+| Alternating rows | Grey 300 (#E3E3E3) on alternating data rows (`ALT_ROW_FILL`) |
+| Input cells | Cool Grey (#D6D6D6) fill (`INPUT_FILL`) |
+| Currency format | `$#,##0` (`CURRENCY_FMT`) |
+| Borders | Thin Grey 500 (#BCBCBC) borders on all data cells (`THIN_BORDER`) |
 | Column widths | Auto-fit with minimum padding (description columns: 40+ chars wide) |
 | Freeze panes | Top row + first column frozen |
 | Print area | Set on all sheets |
 
 ## openpyxl Generation Instructions
 
-Use Python with openpyxl to generate the workbook. Follow these steps:
+Use Python with openpyxl. **Do not define fills/fonts/borders inline** — import
+everything from `scripts/brand_styles.py` (repo root):
 
 ```python
-# 1. Check if openpyxl is installed, install if needed
-# pip install openpyxl (run via Bash if not available)
+# Generator script lives anywhere under the repo; shim the repo root onto sys.path:
+import sys
+from pathlib import Path
 
-# 2. Key imports
-from openpyxl import Workbook
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side, numbers
-from openpyxl.utils import get_column_letter
+REPO_ROOT = Path(__file__).resolve().parent  # adjust .parent count to reach repo root
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-# 3. Create workbook and sheets
-wb = Workbook()
-# Rename default sheet, add additional sheets
-
-# 4. Apply formatting
-header_fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
-header_font = Font(name="Arial", size=11, bold=True, color="FFFFFF")
-body_font = Font(name="Arial", size=10)
-alt_row_fill = PatternFill(start_color="F2F2F2", end_color="F2F2F2", fill_type="solid")
-thin_border = Border(
-    left=Side(style="thin"),
-    right=Side(style="thin"),
-    top=Side(style="thin"),
-    bottom=Side(style="thin")
+from brand_styles import (
+    HEADER_FILL, HEADER_FONT, SECONDARY_HEADER_FILL, SECONDARY_HEADER_FONT,
+    BODY_FONT, BOLD_BODY_FONT, TITLE_FONT, ALT_ROW_FILL, INPUT_FILL,
+    THIN_BORDER, CURRENCY_FMT, severity_fill,
+    style_header_row, style_secondary_header_cells,
+    apply_data_styles, apply_data_styles_rows, apply_input_fill_cells,
+    get_column_letter,
 )
 
-# Severity fills for risk register
-high_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
-medium_fill = PatternFill(start_color="FFD700", end_color="FFD700", fill_type="solid")
-low_fill = PatternFill(start_color="00B050", end_color="00B050", fill_type="solid")
+from openpyxl import Workbook
 
-# 5. Set column widths appropriately
-# 6. Apply freeze panes: ws.freeze_panes = "B2"
-# 7. Set print area: ws.print_area = "A1:J{last_row}"
-# 8. Apply number format for currency columns: cell.number_format = '$#,##0'
+wb = Workbook()
+ws = wb.active
+ws.title = "Scoping Estimate"
+
+# Headers: one call, on-brand
+style_header_row(ws, row=1, max_col=10)
+
+# Actuals columns get the quieter secondary header
+style_secondary_header_cells(ws, row=1, cols=[11, 12])
+
+# Data rows with alternating Grey 300 striping
+apply_data_styles(ws, data_start=2, data_end=last_row, max_col=10)
+
+# Risk severity
+cell.fill = severity_fill("HIGH")
+
+# Currency columns
+cell.number_format = CURRENCY_FMT
+
+# Freeze panes + print area per sheet
+ws.freeze_panes = "B2"
+ws.print_area = f"A1:J{last_row}"
 ```
 
-**Important:** Write the complete Python script to a temporary file and execute via Bash. Clean up the script after successful generation.
+Python 3.9 compatible — no `X | None` or `tuple[X, Y]` syntax in generated scripts.
+
+**Important:** Write the complete Python script to a temporary file and execute via
+Bash. Clean up the script after successful generation.

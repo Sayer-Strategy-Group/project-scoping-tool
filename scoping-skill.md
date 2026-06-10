@@ -226,8 +226,8 @@ If the project involves multiple systems or has significant dependency risks, ge
 
 **Before generating any Excel:** Load the Sayer brand spec AND the xlsx mechanics skill in that order.
 
-1. **Brand spec (authoritative):** `~/projects/AIVA/skills/sayer-brand-guidelines/SKILL.md` — colors, typography, application rules. If this doc and the bullets below ever conflict, the brand skill wins.
-2. **Mechanics:** `/mnt/skills/public/xlsx/SKILL.md` — openpyxl patterns (freeze panes, print areas, formulas).
+1. **Brand spec (authoritative):** `skills/sayer-brand-guidelines/SKILL.md` (bundled in this repo) — colors, typography, application rules. If this doc and the bullets below ever conflict, the brand skill wins.
+2. **Mechanics:** `skills/scope-project/references/excel-formatting.md` — sheet specs, openpyxl patterns (freeze panes, print areas, formulas), and the `brand_styles` import pattern.
 3. **Shared style module (this repo):** `scripts/brand_styles.py` — the single source of truth for every generator in this repo. Import from it; never hard-code hex values. Add a `sys.path.insert` shim at the top of any new generator so it can `from brand_styles import ...`. Per-client generators (kept locally in each client folder) follow this pattern.
 
 **Output one or more Excel workbooks with these sheets:**
@@ -257,7 +257,7 @@ If the project involves multiple systems or has significant dependency risks, ge
 - Recommendation section at bottom
 
 **Formatting Standards (Sayer brand — enforced via `scripts/brand_styles.py`):**
-- Font: **Calibri** 11pt body, Semibold 14pt title, Semibold 11pt headers. Rethink Sans is the Sayer brand font but does not survive xlsx conversion — Calibri is the sanctioned fallback (same rule as docx per `.claude/rules/docx-generation.md`).
+- Font: **Calibri** 11pt body, Semibold 14pt title, Semibold 11pt headers. Rethink Sans is the Sayer brand font but does not survive xlsx conversion — Calibri is the sanctioned fallback (the same Calibri-fallback rule applies to docx).
 - Primary header row: **Sayer Yellow (#FEC700) fill, black text (#000000), bold**
 - Secondary header row (Actuals columns): **Grey 700 (#2E2E2E) fill, white text, bold**
 - Alternating row shading: **Grey 300 (#E3E3E3)**
