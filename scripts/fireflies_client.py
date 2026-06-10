@@ -1,9 +1,8 @@
 """Fireflies GraphQL client.
 
-Ported from /Users/harbuckconsulting/projects/AIVA/kh_ccStudio_migration/
-scripts/integrations/fireflies/client.py with two adaptations:
+Adaptations from the original integration client:
 
-1. Credentials load via Keychain (keychain.get_secret) instead of env/file.
+1. Credentials load via keychain.get_secret (Keychain/env/.env/1Password chain).
 2. Type hints use typing.Optional/Dict/List for Python 3.9 compatibility.
 
 Single endpoint: https://api.fireflies.ai/graphql

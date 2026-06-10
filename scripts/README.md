@@ -11,10 +11,21 @@ Install dependencies once:
 pip3 install -r requirements.txt
 ```
 
-Set credentials in the macOS Keychain. The Keychain **account** defaults to
-`harbuckconsulting` but is overridable per machine via the `SAYER_KEYCHAIN_ACCOUNT`
-env var — so teammates point the lookup at their own account (e.g. their macOS
-username) without editing any code:
+**Team default — no personal API keys needed.** Credentials resolve from the
+shared Sayer 1Password vault. One-time setup:
+
+```bash
+brew install 1password-cli
+# Then in the 1Password app: Settings -> Developer -> Integrate with 1Password CLI
+# Sign in to the Sayer 1Password account, then verify:
+op read "op://Shared/FIREFLIES_API_KEY/credential"
+op read "op://Shared/HUBSPOT_API_KEY/credential"
+```
+
+The vault name is overridable via `SAYER_OP_VAULT` (default: `Shared`).
+
+**Personal overrides** (optional — checked *before* 1Password). Resolution order
+per secret: **Keychain → env var → `.env` → 1Password**.
 
 ```bash
 # Optional — override the Keychain account for this machine (default: harbuckconsulting)
@@ -24,10 +35,8 @@ security add-generic-password -a "$SAYER_KEYCHAIN_ACCOUNT" -s HUBSPOT_API_KEY   
 security add-generic-password -a "$SAYER_KEYCHAIN_ACCOUNT" -s FIREFLIES_API_KEY -w '...'
 ```
 
-The scripts fall back to environment variables, then to a repo-local `.env`
-(gitignored) if Keychain lookup fails — so teammates who keep tokens in env vars
-or a `.env` file can skip the Keychain account entirely. Resolution order per
-secret: **Keychain → env var → `.env`**.
+Env vars and a repo-local `.env` (gitignored) also work — anyone who keeps
+tokens there can skip both Keychain and 1Password.
 
 ## `intake.py` — client intake automation
 
@@ -88,8 +97,8 @@ production client. Exposes `ping()`, `list_recent(days, limit)`,
 
 ## `keychain.py`
 
-Small helper that loads secrets from macOS Keychain with env + `.env`
-fallback. Used by both clients.
+Small helper that loads secrets via macOS Keychain → env → `.env` → shared
+1Password vault (`op` CLI). Used by both clients.
 
 ## Tests
 

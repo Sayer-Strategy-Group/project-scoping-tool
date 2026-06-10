@@ -56,8 +56,10 @@ def _token_available() -> bool:
 
 _HAS_TOKEN = _token_available()
 _SKIP_REASON = (
-    "HUBSPOT_API_KEY not available (checked macOS Keychain -> env -> .env). "
-    "Add with: security add-generic-password -a 'harbuckconsulting' "
+    "HUBSPOT_API_KEY not available (checked macOS Keychain -> env -> .env -> "
+    "1Password op://Shared/HUBSPOT_API_KEY/credential). Sign in to the Sayer "
+    "1Password account (op CLI) or add a personal override with: "
+    "security add-generic-password -a 'harbuckconsulting' "
     "-s 'HUBSPOT_API_KEY' -w '<token>'"
 )
 
