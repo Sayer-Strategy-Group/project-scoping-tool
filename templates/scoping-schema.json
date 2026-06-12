@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sayer.consulting/schemas/scope.json",
+  "title": "Scoping Estimate Record",
+  "description": "Structured pre-sale scoping estimate emitted by the scope-project skill. Single source of truth that drives the branded Excel workbook, the client-ready summary, and (after a deal closes) the pricing-calibration store. The phase/task/workstream breakdown is the granularity HubSpot's lump deal amount cannot provide.",
+  "type": "object",
+  "required": ["schemaVersion", "scopingMetadata", "client", "engagement", "risks", "assumptions", "exclusions"],
+  "$comment": "workstreams+budgetSummary (ranges mode) vs phases+committedSummary (committed mode) are required conditionally — see allOf at the end.",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version for forward compatibility"
+    },
+    "scopingMetadata": {
+      "type": "object",
+      "required": ["generatedAt", "estimator", "discoverySource"],
+      "properties": {
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "estimator": { "type": "string", "description": "Who produced the estimate (person or agent id)" },
+        "discoverySource": { "type": "string", "description": "Relative path(s) to the discovery notes the scope was built from" },
+        "calibrationCited": {
+          "type": "array",
+          "description": "Comparable past projects cited from calibration when setting ranges/rates. Empty if none applied.",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "client": {
+      "type": "object",
+      "required": ["name", "vertical"],
+      "properties": {
+        "name": { "type": "string" },
+        "vertical": {
+          "type": "string",
+          "description": "Industry/vertical bucket used for calibration grouping (e.g., pe, real-estate, automotive, insurance, voip, multifamily, logistics, manufacturing, other)"
+        },
+        "size": { "type": "string", "description": "Rough size signal (employee/user count band or revenue band)" },
+        "primaryContact": { "type": "string" },
+        "contactEmail": { "type": ["string", "null"], "format": "email" },
+        "hubspotUrl": {
+          "type": ["string", "null"],
+          "description": "HubSpot deal/company record URL captured at intake. KEY for stamping won/lost + final amount onto this record later (Session 3 calibration sync)."
+        }
+      }
+    },
+    "engagement": {
+      "type": "object",
+      "required": ["name", "pricingModel", "defaultRate", "totalHours"],
+      "properties": {
+        "name": { "type": "string", "description": "Short engagement title" },
+        "systemsInScope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Named systems/platforms in scope (e.g., HubSpot, NetSuite, Aircall)"
+        },
+        "pricingModel": {
+          "type": "string",
+          "enum": ["hourly", "fixed", "time-materials", "retainer"],
+          "description": "How the engagement is priced. Drives client-facing disclosure rules (fixed/T&M hide hour totals per brand/Gamma rules)."
+        },
+        "defaultRate": { "type": "number", "description": "Default/blended hourly rate from sayer-rates (authoritative). NOT a hardcoded constant." },
+        "estimateMode": {
+          "type": "string",
+          "enum": ["ranges", "committed"],
+          "default": "ranges",
+          "description": "ranges = min/max/median per workstream (the pre-sale discovery scoping standard). committed = single hours/amount per phase with a tech fee and tiered staff blend (the T&M SOW form). Drives Sheet-1 layout and which fields are required. Absent == ranges."
+        },
+        "blendedRate": { "type": "number", "description": "Headline blended rate (committed mode). Derivable from staffMix as sum(rate*allocationPct/100)." },
+        "techFeePct": { "type": "number", "description": "Technology & Admin Fee percentage on the consulting subtotal (e.g., 5 = 5%). Committed mode." },
+        "feeStructure": { "type": "string", "description": "Free-text fee terms for the Sheet-1 metadata block (e.g., 'T&M, monthly invoicing, Net-15, +5% Tech & Admin Fee')." },
+        "lead": { "type": "string", "description": "Sayer engagement lead name (Sheet-1 metadata block)." },
+        "staffMix": {
+          "type": "array",
+          "description": "Tiered staffing blend documenting the blended rate (committed mode).",
+          "items": {
+            "type": "object",
+            "required": ["role", "rate", "allocationPct"],
+            "properties": {
+              "role": { "type": "string", "description": "e.g., Analyst, Director" },
+              "name": { "type": "string" },
+              "rate": { "type": "number" },
+              "allocationPct": { "type": "number", "description": "Percent allocation 0-100" }
+            }
+          }
+        },
+        "estimatedTimelineWeeks": { "type": ["number", "null"] },
+        "totalHours": { "$ref": "#/$defs/range" }
+      }
+    },
+    "phases": {
+      "type": "array",
+      "description": "Optional delivery-sequencing grouping (present when a phased approach is recommended). Workstreams reference a phase by id; pricing calibration keys off workstream.category, not phase.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "order"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^phase-[0-9]+$" },
+          "name": { "type": "string" },
+          "order": { "type": "integer", "minimum": 1 },
+          "kind": { "type": "string", "enum": ["phase", "contingency"], "default": "phase", "description": "contingency rows (e.g., discovery contingency) render but are flagged distinctly." },
+          "description": { "type": "string", "description": "Phase description shown in the Sheet-1 committed-mode rollup (column B)." },
+          "committedHours": { "type": "number", "description": "Committed hours for this phase (committed mode). Sheet-1 'Est. Hours'. Required in committed mode." },
+          "committedAmount": { "type": "number", "description": "Committed amount (committed mode). Sheet-1 'Est. Amount' = committedHours x blendedRate." },
+          "tasks": {
+            "type": "array",
+            "description": "Task line items rolling up to this phase (committed-mode Sheet 2). Subtotal reconciles to committedHours.",
+            "items": {
+              "type": "object",
+              "required": ["name", "hours"],
+              "properties": {
+                "name": { "type": "string" },
+                "hours": { "type": "number" },
+                "workstream": { "type": "string" },
+                "notes": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "workstreams": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Primary unit of the estimate and the calibration join key. One row per Sheet-1 'Scoping Estimate' line.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "category", "hours", "rate", "cost"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Z]+-[0-9]+$", "description": "Category prefix + number (CRM-01, MIG-03, INT-02)" },
+          "name": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["crm", "erp", "marketing", "voip", "data-bi", "integration", "migration", "pm", "uat", "training", "documentation", "go-live", "other"],
+            "description": "Controlled work-type vocabulary. The calibration query groups on this ('what did we win for migration work in PE?'). Do NOT use free text."
+          },
+          "description": { "type": "string" },
+          "phase": { "type": ["string", "null"], "description": "Phase id this workstream belongs to, or null if not phased" },
+          "owner": { "type": "string", "enum": ["sayer", "client", "shared"], "default": "sayer" },
+          "hours": { "$ref": "#/$defs/range" },
+          "rate": { "type": "number", "description": "Hourly rate applied to this workstream (usually engagement.defaultRate; may differ for tiered staffing)" },
+          "cost": {
+            "$ref": "#/$defs/range",
+            "description": "Extended cost. Invariant: cost.{min,max,median} = hours.{min,max,median} x rate. Stored for direct calibration querying; ingest validates the invariant."
+          },
+          "tasks": {
+            "type": "array",
+            "description": "Task-level breakdown -> Sheet 2 'Task Breakdown'. Subtotal of task hours should reconcile to this workstream's median hours (the Sheet-2 integrity check).",
+            "items": {
+              "type": "object",
+              "required": ["name", "hours"],
+              "properties": {
+                "name": { "type": "string" },
+                "hours": { "type": "number", "description": "Single point estimate for the task (median-level)" },
+                "notes": { "type": "string" }
+              }
+            }
+          },
+          "notes": { "type": "string", "description": "Notes/Assumptions cell on Sheet 1" }
+        }
+      }
+    },
+    "budgetSummary": {
+      "type": "object",
+      "required": ["totalHours", "totalCost", "blendedRate"],
+      "properties": {
+        "totalHours": { "$ref": "#/$defs/range" },
+        "totalCost": { "$ref": "#/$defs/range" },
+        "blendedRate": { "type": "number" },
+        "perCategory": {
+          "type": "array",
+          "description": "Optional rollup by work-type category (precomputed convenience for calibration; derivable from workstreams).",
+          "items": {
+            "type": "object",
+            "required": ["category", "hours", "cost"],
+            "properties": {
+              "category": { "type": "string" },
+              "hours": { "$ref": "#/$defs/range" },
+              "cost": { "$ref": "#/$defs/range" }
+            }
+          }
+        }
+      }
+    },
+    "committedSummary": {
+      "type": "object",
+      "description": "Sheet-1 totals for committed (T&M) mode: consulting subtotal -> tech fee -> grand total. Required in committed mode.",
+      "required": ["consultingSubtotal", "techFee", "grandTotal", "totalHours"],
+      "properties": {
+        "totalHours": { "type": "number" },
+        "consultingSubtotal": { "type": "number", "description": "totalHours x blendedRate" },
+        "techFee": { "type": "number", "description": "round(consultingSubtotal x techFeePct/100)" },
+        "grandTotal": { "type": "number", "description": "consultingSubtotal + techFee" }
+      }
+    },
+    "deliverables": {
+      "type": "array",
+      "description": "Sheet 3 'Deliverables & Acceptance'.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "acceptanceCriteria"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "workstream": { "type": "string", "description": "Related workstream id or name" },
+          "acceptanceCriteria": { "type": "string" }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Sheet 4 'Risk Register'.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "severity", "likelihood", "impact", "mitigation", "owner"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^R-[0-9]+$" },
+          "name": { "type": "string" },
+          "severity": { "type": "string", "enum": ["high", "medium", "low"] },
+          "likelihood": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" },
+          "mitigation": { "type": "string" },
+          "owner": { "type": "string" },
+          "status": { "type": "string", "default": "open" }
+        }
+      }
+    },
+    "assumptions": { "type": "array", "items": { "type": "string" }, "description": "Sheet 5 section 1 — scope assumptions" },
+    "exclusions": { "type": "array", "items": { "type": "string" }, "description": "Sheet 5 section 2 — out of scope" },
+    "clientResponsibilities": { "type": "array", "items": { "type": "string" }, "description": "Sheet 5 section 3 — what the client must provide" },
+    "openItems": { "type": "array", "items": { "type": "string" }, "description": "Sheet 5 section 4 — unresolved questions that could affect scope" },
+    "approaches": {
+      "type": "array",
+      "description": "Optional Sheet 6 'Approach Comparison' (present for multi-system / high-dependency projects).",
+      "items": {
+        "type": "object",
+        "required": ["name", "recommended"],
+        "properties": {
+          "name": { "type": "string", "description": "e.g., Concurrent, Phased" },
+          "description": { "type": "string" },
+          "totalHours": { "$ref": "#/$defs/range" },
+          "totalCost": { "$ref": "#/$defs/range" },
+          "timelineWeeks": { "type": ["number", "null"] },
+          "riskLevel": { "type": "string", "enum": ["high", "medium", "low"] },
+          "dependencies": { "type": "array", "items": { "type": "string" } },
+          "recommended": { "type": "boolean" }
+        }
+      }
+    },
+    "recommendation": { "type": "string", "description": "1-2 sentence recommended approach + reasoning, mirrors the client summary." },
+    "outcome": {
+      "type": ["object", "null"],
+      "description": "Stamped AFTER the deal closes (Session 3 HubSpot sync), keyed by client.hubspotUrl. Null at scope time. Turns this record from an estimate into a calibration data point.",
+      "properties": {
+        "status": { "type": "string", "enum": ["pending", "won", "lost"] },
+        "finalAmount": { "type": ["number", "null"], "description": "Final signed deal amount from HubSpot" },
+        "closeDate": { "type": ["string", "null"], "format": "date" },
+        "lostReason": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "Mode-conditional requirements. Absent estimateMode evaluates as ranges (the else branch).",
+      "if": {
+        "required": ["engagement"],
+        "properties": {
+          "engagement": {
+            "required": ["estimateMode"],
+            "properties": { "estimateMode": { "const": "committed" } }
+          }
+        }
+      },
+      "then": {
+        "required": ["phases", "committedSummary"],
+        "properties": { "engagement": { "required": ["blendedRate"] } }
+      },
+      "else": {
+        "required": ["workstreams", "budgetSummary"]
+      }
+    }
+  ],
+  "$defs": {
+    "range": {
+      "type": "object",
+      "required": ["min", "max", "median"],
+      "properties": {
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "median": { "type": "number" }
+      }
+    }
+  }
+}

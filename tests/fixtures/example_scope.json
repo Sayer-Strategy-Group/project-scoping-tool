@@ -1,0 +1,211 @@
+{
+  "schemaVersion": "1.0",
+  "scopingMetadata": {
+    "generatedAt": "2026-06-12T00:00:00Z",
+    "estimator": "scope-project",
+    "discoverySource": "tests/fixtures/example_scope.json (fictional Acme Corp — test fixture, not a real client)",
+    "calibrationCited": []
+  },
+  "client": {
+    "name": "Acme Corp",
+    "vertical": "other",
+    "size": "15 users",
+    "primaryContact": "Jane Doe",
+    "contactEmail": "jane@acmecorp.example",
+    "hubspotUrl": null
+  },
+  "engagement": {
+    "name": "HubSpot CRM + QuickBooks/Aircall Integration",
+    "systemsInScope": ["HubSpot", "QuickBooks", "Mailchimp", "Aircall"],
+    "pricingModel": "hourly",
+    "defaultRate": 150,
+    "estimatedTimelineWeeks": 8,
+    "totalHours": { "min": 88, "max": 172, "median": 130 }
+  },
+  "phases": [
+    { "id": "phase-1", "name": "Phase 1: CRM Foundation + Migration (Weeks 1-5)", "order": 1 },
+    { "id": "phase-2", "name": "Phase 2: Integrations + Training (Weeks 4-8)", "order": 2 }
+  ],
+  "workstreams": [
+    {
+      "id": "CRM-01", "name": "CRM Architecture & Setup", "category": "crm", "phase": "phase-1", "owner": "sayer",
+      "description": "Tier selection, portal config, user roles/permissions, team structure",
+      "hours": { "min": 8, "max": 16, "median": 12 },
+      "rate": 150, "cost": { "min": 1200, "max": 2400, "median": 1800 },
+      "tasks": [
+        { "name": "Portal config & user provisioning", "hours": 4 },
+        { "name": "Team structure & permission sets", "hours": 4 },
+        { "name": "Tier selection rationale & setup", "hours": 4 }
+      ],
+      "notes": "Assumes Sales Hub Professional tier"
+    },
+    {
+      "id": "CRM-02", "name": "Pipeline & Deal Management", "category": "crm", "phase": "phase-1", "owner": "sayer",
+      "description": "Pipeline stages, deal properties, required fields, stage automation, probability mapping",
+      "hours": { "min": 8, "max": 14, "median": 11 },
+      "rate": 150, "cost": { "min": 1200, "max": 2100, "median": 1650 },
+      "tasks": [
+        { "name": "Pipeline stages & probabilities", "hours": 4 },
+        { "name": "Deal properties & required fields", "hours": 4 },
+        { "name": "Stage-change automation", "hours": 3 }
+      ],
+      "notes": "Single sales pipeline assumed"
+    },
+    {
+      "id": "CRM-03", "name": "Contact & Company Management", "category": "crm", "phase": "phase-1", "owner": "sayer",
+      "description": "Standard + custom properties, lifecycle stages, lead status, association labels, dedup strategy",
+      "hours": { "min": 8, "max": 16, "median": 12 },
+      "rate": 150, "cost": { "min": 1200, "max": 2400, "median": 1800 },
+      "tasks": [
+        { "name": "Standard + custom properties (cap 30)", "hours": 5 },
+        { "name": "Lifecycle stages & lead status", "hours": 3 },
+        { "name": "Dedup strategy & association labels", "hours": 4 }
+      ],
+      "notes": "Custom property cap: 30; overages are change orders"
+    },
+    {
+      "id": "CRM-04", "name": "Automations & Workflows", "category": "crm", "phase": "phase-1", "owner": "sayer",
+      "description": "Lead routing, task creation, stage-change triggers, notification workflows, SLA enforcement",
+      "hours": { "min": 12, "max": 24, "median": 18 },
+      "rate": 150, "cost": { "min": 1800, "max": 3600, "median": 2700 },
+      "tasks": [
+        { "name": "Lead routing & assignment", "hours": 6 },
+        { "name": "Task & notification workflows", "hours": 6 },
+        { "name": "SLA enforcement", "hours": 6 }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "CRM-05", "name": "Reporting & Dashboards", "category": "crm", "phase": "phase-1", "owner": "sayer",
+      "description": "Standard reports, custom reports, dashboards per role, KPI definitions",
+      "hours": { "min": 8, "max": 16, "median": 12 },
+      "rate": 150, "cost": { "min": 1200, "max": 2400, "median": 1800 },
+      "tasks": [
+        { "name": "KPI definitions", "hours": 4 },
+        { "name": "Standard + custom reports", "hours": 4 },
+        { "name": "Dashboards per role", "hours": 4 }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "MIG-01", "name": "Mailchimp Data Migration", "category": "migration", "phase": "phase-1", "owner": "shared",
+      "description": "Export, cleanse, dedup, map, test load, validate (5K contacts)",
+      "hours": { "min": 10, "max": 20, "median": 15 },
+      "rate": 150, "cost": { "min": 1500, "max": 3000, "median": 2250 },
+      "tasks": [
+        { "name": "Export & data audit", "hours": 5 },
+        { "name": "Cleanse & dedup", "hours": 5 },
+        { "name": "Map, test load & validate", "hours": 5 }
+      ],
+      "notes": "Highest-risk item — spreadsheet/Mailchimp data quality unknown"
+    },
+    {
+      "id": "INT-01", "name": "QuickBooks Integration", "category": "integration", "phase": "phase-2", "owner": "sayer",
+      "description": "API mapping, invoice sync logic, conflict resolution, error handling, monitoring",
+      "hours": { "min": 12, "max": 24, "median": 18 },
+      "rate": 150, "cost": { "min": 1800, "max": 3600, "median": 2700 },
+      "tasks": [
+        { "name": "API & field mapping", "hours": 6 },
+        { "name": "Sync logic & conflict resolution", "hours": 6 },
+        { "name": "Error handling & monitoring", "hours": 6 }
+      ],
+      "notes": "ERP involvement — complexity premium applied"
+    },
+    {
+      "id": "INT-02", "name": "Aircall Integration", "category": "integration", "phase": "phase-2", "owner": "sayer",
+      "description": "Call logging, click-to-call, contact sync, activity tracking",
+      "hours": { "min": 8, "max": 16, "median": 12 },
+      "rate": 150, "cost": { "min": 1200, "max": 2400, "median": 1800 },
+      "tasks": [
+        { "name": "Call logging & click-to-call", "hours": 4 },
+        { "name": "Contact sync", "hours": 4 },
+        { "name": "Activity tracking", "hours": 4 }
+      ],
+      "notes": "Number porting timeline is carrier-dependent"
+    },
+    {
+      "id": "TRN-01", "name": "Training (Admin + End-User)", "category": "training", "phase": "phase-2", "owner": "sayer",
+      "description": "Admin training, end-user training by role, documentation, go-live support",
+      "hours": { "min": 6, "max": 10, "median": 8 },
+      "rate": 150, "cost": { "min": 900, "max": 1500, "median": 1200 },
+      "tasks": [
+        { "name": "Admin training", "hours": 4 },
+        { "name": "End-user training", "hours": 4 }
+      ],
+      "notes": ""
+    },
+    {
+      "id": "PM-01", "name": "Project Management", "category": "pm", "phase": null, "owner": "sayer",
+      "description": "Kickoff, weekly syncs, status updates, change management (~10-15% of total)",
+      "hours": { "min": 8, "max": 16, "median": 12 },
+      "rate": 150, "cost": { "min": 1200, "max": 2400, "median": 1800 },
+      "tasks": [
+        { "name": "Kickoff & planning", "hours": 4 },
+        { "name": "Weekly syncs", "hours": 4 },
+        { "name": "Status reporting & change management", "hours": 4 }
+      ],
+      "notes": "Spans both phases"
+    }
+  ],
+  "budgetSummary": {
+    "totalHours": { "min": 88, "max": 172, "median": 130 },
+    "totalCost": { "min": 13200, "max": 25800, "median": 19500 },
+    "blendedRate": 150
+  },
+  "deliverables": [
+    { "id": 1, "name": "Configured HubSpot portal", "description": "Pipeline, properties, roles, automations live", "workstream": "CRM-01", "acceptanceCriteria": "Admin can create a deal and it routes per the configured rules" },
+    { "id": 2, "name": "Migrated contact database", "description": "5K Mailchimp contacts cleaned, deduped, loaded", "workstream": "MIG-01", "acceptanceCriteria": "Record count reconciles within 2% and zero duplicate emails remain" },
+    { "id": 3, "name": "QuickBooks invoice sync", "description": "Bi-directional invoice sync with error monitoring", "workstream": "INT-01", "acceptanceCriteria": "Test invoice syncs both directions and errors surface to a monitored queue" },
+    { "id": 4, "name": "Aircall telephony integration", "description": "Calls log to CRM with click-to-call", "workstream": "INT-02", "acceptanceCriteria": "Outbound call logs an activity on the correct contact" },
+    { "id": 5, "name": "Training + documentation", "description": "Admin and end-user enablement materials", "workstream": "TRN-01", "acceptanceCriteria": "Admin completes a config change unaided after training" }
+  ],
+  "risks": [
+    { "id": "R-1", "name": "Data quality from spreadsheets (no validation, likely duplicates)", "severity": "high", "likelihood": "high", "impact": "Migration slips; bad data erodes CRM trust at launch", "mitigation": "Front-load a data audit in Phase 1; budget cleanse/dedup hours explicitly", "owner": "shared", "status": "open" },
+    { "id": "R-2", "name": "QuickBooks API limitations (rate limits, field restrictions)", "severity": "medium", "likelihood": "medium", "impact": "Integration build runs long or requires workarounds", "mitigation": "Validate API capabilities in a spike before committing sync scope", "owner": "sayer", "status": "open" },
+    { "id": "R-3", "name": "8-week timeline tight for 4 systems", "severity": "high", "likelihood": "medium", "impact": "Compressed schedule forces parallel work and raises risk", "mitigation": "Phase the work; overlap Phases 1 and 2 by 2 weeks", "owner": "sayer", "status": "open" },
+    { "id": "R-4", "name": "Mailchimp list health unknown (bounces, unsubscribes)", "severity": "medium", "likelihood": "medium", "impact": "Deliverability and segment accuracy degraded post-migration", "mitigation": "Run list-health assessment during export/audit", "owner": "shared", "status": "open" },
+    { "id": "R-5", "name": "Phone number porting timeline (carrier-dependent)", "severity": "medium", "likelihood": "low", "impact": "Aircall go-live delayed by carrier", "mitigation": "Start porting request at project kickoff, in parallel", "owner": "client", "status": "open" },
+    { "id": "R-6", "name": "Adoption risk (moving from spreadsheets to CRM)", "severity": "high", "likelihood": "medium", "impact": "Users revert to spreadsheets; ROI not realized", "mitigation": "Role-based training + go-live hypercare + exec sponsorship", "owner": "shared", "status": "open" }
+  ],
+  "assumptions": [
+    "HubSpot Sales Hub Professional licensing is procured by the client before kickoff",
+    "Up to 30 custom properties; overages handled as change orders",
+    "One sales pipeline in scope",
+    "Client provides a single point of contact with decision authority"
+  ],
+  "exclusions": [
+    "Marketing Hub configuration beyond list migration",
+    "Custom-coded integrations beyond QuickBooks and Aircall",
+    "Historical QuickBooks transaction migration (current-state sync only)"
+  ],
+  "clientResponsibilities": [
+    "Provide Mailchimp and QuickBooks admin access and API credentials",
+    "Designate users for training sessions",
+    "Review and sign off on data mapping before test load"
+  ],
+  "openItems": [
+    "Confirm HubSpot tier and seat count",
+    "Confirm whether historical invoices must be visible in CRM",
+    "Confirm number-porting carrier and timeline"
+  ],
+  "approaches": [
+    {
+      "name": "Concurrent", "description": "All four systems implemented at once with a single cutover",
+      "totalHours": { "min": 88, "max": 172, "median": 130 },
+      "totalCost": { "min": 13200, "max": 25800, "median": 19500 },
+      "timelineWeeks": 6, "riskLevel": "high",
+      "dependencies": ["Strong internal IT availability", "Clean source data"],
+      "recommended": false
+    },
+    {
+      "name": "Phased", "description": "CRM + migration first (Phase 1), then integrations + training (Phase 2), overlapping 2 weeks",
+      "totalHours": { "min": 88, "max": 172, "median": 130 },
+      "totalCost": { "min": 13200, "max": 25800, "median": 19500 },
+      "timelineWeeks": 8, "riskLevel": "medium",
+      "dependencies": ["Phase 1 data quality assessment gates Phase 2 integration scope"],
+      "recommended": true
+    }
+  ],
+  "recommendation": "Phased approach: get CRM functional and contact data clean before layering QuickBooks and Aircall integrations, with a 2-week overlap to hold the 8-week timeline. The spreadsheet-to-CRM migration is the highest-risk item and should be de-risked first.",
+  "outcome": null
+}

@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "1.0",
+  "scopingMetadata": {
+    "generatedAt": "2026-01-01T00:00:00Z",
+    "estimator": "scope-project",
+    "discoverySource": "tests/fixtures/example_scope_committed.json (fictional Northwind Supply Co. — committed/T&M mode fixture; illustrative numbers, not a real client)",
+    "calibrationCited": []
+  },
+  "client": {
+    "name": "Northwind Supply Co.",
+    "vertical": "manufacturing",
+    "size": "mid-market contract manufacturer",
+    "primaryContact": "Pat Rivera",
+    "contactEmail": null,
+    "hubspotUrl": null
+  },
+  "engagement": {
+    "name": "ERP Remediation, Optimization & Setup",
+    "systemsInScope": ["NetSuite"],
+    "pricingModel": "time-materials",
+    "defaultRate": 135,
+    "estimateMode": "committed",
+    "blendedRate": 135,
+    "techFeePct": 5,
+    "feeStructure": "Time & Materials, monthly invoicing, Net-15, +5% Tech & Admin Fee",
+    "lead": "Pat Rivera",
+    "staffMix": [
+      { "role": "Analyst", "name": "Sam Carter", "rate": 125, "allocationPct": 90 },
+      { "role": "Director", "name": "Dana Cole", "rate": 225, "allocationPct": 10 }
+    ],
+    "estimatedTimelineWeeks": null,
+    "totalHours": { "min": 232, "max": 232, "median": 232 }
+  },
+  "phases": [
+    {
+      "id": "phase-1", "name": "Phase 1 — Clean Up", "order": 1, "kind": "phase",
+      "description": "Phase 1 — Clean Up (migration data remediation)",
+      "committedHours": 40, "committedAmount": 5400,
+      "tasks": [
+        { "name": "AR opening-balance unwind", "hours": 16 },
+        { "name": "Inventory / AP cleanup", "hours": 16 },
+        { "name": "Data remediation QA", "hours": 8 }
+      ]
+    },
+    {
+      "id": "phase-2", "name": "Phase 2 — Optimize", "order": 2, "kind": "phase",
+      "description": "Phase 2 — Optimize (process improvements)",
+      "committedHours": 40, "committedAmount": 5400,
+      "tasks": [
+        { "name": "Process optimization workshops", "hours": 20 },
+        { "name": "Workflow automation build", "hours": 20 }
+      ]
+    },
+    {
+      "id": "phase-3", "name": "Phase 3 — Setup", "order": 3, "kind": "phase",
+      "description": "Phase 3 — Setup (4 modules + manufacturing + structural)",
+      "committedHours": 142, "committedAmount": 19170,
+      "tasks": [
+        { "name": "Module A setup", "hours": 30 },
+        { "name": "Module B setup", "hours": 30 },
+        { "name": "Module C setup", "hours": 30 },
+        { "name": "Manufacturing module config", "hours": 32 },
+        { "name": "Structural / chart-of-accounts config", "hours": 20 }
+      ]
+    },
+    {
+      "id": "phase-4", "name": "Discovery Contingency", "order": 4, "kind": "contingency",
+      "description": "Discovery Contingency (reserved block)",
+      "committedHours": 10, "committedAmount": 1350,
+      "tasks": [
+        { "name": "Discovery contingency (reserved)", "hours": 10 }
+      ]
+    }
+  ],
+  "committedSummary": {
+    "totalHours": 232,
+    "consultingSubtotal": 31320,
+    "techFee": 1566,
+    "grandTotal": 32886
+  },
+  "deliverables": [
+    { "id": 1, "name": "Remediated migration data", "description": "AR/AP/inventory opening balances reconciled", "workstream": "phase-1", "acceptanceCriteria": "Opening balances tie to source within tolerance" },
+    { "id": 2, "name": "Optimized processes", "description": "Workflow automations live", "workstream": "phase-2", "acceptanceCriteria": "Documented workflows execute end-to-end in the ERP" },
+    { "id": 3, "name": "Configured modules + manufacturing", "description": "Four modules + manufacturing module configured", "workstream": "phase-3", "acceptanceCriteria": "Each module passes a transaction smoke test" }
+  ],
+  "risks": [
+    { "id": "R-1", "name": "Migration data quality worse than discovered", "severity": "high", "likelihood": "medium", "impact": "Clean-up phase overruns committed hours", "mitigation": "Discovery contingency block reserved; escalate via change order if exceeded", "owner": "shared", "status": "open" },
+    { "id": "R-2", "name": "Third-party module configuration dependencies", "severity": "medium", "likelihood": "medium", "impact": "Phase 3 blocked on third-party module provisioning", "mitigation": "Confirm module licensing/access before Phase 3 start", "owner": "client", "status": "open" },
+    { "id": "R-3", "name": "Scope expansion beyond committed phases", "severity": "medium", "likelihood": "medium", "impact": "T&M hours exceed estimate", "mitigation": "Monthly invoicing surfaces burn early; change-order discipline", "owner": "sayer", "status": "open" }
+  ],
+  "assumptions": [
+    "Client provides ERP admin access and module licensing",
+    "T&M billing, monthly, Net-15, with a 5% Technology & Admin Fee",
+    "Committed hours are an estimate, not a fixed fee; overages are change orders"
+  ],
+  "exclusions": [
+    "Custom scripting beyond the four named modules",
+    "Historical transaction migration beyond opening balances"
+  ],
+  "clientResponsibilities": [
+    "Provision module licenses before Phase 3",
+    "Designate a data-remediation SME for Phase 1"
+  ],
+  "openItems": [
+    "Confirm module version compatibility",
+    "Confirm manufacturing module licensing tier"
+  ],
+  "recommendation": "Single SOW, internally sequenced across three phases plus a discovery contingency; T&M with monthly invoicing keeps burn visible while the clean-up phase de-risks the module setup that follows.",
+  "outcome": null
+}
