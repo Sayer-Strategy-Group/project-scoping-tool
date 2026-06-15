@@ -69,6 +69,19 @@
         "blendedRate": { "type": "number", "description": "Headline blended rate (committed mode). Derivable from staffMix as sum(rate*allocationPct/100)." },
         "techFeePct": { "type": "number", "description": "Technology & Admin Fee percentage on the consulting subtotal (e.g., 5 = 5%). Committed mode." },
         "feeStructure": { "type": "string", "description": "Free-text fee terms for the Sheet-1 metadata block (e.g., 'T&M, monthly invoicing, Net-15, +5% Tech & Admin Fee')." },
+        "paymentSchedule": {
+          "type": "array",
+          "description": "Optional invoice/payment schedule rows for committed-mode SOWs. Renders as a block below the grand total on Sheet 1. Sum of amounts should reconcile to committedSummary.grandTotal.",
+          "items": {
+            "type": "object",
+            "required": ["label", "amount"],
+            "properties": {
+              "label": { "type": "string", "description": "e.g., 'Invoice 1 — Engagement kickoff (Week 0)'" },
+              "amount": { "type": "number" },
+              "notes": { "type": "string" }
+            }
+          }
+        },
         "lead": { "type": "string", "description": "Sayer engagement lead name (Sheet-1 metadata block)." },
         "staffMix": {
           "type": "array",

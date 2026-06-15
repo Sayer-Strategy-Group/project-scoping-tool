@@ -481,9 +481,38 @@ def build_scoping_estimate_committed(ws: Worksheet, scope: dict) -> Dict[str, in
             cell.border = THIN_BORDER
         ws.cell(row=trow, column=4).number_format = CURRENCY_FMT
 
+    # Optional payment / invoice schedule (committed SOW). Sum should reconcile to grand total.
+    last_row = gt_row
+    schedule = eng.get("paymentSchedule") or []
+    if schedule:
+        sched_header = gt_row + 2
+        hcell = ws.cell(row=sched_header, column=1, value="Payment Schedule")
+        hcell.font = BOLD_BODY_FONT
+        ws.merge_cells(start_row=sched_header, start_column=1, end_row=sched_header, end_column=3)
+        ws.cell(row=sched_header, column=4, value="Amount").font = BOLD_BODY_FONT
+        sched_first = sched_header + 1
+        rr2 = sched_first
+        for inv in schedule:
+            ws.cell(row=rr2, column=2, value=inv.get("label", ""))
+            amt_cell = ws.cell(row=rr2, column=4, value=inv.get("amount", 0))
+            amt_cell.number_format = CURRENCY_FMT
+            if inv.get("notes"):
+                ws.cell(row=rr2, column=8, value=inv["notes"])
+            rr2 += 1
+        sched_last = rr2 - 1
+        total_row = rr2
+        ws.cell(row=total_row, column=2, value="Total").font = BOLD_BODY_FONT
+        tcell = ws.cell(row=total_row, column=4, value="=SUM(D%d:D%d)" % (sched_first, sched_last))
+        tcell.number_format = CURRENCY_FMT
+        tcell.font = BOLD_BODY_FONT
+        for rrow in range(sched_header, total_row + 1):
+            for col in range(1, 9):
+                ws.cell(row=rrow, column=col).border = THIN_BORDER
+        last_row = total_row
+
     _set_widths(ws, {"A": 6, "B": 40, "C": 12, "D": 14, "E": 13, "F": 14, "G": 12, "H": 28})
     ws.freeze_panes = "A%d" % first
-    ws.print_area = "A1:H%d" % gt_row
+    ws.print_area = "A1:H%d" % last_row
     return phase_row_map
 
 
