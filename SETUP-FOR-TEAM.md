@@ -67,6 +67,14 @@ op read "op://Shared/HUBSPOT_API_KEY/credential"
 Both should print a token. If you get a vault/item error, ask Kyle for access to
 the `Shared` vault. (A different vault name can be set via `SAYER_OP_VAULT`.)
 
+**Obsidian vault (optional).** If you maintain a SayerBrain Obsidian vault,
+set `SAYER_VAULT_PATH` to mirror client intake folders there automatically.
+If not set, intake skips the mirror silently — no action needed:
+
+```bash
+export SAYER_VAULT_PATH="$HOME/Obsidian/SayerBrain"   # add to ~/.zshrc to persist
+```
+
 **Personal overrides (optional).** Anything found in Keychain, env vars, or a
 repo-local `.env` (gitignored — never commit it) wins over 1Password:
 

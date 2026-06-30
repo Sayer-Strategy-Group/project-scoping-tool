@@ -1,4 +1,8 @@
 ---
+layer: Org
+owner: team
+created_at: 2026-06-30
+access_level: internal
 name: sayer-rates
 description: Use when generating proposals, scoping new engagements, building SOWs, calculating blended rates, staffing tier mixes, discussing Sayer hourly rates, or referencing invoicing terms (Net-15, technology fee, time tracking). Also covers canonical staffing bios for Billy Leigh, Cameron Taggart, Kyle Harbuck, and Weston Baker.
 allowed-tools: Read, Grep, Glob

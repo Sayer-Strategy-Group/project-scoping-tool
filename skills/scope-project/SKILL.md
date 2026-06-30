@@ -1,4 +1,8 @@
 ---
+layer: Org
+owner: team
+created_at: 2026-06-30
+access_level: internal
 name: scope-project
 description: >
   Generate professional implementation scoping packages from discovery notes.

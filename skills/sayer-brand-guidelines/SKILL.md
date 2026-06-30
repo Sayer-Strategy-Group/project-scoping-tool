@@ -1,4 +1,8 @@
 ---
+layer: Org
+owner: team
+created_at: 2026-06-30
+access_level: internal
 name: sayer-brand-guidelines
 description: "Applies Sayer's official brand — colors, typography, logo, visual identity — to any document, presentation, spreadsheet, PDF, artifact, or web component going to a client or representing Sayer externally. Trigger on brand-specific phrases — 'apply Sayer branding', 'format per brand guidelines', 'brand-check this [artifact]', 'Sayer-branded [artifact]', 'on-brand [artifact]', or any mention of Sayer alongside a document/file type. Read this skill BEFORE generating any client-facing deliverable. Legal documents and contracts require the legal name 'Sayer Strategy Group' — this skill covers when and where to use it."
 allowed-tools: Read, Grep, Glob, mcp__claude_ai_Google_Drive__get_file_metadata, mcp__claude_ai_Google_Drive__download_file_content, mcp__claude_ai_Google_Drive__read_file_content, mcp__claude_ai_Google_Drive__search_files

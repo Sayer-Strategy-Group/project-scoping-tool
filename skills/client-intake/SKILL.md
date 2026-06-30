@@ -1,4 +1,8 @@
 ---
+layer: Org
+owner: team
+created_at: 2026-06-30
+access_level: internal
 name: client-intake
 description: >
   Create a new client folder and pull discovery materials from Fireflies,
@@ -69,7 +73,7 @@ Replace `{ClientName}` with the actual client name.
 
 ## Step 2: Pull Fireflies Data
 
-1. Use `fireflies_search` to find meetings matching the company name
+1. Use `fireflies_get_transcripts` with `keyword: "{ClientName}", scope: "title"` to find meetings matching the company name. **Do NOT use `fireflies_search` — it times out reliably.**
 2. For each matching meeting:
    a. Use `fireflies_get_transcript` to pull the full transcript
    b. Use `fireflies_get_summary` to pull the AI summary
