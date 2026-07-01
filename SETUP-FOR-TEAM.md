@@ -22,7 +22,7 @@ This guide gets you from zero to producing a scope package.
 
 ## Prerequisites
 
-- **macOS** with **Claude Code** installed.
+- **macOS or Windows** with **Claude Code** installed.
 - **Python 3.9+** (`python3 --version`). Scripts target 3.9 for compatibility.
 - **1Password** — the Sayer account, desktop app, and CLI. The shared Fireflies and
   HubSpot API keys live in the Sayer `Shared` vault; **you do not need your own API
@@ -33,6 +33,12 @@ This guide gets you from zero to producing a scope package.
 - GitHub access to `Sayer-Strategy-Group/project-scoping-tool` (your org membership).
 - *Optional:* the **Rethink Sans** Google Font for decks — Excel/docx output falls
   back to Calibri automatically, so this is never blocking.
+
+> **Windows users:** Skip the macOS Keychain step in Step 2. The credential
+> resolver catches the missing `security` command silently and falls through to
+> env var → `.env` → 1Password automatically. Just create a `.env` file in the
+> repo root using `.env.example` as a template, or use the 1Password CLI path
+> (works cross-platform). Everything else in this guide applies as-is.
 
 ---
 
