@@ -47,7 +47,23 @@
 | File | Purpose |
 |------|---------|
 | `plan.json` | Source of truth for all phases and tasks |
-| `delivery-state.json` | Linear / Sheets artifact IDs |
+| `delivery-state.json` | Lifecycle ledger — canonical Drive / Notion / Slack / Linear / Sheets artifact IDs (see below) |
+
+---
+
+## Launch Artifacts
+
+The one-time artifacts every skill reuses. `delivery-state.json` is the machine-readable
+source; this table is the human-readable mirror. **Never create a second one of these —
+skills read the IDs from `delivery-state.json` and write into the existing artifact.**
+
+| Artifact | ID / Link |
+|----------|-----------|
+| Drive project folder | `driveFolderId` — [link]() |
+| Drive `Deliverables/` folder | `driveDeliverablesFolderId` — client-facing sheets/decks land here |
+| Notion engagement page | `notionPageId` — [link]() |
+| Slack channel | `#project-{slug}` — `slackChannelId` |
+| Linear project | `linear.projectId` — [link]() |
 
 ---
 
