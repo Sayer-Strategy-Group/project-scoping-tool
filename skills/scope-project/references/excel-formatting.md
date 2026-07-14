@@ -107,55 +107,30 @@ Per-workstream task detail with hours per task.
 | Freeze panes | Top row + first column frozen |
 | Print area | Set on all sheets |
 
-## openpyxl Generation Instructions
+## Generation: use the shared generator, not a hand-written script
 
-Use Python with openpyxl. **Do not define fills/fonts/borders inline** — import
-everything from `scripts/brand_styles.py` (repo root):
+**Do NOT hand-write a per-client openpyxl script.** The workbook is produced from the
+structured `scope.json` (see `templates/scoping-schema.json`) by the single shared
+generator at the repo root:
 
-```python
-# Generator script lives anywhere under the repo; shim the repo root onto sys.path:
-import sys
-from pathlib import Path
-
-REPO_ROOT = Path(__file__).resolve().parent  # adjust .parent count to reach repo root
-sys.path.insert(0, str(REPO_ROOT / "scripts"))
-
-from brand_styles import (
-    HEADER_FILL, HEADER_FONT, SECONDARY_HEADER_FILL, SECONDARY_HEADER_FONT,
-    BODY_FONT, BOLD_BODY_FONT, TITLE_FONT, ALT_ROW_FILL, INPUT_FILL,
-    THIN_BORDER, CURRENCY_FMT, severity_fill,
-    style_header_row, style_secondary_header_cells,
-    apply_data_styles, apply_data_styles_rows, apply_input_fill_cells,
-    get_column_letter,
-)
-
-from openpyxl import Workbook
-
-wb = Workbook()
-ws = wb.active
-ws.title = "Scoping Estimate"
-
-# Headers: one call, on-brand
-style_header_row(ws, row=1, max_col=10)
-
-# Actuals columns get the quieter secondary header
-style_secondary_header_cells(ws, row=1, cols=[11, 12])
-
-# Data rows with alternating Grey 300 striping
-apply_data_styles(ws, data_start=2, data_end=last_row, max_col=10)
-
-# Risk severity
-cell.fill = severity_fill("HIGH")
-
-# Currency columns
-cell.number_format = CURRENCY_FMT
-
-# Freeze panes + print area per sheet
-ws.freeze_panes = "B2"
-ws.print_area = f"A1:J{last_row}"
+```bash
+python3 scripts/build_estimate.py {ClientFolder}/scope.json
+# validate the record without writing a workbook:
+python3 scripts/build_estimate.py {ClientFolder}/scope.json --validate-only
 ```
 
-Python 3.9 compatible — no `X | None` or `tuple[X, Y]` syntax in generated scripts.
+This is the de-duplication win: one code path, driven by data, produces an identical
+on-brand workbook every time — including the Sheet-2 → Sheet-1 integrity formulas. The
+old per-client `build_estimate.py` scripts in client folders are retired.
 
-**Important:** Write the complete Python script to a temporary file and execute via
-Bash. Clean up the script after successful generation.
+This spec document describes **what the generator emits** (so you can understand or modify
+it), not a workbook to assemble by hand. If you change the workbook layout, change
+`scripts/build_estimate.py` and its test (`tests/test_build_estimate.py`) — then update this
+spec in the same commit.
+
+All styling is imported from `scripts/brand_styles.py` (the brand single-source-of-truth):
+`HEADER_FILL`/`HEADER_FONT` (primary Sayer-Yellow header), `SECONDARY_HEADER_*` (Grey-700
+actuals header), `apply_data_styles` (Grey-300 striping), `INPUT_FILL` (Cool-Grey input
+cells), `severity_fill()` (risk traffic-light), `CURRENCY_FMT`. Never hard-code hex.
+
+Python 3.9 compatible — no `X | None` or `tuple[X, Y]` syntax in the generator.

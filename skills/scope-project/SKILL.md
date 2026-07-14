@@ -104,13 +104,54 @@ If the project involves multiple systems or has significant dependency risks, ge
 
 Include a comparison matrix (hours, cost, timeline, risk level, dependencies per approach) and a recommendation tied to the client's specific risk factors.
 
-### Step 6: Generate Excel Deliverables
+### Step 6: Emit the Structured Scope Record (`scope.json`)
 
-Read the `sayer-brand-guidelines` skill first, then reference `${CLAUDE_SKILL_DIR}/references/excel-formatting.md` for sheet specs, formatting standards, and openpyxl generation instructions. Style everything via `scripts/brand_styles.py` (repo root) — never hard-code hex values.
+Before generating any deliverable, write the full estimate as a structured record:
+`{ClientFolder}/scope.json`, conforming to `templates/scoping-schema.json` (repo root).
+This record is the **single source of truth** — the Excel workbook, the client summary,
+and (after the deal closes) the pricing-calibration store all derive from it. Do not
+re-derive the same numbers in three places; produce them once, here.
 
-Output: `{ClientName}_Scoping_Estimate.xlsx` with 5 sheets by default (Scoping Estimate, Task Breakdown, Deliverables & Acceptance, Risk Register, Assumptions), plus an optional Approach Comparison sheet when multiple approaches are presented.
+- Every workstream carries `id` (PREFIX-NN), `category` (controlled vocabulary — use the
+  schema enum: crm / erp / marketing / voip / data-bi / integration / migration / pm /
+  uat / training / documentation / go-live / other — **not** free text; it is the
+  calibration join key), `hours {min,max,median}`, `rate`, `cost {min,max,median}`, and `tasks[]`.
+- Invariants: `cost = hours × rate`; each workstream's task hours sum to its median
+  (this is what the Task Breakdown integrity check enforces in the workbook).
+- Capture `client.hubspotUrl` from intake when available — it is the key used to stamp
+  won/lost + final amount onto this record later (pricing calibration).
+- **Pick the estimate mode** (`engagement.estimateMode`):
+  - `ranges` (default) — min/max/median per workstream. The pre-sale discovery scoping
+    standard. Requires `workstreams[]` + `budgetSummary`.
+  - `committed` — single committed hours/amount per phase, with a tiered staff blend
+    (`staffMix`), a Technology & Admin Fee (`techFeePct`), and a `committedSummary`
+    (consulting subtotal → tech fee → grand total). The T&M-SOW form.
+    Requires `phases[]` (with `committedHours`/`committedAmount`) + `committedSummary`.
+    Use a degenerate range (`min=max=median`) for `engagement.totalHours`.
+- Validate before proceeding (catches schema drift early):
+  ```bash
+  python3 scripts/build_estimate.py {ClientFolder}/scope.json --validate-only
+  ```
+  Fix any reported schema errors before generating the workbook.
 
-### Step 7: Generate Client-Ready Summary
+### Step 7: Generate Excel Deliverables
+
+Generate the branded workbook **from `scope.json` using the shared generator** — do NOT
+hand-write a per-client openpyxl script (that pattern is retired; one generator, driven by data):
+
+```bash
+python3 scripts/build_estimate.py {ClientFolder}/scope.json
+```
+
+This emits `{ClientName}_Scoping_Estimate.xlsx` with 5 sheets by default (Scoping Estimate;
+Task Breakdown with formula-based integrity checks back to Sheet 1; Deliverables & Acceptance;
+Risk Register; Assumptions), plus an Approach Comparison sheet when `approaches` are present.
+All styling comes from `scripts/brand_styles.py` (Sayer brand) — never hard-code hex. The sheet
+spec is documented in `${CLAUDE_SKILL_DIR}/references/excel-formatting.md` and the
+`sayer-brand-guidelines` skill — read those to understand or modify the generator, not to
+author a workbook by hand.
+
+### Step 8: Generate Client-Ready Summary
 
 Create a concise summary suitable for Slack, email, or SOW insertion:
 
@@ -144,7 +185,7 @@ Create a concise summary suitable for Slack, email, or SOW insertion:
 1. **Never pad estimates.** Use honest ranges. The min/max spread IS the buffer.
 2. **Always flag unknowns.** An unknown that isn't flagged becomes a scope bomb. Surface it.
 3. **Separate what you know from what you're assuming.** Label assumptions explicitly.
-4. **Rate is configurable.** Check consulting profile, default to $150/hr, ask if unknown.
+4. **Rate comes from `sayer-rates`.** That skill is the authoritative rate card and blended-rate model — consult it, do not hardcode. Default to the Associate rate ($150/hr) only when no tier mix is specified; ask if the staffing mix is unknown. Record the rate used in `scope.json` (`engagement.defaultRate` + per-workstream `rate`).
 5. **One workstream per integration.** Don't lump integrations together -- each has unique complexity.
 6. **Data migration is per-source.** Each data source gets its own estimate.
 7. **Training is per-audience.** Admin training is not end-user training is not executive training.
@@ -156,6 +197,7 @@ Create a concise summary suitable for Slack, email, or SOW insertion:
 
 Before presenting to the user, verify all deliverables include:
 
+- [ ] `scope.json` written and passing `--validate-only` (the structured source of truth)
 - [ ] Workstream-level hour estimates (min/max/median)
 - [ ] Rate modeling with configurable rate
 - [ ] Risk register with severity ratings

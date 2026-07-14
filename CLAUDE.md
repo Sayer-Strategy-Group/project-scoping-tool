@@ -62,7 +62,8 @@ A synthesized knowledge wiki lives in `wiki/`. It compresses raw client folders 
 ## Key Files
 
 ### Scoping
-- `scoping-skill.md` -- The scoping skill definition (workstream templates, estimation framework, risk register standards, Excel format spec)
+- `skills/scope-project/SKILL.md` -- The scoping skill definition (workstream templates, estimation framework, risk register standards, Excel format spec). Decomposed into `skills/scope-project/references/` (workstream-catalog, hour-ranges, risk-register-template, excel-formatting, example-scope). **Authoritative source of truth** — the former root `scoping-skill.md` monolith was retired 2026-06-12.
+- `templates/scoping-schema.json` -- JSON Schema for `scope.json`, the structured estimate record `scope-project` emits per engagement (phase/task x hours x rate x cost). Calibration data source + AIVA invoke contract.
 - `calibration/calibration.md` -- **READ FIRST before every scoping session.** Calibration data from past projects, estimation adjustments, and cross-project patterns.
 - `templates/scope-summary-template.md` -- Post-discovery scope writeup (tier recommendation, workstreams, risks, assumptions, outstanding items)
 - `templates/decisions-template.md` -- Scoping decisions log with worked examples (D1-D3 format)

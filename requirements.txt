@@ -12,5 +12,8 @@ requests>=2.31.0         # Linear GraphQL API + HubSpot REST client
 # Client intake (new)
 pydantic>=2.0,<3.0       # Typed HubSpot response models
 #
+# Structured scope record (new)
+jsonschema>=4.0          # Validate scope.json against templates/scoping-schema.json
+#
 # Test dependencies
 pytest>=8.0              # Contract tests
