@@ -9,8 +9,8 @@
     {
       "name": "project-scoping",
       "source": "./",
-      "description": "Client intake, workstream-based scoping estimates, risk registers, brand-styled Excel scope packages, and Sayer brand guidelines (scoping-only; delivery skills not yet bundled).",
-      "version": "0.2.0"
+      "description": "Client intake, workstream-based scoping estimates, risk registers, brand-styled Excel scope packages, CSA/SOW contract drafting, and Sayer brand guidelines (scoping-only; delivery skills not yet bundled).",
+      "version": "0.3.0"
     }
   ]
 }

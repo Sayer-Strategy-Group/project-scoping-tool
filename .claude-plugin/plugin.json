@@ -1,7 +1,7 @@
 {
   "name": "project-scoping",
-  "description": "Sayer pre-sale scoping toolkit — client intake (Fireflies/Gmail/HubSpot, Notion mirror), workstream-based hour estimates, risk registers, brand-styled Excel scope packages, and bundled Sayer brand guidelines. Run from a clone of the project-scoping-tool repo; skills read shared calibration and templates from the repo working directory.",
-  "version": "0.2.0",
+  "description": "Sayer pre-sale scoping toolkit — client intake (Fireflies/Gmail/HubSpot, Notion mirror), workstream-based hour estimates, risk registers, brand-styled Excel scope packages, CSA/SOW contract drafting, and bundled Sayer brand guidelines. Run from a clone of the project-scoping-tool repo; skills read shared calibration and templates from the repo working directory.",
+  "version": "0.3.0",
   "author": {
     "name": "Sayer Strategy Group"
   },
