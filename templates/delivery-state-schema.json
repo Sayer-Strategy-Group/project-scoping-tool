@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sayer.consulting/schemas/delivery-state.json",
+  "title": "Client Lifecycle State Ledger",
+  "description": "Single continuity ledger for one client engagement. Seeded at intake and carried through scoping, planning, delivery, status, and retro. Records the IDs of the artifacts created ONCE at launch (Drive folder, Notion page, Slack channel, Linear project) so every downstream skill reuses them instead of spawning parallel/duplicate artifacts. Lives at the client folder root as delivery-state.json (gitignored). Every skill READS this file before creating anything; every skill that creates a durable artifact WRITES its ID back here.",
+  "type": "object",
+  "required": ["schemaVersion", "client", "launch"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version for forward compatibility"
+    },
+    "client": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "slug": { "type": "string", "description": "kebab-case folder/slug form of the client name" }
+      }
+    },
+    "launch": {
+      "type": "object",
+      "description": "IDs of the artifacts provisioned once, early in the lifecycle. Downstream skills reuse these rather than creating new ones. A field is null until the skill that owns it has run; skills must treat null as 'not yet created' and a present value as 'reuse this'.",
+      "properties": {
+        "driveFolderId": {
+          "type": ["string", "null"],
+          "description": "Google Drive ID of the top-level client project folder"
+        },
+        "driveDeliverablesFolderId": {
+          "type": ["string", "null"],
+          "description": "Drive ID of the CRM Implementation/Deliverables subfolder. Client-facing sheets, decks, and exports are created INSIDE this folder (as a Drive `parent`), never locally-then-orphaned."
+        },
+        "driveWorkingFilesFolderId": {
+          "type": ["string", "null"],
+          "description": "Drive ID of the CRM Implementation/Working Files subfolder"
+        },
+        "driveMeetingNotesFolderId": {
+          "type": ["string", "null"],
+          "description": "Drive ID of the CRM Implementation/Meeting Notes subfolder"
+        },
+        "notionPageId": {
+          "type": ["string", "null"],
+          "description": "Notion page ID of the client's row in the Client Engagements database. Status updates, scope summaries, and links are written to THIS page — never a new page."
+        },
+        "notionDatabaseId": {
+          "type": ["string", "null"],
+          "description": "Notion Client Engagements database ID (parent of notionPageId)"
+        },
+        "slackChannelId": {
+          "type": ["string", "null"],
+          "description": "Slack channel ID for the project (e.g., #project-{slug})"
+        },
+        "slackChannelName": {
+          "type": ["string", "null"],
+          "description": "Human-readable Slack channel name (e.g., project-nec)"
+        },
+        "linear": {
+          "type": ["object", "null"],
+          "description": "Linear project/issue created for the engagement",
+          "properties": {
+            "projectId": { "type": ["string", "null"], "description": "Linear project ID" },
+            "projectUrl": { "type": ["string", "null"] },
+            "issueIdentifier": { "type": ["string", "null"], "description": "Human identifier, e.g., GOS-606" },
+            "issueId": { "type": ["string", "null"], "description": "Linear internal issue ID" }
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "description": "IDs of regenerable/derived artifacts, tracked for idempotency so re-running a skill updates in place instead of duplicating.",
+      "properties": {
+        "sheetId": { "type": ["string", "null"], "description": "Google Sheets file ID of the client-facing project sheet (created inside driveDeliverablesFolderId)" },
+        "sheetUrl": { "type": ["string", "null"] },
+        "gammaDeckIds": {
+          "type": "array",
+          "description": "Gamma/deck artifact IDs keyed by meeting type",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "description": "kickoff | standup | phase-review | retro" },
+              "id": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        },
+        "calendarEventIds": {
+          "type": "array",
+          "description": "Google Calendar event IDs created by /meeting-calendar, for idempotent updates",
+          "items": { "type": "string" }
+        },
+        "linearIssueIds": {
+          "type": "array",
+          "description": "Linear issue IDs created by /project-plan, for idempotent updates",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "history": {
+      "type": "array",
+      "description": "Append-only log of which skill wrote which artifact ID and when, for auditability across the lifecycle",
+      "items": {
+        "type": "object",
+        "required": ["date", "skill", "action"],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "skill": { "type": "string", "description": "e.g., client-intake, project-plan, project-sheet" },
+          "action": { "type": "string", "description": "e.g., 'created Notion page', 'reused Drive Deliverables folder'" }
+        }
+      }
+    }
+  }
+}

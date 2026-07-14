@@ -173,8 +173,12 @@ Sayer Notion workspace (parent: Sayer Home).
 - **Database ID:** `1ee8290de7bc415a8afd62cc22b43fa7`
 - **Data source:** `collection://365887c7-a250-40fb-8421-d97a2ecab24b`
 
-1. **Check for an existing page first** — search the data source for the client
-   name. If a page already exists, update it instead of creating a duplicate.
+1. **Check the ledger, then the database, before creating.** If
+   `{ClientName}/delivery-state.json` exists and has `launch.notionPageId`, reuse
+   that page — update it, never create a second one. Otherwise search the data
+   source for the client name; if a page already exists, update it instead of
+   creating a duplicate. Only create a new page when neither the ledger nor the
+   database has one.
 2. Create (or update) the page with properties:
    - **Client Name:** `{ClientName}`
    - **Status:** `Intake`
@@ -194,7 +198,29 @@ skip with an explicit notice in the summary ("Notion mirror skipped — connecto
 not available"). The local repo folder remains the source of truth; never fail
 the intake over the mirror.
 
-## Step 6: Summary Report
+## Step 6: Seed the lifecycle ledger
+
+Intake is the front of the client lifecycle, so it opens the continuity ledger
+that every downstream skill (`/scope-project`, `/project-plan`, `/project-sheet`,
+`/meeting-calendar`, `/sayer-project-status`, `/delivery-retro`, and the launch
+skill) reads to find already-created artifacts. This is what prevents parallel
+Notion pages, duplicate Drive folders, and orphaned local sheets later.
+
+Write `{ClientName}/delivery-state.json` (schema:
+`templates/delivery-state-schema.json`). If the file already exists, **merge**
+into it — never clobber IDs a later skill already recorded.
+
+- Set `client.name` and `client.slug`.
+- Set `launch.notionPageId` and `launch.notionDatabaseId` to the page and database
+  from Step 5 (leave `null` if the Notion mirror was skipped).
+- Leave the Drive / Slack / Linear launch fields `null` — they are provisioned by
+  the launch skill post-signing, which fills them into this same file.
+- Append a `history` entry: `{ date, skill: "client-intake", action: "created/reused Notion page" }`.
+
+This file is gitignored (it holds external artifact IDs), so it stays local to the
+client folder. Skip this step silently only if the folder could not be created.
+
+## Step 7: Summary Report
 
 Print a summary of everything collected:
 
@@ -205,9 +231,11 @@ Print a summary of everything collected:
 - 1 company + {N} contacts pulled → hubspot/
 - decisions.md template created
 - Notion: Client Engagements page created (Status: Intake) — or "skipped, connector not available"
+- delivery-state.json seeded (Notion page ID recorded for downstream skills)
 
 Written to:
   Repo:     {ClientName}/   (in the project-scoping-tool repo)
+  Ledger:   {ClientName}/delivery-state.json  (lifecycle artifact IDs — reused by all later skills)
   Notion:   Client Engagements → {ClientName}  (team-visible index)
   Obsidian: {vault path}    (only if a SayerBrain vault is present; omit otherwise)
 

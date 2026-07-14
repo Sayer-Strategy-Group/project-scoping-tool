@@ -91,7 +91,7 @@ A synthesized knowledge wiki lives in `wiki/`. It compresses raw client folders 
 - After project closes: completed retro .md, actuals entered in Excel, learnings extracted to calibration.md
 - **Delivery artifacts (post-signing):**
   - `plan.json` -- Structured project plan (intermediate format for all delivery skills)
-  - `delivery-state.json` -- Artifact IDs for idempotency (Linear, Google Sheets, Calendar)
+  - `delivery-state.json` -- **Lifecycle continuity ledger** (schema: `templates/delivery-state-schema.json`). Seeded at intake and carried through the whole lifecycle. Holds the canonical IDs of the artifacts created ONCE at launch -- Drive project folder + `Deliverables`/`Working Files`/`Meeting Notes` subfolders, Notion engagement page, Slack channel, Linear project -- plus regenerable-artifact IDs for idempotency (Sheets, Calendar, Gamma decks). See "Launch-Artifact Continuity" below.
   - `create_linear_project.py` -- Generated Linear API script
   - `kickoff-deck.md`, `standup-template.md`, `phase-review-template.md` -- Gamma markdown meeting decks
   - `phase-notes.md` -- Running phase completion pulses
@@ -158,6 +158,30 @@ These post-sale skills live in Kyle's `~/.claude/skills/` and are NOT distribute
 - `_final_estimate.md` is a working doc and may be superseded by the signed proposal -- verify pricing and payment terms against the signed version
 - Present phase-by-phase task breakdown and get Kyle's per-phase approval before writing plan.json
 - Do not shortcut the review -- write only after all phases are approved
+
+### Launch-Artifact Continuity (read-before-create)
+
+A client's Drive project folder, Notion engagement page, Slack channel, and Linear
+project are each created **once**, early in the lifecycle, and every later skill
+**reuses** them. The IDs live in `{Client}/delivery-state.json` (schema:
+`templates/delivery-state-schema.json`), seeded at intake and filled in by the
+launch skill. This is a hard rule — the failure mode it prevents is parallel
+sources of truth (a duplicate Notion page, a second Drive folder, a project sheet
+built locally instead of dropped into the existing `Deliverables/` folder).
+
+**Ownership of launch artifacts:**
+- **Notion engagement page** — created by `/client-intake` (Client Engagements DB). Its ID is written to `delivery-state.json` at intake.
+- **Drive folder (+ `Deliverables`/`Working Files`/`Meeting Notes`), Slack channel, Linear project** — created by the post-signing **launch skill** (e.g. `/sayer-project-kickoff` or a dedicated project-launch skill). The launch skill MUST write every ID it creates into the same `delivery-state.json`.
+
+**Contract for every downstream skill** (`/project-plan`, `/project-sheet`, `/meeting-calendar`, `/sayer-project-status`, `/delivery-retro`):
+1. **Read `delivery-state.json` first.** Treat a present ID as "reuse this," a `null`/missing ID as "not created yet."
+2. **Create client-facing files inside the existing Drive folder** — new Google Sheets/decks are created with `driveDeliverablesFolderId` as their Drive `parent`, never built locally and left orphaned.
+3. **Update the existing Notion page** (`notionPageId`) with status/links — never create a new page for the same client.
+4. **Post to the existing Slack channel** (`slackChannelId`) and **reuse the existing Linear project** (`linear.projectId`) — do not re-provision.
+5. **Write back** any new durable artifact ID (sheet, deck, calendar event, Linear issue) into `delivery-state.json` and append a `history` entry, so the next skill sees it.
+6. If a required launch ID is missing when a skill needs it, tell Kyle the launch step hasn't run — do not silently create a parallel artifact.
+
+`plan.json` mirrors the launch IDs it depends on from `delivery-state.json`; `delivery-state.json` remains the single ledger of record.
 
 ## Credentials
 
