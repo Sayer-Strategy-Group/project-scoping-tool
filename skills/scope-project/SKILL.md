@@ -76,6 +76,8 @@ Reference: `${CLAUDE_SKILL_DIR}/references/workstream-catalog.md` for the full c
 
 Apply relevant workstreams from the catalog. Every project also gets the cross-cutting workstreams (PM, UAT, documentation, go-live) sized appropriately.
 
+**For quoting / CPQ engagements, read `${CLAUDE_SKILL_DIR}/references/hubspot-cpq-capabilities.md` FIRST.** It captures current HubSpot quoting/CPQ licensing and feature parity — what's native (Price Books, approvals, Contracts object) vs. what needs Data Hub custom code vs. what forces Enterprise — plus list pricing and a per-engagement refresh rule. The license stack and the pricing mechanism drive CPQ scope more than SKU count does, and HubSpot's structure changes often, so confirm the relevant rows with a rep/SE and bump the file's `Last verified` date before you commit a fixed fee.
+
 ### Step 3: Estimate Hours
 
 For each workstream, provide **min / max / median** hour estimates.
