@@ -149,6 +149,12 @@ re-derive the same numbers in three places; produce them once, here.
   schema enum: crm / erp / marketing / voip / data-bi / integration / migration / pm /
   uat / training / documentation / go-live / other — **not** free text; it is the
   calibration join key), `hours {min,max,median}`, `rate`, `cost {min,max,median}`, and `tasks[]`.
+- **Line-by-line `tasks[]` are MANDATORY on every workstream — never ship workstreams-only.**
+  Each workstream gets 2+ concrete task line items (the actual units of work), and their
+  hours **must sum exactly to the workstream median**. This is the Task Breakdown (Sheet 2)
+  and it is a required deliverable, not an optional extra — an estimate without it is
+  unauditable and cannot be negotiated line-by-line. An empty `tasks[]` makes Sheet 2 print
+  "NO TASKS"; a bad sum prints "MISMATCH". Neither is acceptable in a delivered estimate.
 - Invariants: `cost = hours × rate`; each workstream's task hours sum to its median
   (this is what the Task Breakdown integrity check enforces in the workbook).
 - Capture `client.hubspotUrl` from intake when available — it is the key used to stamp
@@ -173,8 +179,13 @@ Generate the branded workbook **from `scope.json` using the shared generator** �
 hand-write a per-client openpyxl script (that pattern is retired; one generator, driven by data):
 
 ```bash
-python3 scripts/build_estimate.py {ClientFolder}/scope.json
+python3 scripts/build_estimate.py {ClientFolder}/scope.json --strict
 ```
+
+Run with `--strict` so generation **fails** if any workstream lacks line-by-line tasks or
+task hours don't reconcile to the median — this is the guard against silently shipping a
+workstreams-only estimate. Without `--strict` the same problems print as a WARNING; either
+way, do not deliver until the generator reports `task breakdown integrity: OK`.
 
 This emits `{ClientName}_Scoping_Estimate.xlsx` with 5 sheets by default (Scoping Estimate;
 Task Breakdown with formula-based integrity checks back to Sheet 1; Deliverables & Acceptance;
@@ -225,6 +236,7 @@ Create a concise summary suitable for Slack, email, or SOW insertion:
 8. **ERP adds a complexity premium.** Financial data is unforgiving -- always add buffer for reconciliation.
 9. **Cap custom properties.** State the assumed cap (e.g., "up to 30 custom properties") -- overages are change orders.
 10. **Project management hours scale with project size.** Use 10-15% of total estimated hours.
+11. **Line-by-line tasks are mandatory.** Every workstream must break down into concrete task line items that sum to its median (Sheet 2 Task Breakdown). Workstreams-only estimates are incomplete — the generator's `task breakdown integrity: OK` check must pass before delivery.
 
 ## Deliverable Checklist
 
@@ -232,6 +244,7 @@ Before presenting to the user, verify all deliverables include:
 
 - [ ] `scope.json` written and passing `--validate-only` (the structured source of truth)
 - [ ] Workstream-level hour estimates (min/max/median)
+- [ ] **Line-by-line Task Breakdown (Sheet 2) — every workstream has task line items summing to its median; generator reports `task breakdown integrity: OK` (no "NO TASKS" / "MISMATCH")**
 - [ ] Rate modeling with configurable rate
 - [ ] Risk register with severity ratings
 - [ ] Assumptions and exclusions list

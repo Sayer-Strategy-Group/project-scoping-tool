@@ -82,6 +82,38 @@ def validate_scope(scope: dict) -> List[str]:
     ]
 
 
+def check_task_integrity(scope: dict) -> List[str]:
+    """Flag workstreams missing line-by-line tasks or whose task hours don't
+    reconcile to the workstream median.
+
+    The Task Breakdown (Sheet 2) is a REQUIRED part of every estimate, not an
+    optional extra — an estimate without it is unauditable. The workbook renders
+    Sheet 2 from data, so an empty ``tasks[]`` silently prints "NO TASKS" and a
+    bad sum prints "MISMATCH". This surfaces both loudly. Ranges mode only;
+    committed mode reconciles per-phase in its own Sheet 2.
+
+    Returns human-readable problem strings (empty == every workstream has tasks
+    summing to its median).
+    """
+    problems: List[str] = []
+    if scope.get("engagement", {}).get("estimateMode", "ranges") == "committed":
+        return problems
+    for w in scope.get("workstreams", []):
+        wid = w.get("id", "?")
+        tasks = w.get("tasks") or []
+        median = (w.get("hours") or {}).get("median")
+        if not tasks:
+            problems.append("%s has NO line-by-line tasks (Sheet 2 will show 'NO TASKS')" % wid)
+            continue
+        tsum = sum(t.get("hours", 0) for t in tasks)
+        if median is not None and tsum != median:
+            problems.append(
+                "%s task hours (%s) != workstream median (%s) — Sheet 2 will show 'MISMATCH'"
+                % (wid, tsum, median)
+            )
+    return problems
+
+
 # --------------------------------------------------------------------------- #
 # Small helpers
 # --------------------------------------------------------------------------- #
@@ -599,6 +631,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("scope_json", help="Path to scope.json (conforms to templates/scoping-schema.json)")
     parser.add_argument("--out", help="Output .xlsx path (default: {ClientName}_Scoping_Estimate.xlsx next to scope.json)")
     parser.add_argument("--validate-only", action="store_true", help="Validate scope.json against the schema and exit")
+    parser.add_argument("--strict", action="store_true", help="Fail (non-zero exit) if any workstream lacks line-by-line tasks or task hours don't reconcile to the workstream median (Sheet-2 Task Breakdown must be complete)")
     args = parser.parse_args(argv)
 
     scope_path = Path(args.scope_json).resolve()
@@ -614,6 +647,18 @@ def main(argv: Optional[List[str]] = None) -> int:
             print("  - %s" % e, file=sys.stderr)
         return 1
     print("scope.json validates against schema: OK")
+
+    task_problems = check_task_integrity(scope)
+    if task_problems:
+        print("WARNING: incomplete Task Breakdown (line-by-line tasks) — this is a required part of every estimate:", file=sys.stderr)
+        for p in task_problems:
+            print("  ! %s" % p, file=sys.stderr)
+        if args.strict:
+            print("--strict: refusing to generate a workbook with an incomplete Task Breakdown.", file=sys.stderr)
+            return 1
+    else:
+        print("task breakdown integrity: OK (every workstream has line-by-line tasks summing to its median)")
+
     if args.validate_only:
         return 0
 
