@@ -104,6 +104,39 @@ If the project involves multiple systems or has significant dependency risks, ge
 
 Include a comparison matrix (hours, cost, timeline, risk level, dependencies per approach) and a recommendation tied to the client's specific risk factors.
 
+### Scope Readiness Gate (GOS-667 — hard gate before proposal-grade output)
+
+**Before Step 6, stop and check: is there an actual scope of work here, or only
+raw discovery notes with unresolved gaps?** Kyle's reported failure mode: "you
+have to have an actual scope of work before you push it into that proposal
+generator... it might silently fail and then just kind of ask you a couple
+questions with assumptions." `--validate-only` (Step 6) catches schema
+structure errors, not this — a `scope.json` can be schema-valid while every
+number in it is a guess.
+
+Check whether all of these are resolved (confirmed by the user, not guessed to
+fill a gap):
+- `engagement.estimateMode` is explicitly chosen (`ranges` vs `committed`), not defaulted silently
+- Systems in scope are named, not vague ("some CRM work")
+- User count and data-source count are real numbers, not placeholders
+- At least the top 2-3 complexity indicators (Step 1.4) have real answers, not "TBD"
+
+**If any of these is still unresolved after asking once:** do NOT proceed to
+`scope.json` / the Excel workbook / the client summary with invented numbers
+standing in for real ones. Stop and tell the user directly:
+
+> "This doesn't have enough confirmed scope yet to generate a proposal-grade
+> estimate — [list the specific missing items]. I can either (a) ask you these
+> directly now, or (b) generate a rough directional range explicitly marked
+> **DRAFT — NOT FOR CLIENT USE** in both `scope.json` (an `engagement.draft: true`
+> flag) and the Excel/summary output, if you want a placeholder before scope is
+> final. Which do you want?"
+
+Only proceed past this gate once the user explicitly confirms real answers, or
+explicitly asks for the marked-DRAFT placeholder. Never silently blend guessed
+assumptions into what looks like a finished, client-ready number — that's the
+scope bomb this gate exists to prevent.
+
 ### Step 6: Emit the Structured Scope Record (`scope.json`)
 
 Before generating any deliverable, write the full estimate as a structured record:
