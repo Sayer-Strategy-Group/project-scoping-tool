@@ -66,6 +66,11 @@
           "default": "ranges",
           "description": "ranges = min/max/median per workstream (the pre-sale discovery scoping standard). committed = single hours/amount per phase with a tech fee and tiered staff blend (the T&M SOW form). Drives Sheet-1 layout and which fields are required. Absent == ranges."
         },
+        "draft": {
+          "type": "boolean",
+          "default": false,
+          "description": "GOS-667 Scope Readiness Gate. True when the estimate was generated before scope was fully confirmed (a placeholder the user explicitly asked for rather than confirming real answers). Downstream generators should watermark/label output as DRAFT — NOT FOR CLIENT USE when true. Absent/false == normal, scope-confirmed estimate."
+        },
         "blendedRate": { "type": "number", "description": "Headline blended rate (committed mode). Derivable from staffMix as sum(rate*allocationPct/100)." },
         "techFeePct": { "type": "number", "description": "Technology & Admin Fee percentage on the consulting subtotal (e.g., 5 = 5%). Committed mode." },
         "feeStructure": { "type": "string", "description": "Free-text fee terms for the Sheet-1 metadata block (e.g., 'T&M, monthly invoicing, Net-15, +5% Tech & Admin Fee')." },
