@@ -77,6 +77,11 @@ Follow the canonical section order below — the master Google Doc's `#SOW Instr
 1. Invoke `sayer-brand-guidelines`, then the `docx` skill, before generating any file.
 2. Write a `build_docx.js` in the client's folder (or reuse/adapt an existing one, e.g. from a prior client folder — the converter logic is generic markdown-to-branded-docx and doesn't need to be rewritten from scratch each time). Output both `{Client}_CSA_draft.docx` and `{Client}_SOW_draft.docx`.
 3. Verify the output: `validate.py` may not run on this machine (Python version gap) — fall back to a zip/XML integrity check (`zipfile.testzip()` + `defusedxml.ElementTree.fromstring()` on `word/document.xml` — use `defusedxml`, not stdlib `xml.etree`, even though these are self-generated files) and confirm no unintended `[FILL]`/placeholder text survived into fields that should be resolved.
+4. **File the verified docx to the confidential Contracts Drive folder** — via the Google Drive connector, into the **Partners Shared Drive** under `Clients - Partner/{Client}/Contracts/`, so the whole contracts team can reach it and Step 7 can link to it.
+   - The Partners `Clients - Partner` folder is `1pu0CiCUPj6oLyThqv8wkx5dB5KAZIR8j` (inside Shared Drive `0AOHVUF6qe1EQUk9PVA`). **Find-or-create** the `{Client}` folder under it, then find-or-create a `Contracts` subfolder inside that — search by `title` + `parentId` before creating, to avoid duplicating the per-client Contracts folders that already exist.
+   - Upload each docx into that `Contracts` subfolder and capture the returned link — this is the `Drive Doc Link` you record in Step 7.
+   - Access is already correct: the Partners Shared Drive is limited to the contracts team (Kyle, Greg, Cameron, Billy, Weston, Aisha), so these are confidential — do **not** post the links to Slack project channels.
+   - If the upload fails or the Drive connector isn't available, leave the docx in the client folder, note that filing was skipped, and record the Step 7 row with `Drive Doc Link` blank.
 
 ## Step 5: Decisions Log
 
@@ -100,7 +105,7 @@ Every CSA/SOW produced gets a row in the shared **Contracts** Notion database, s
   - `Contract Value` — the fixed fee or committed figure from Step 1 if disclosed; leave blank for pure rate-card / no-estimate SOWs
   - `HubSpot Deal` — the deal URL if known
   - `Approver` — Billy Leigh and/or Greg Dyer
-  - `Drive Doc Link` — the shared-Drive URL of the branded docx once it is filed to the confidential Contracts folder; leave blank until then and update the row when filed
+  - `Drive Doc Link` — the Partners Shared Drive URL captured when the docx was filed in Step 4; leave blank only if filing was skipped, and update the row once it is filed
   - `Notes` — the contracting entity used and any open items from the decisions log
 - **Idempotency:** before creating, query the Contracts data source by `Name`/`Client` to check whether a row already exists for this client + document. If it does, update it rather than adding a duplicate.
 - **Degrade gracefully:** if the Notion connector isn't connected, report that the store row was skipped (do not fail the whole run) and tell the user to connect Notion via `/mcp` and re-run this step.
