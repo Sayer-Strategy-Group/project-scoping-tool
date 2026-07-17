@@ -25,7 +25,7 @@ Quick version once you've cloned and installed deps:
 /plugin install project-scoping@sayer-scoping
 ```
 
-You'll get `/client-intake`, `/scope-project`, `/sayer-rates`, and the
+You'll get `/client-intake`, `/scope-project`, `/sayer-rates`, `/draft-csa-sow`, and the
 `sayer-brand-guidelines` reference skill (applied automatically to Excel/docx output).
 
 > **Always launch Claude Code from inside your clone of this repo.** The skills read
@@ -38,7 +38,7 @@ You'll get `/client-intake`, `/scope-project`, `/sayer-rates`, and the
 
 | Path | What it is |
 |------|------------|
-| `skills/` | The plugin's skills (`scope-project`, `client-intake`, `sayer-rates`, `sayer-brand-guidelines`). Auto-discovered when the plugin is installed. |
+| `skills/` | The plugin's skills (`scope-project`, `client-intake`, `sayer-rates`, `draft-csa-sow`, `sayer-brand-guidelines`). Auto-discovered when the plugin is installed. |
 | `.claude-plugin/` | Plugin + marketplace manifests (`plugin.json`, `marketplace.json`). |
 | `calibration/` | **Shared learning loop** — estimate baselines and adjustments from past projects. Single source of truth; read before scoping, append after closing one. |
 | `templates/` | Scope summary, decisions log, estimate, discovery prep, delivery, and retro templates. |
@@ -51,10 +51,12 @@ You'll get `/client-intake`, `/scope-project`, `/sayer-rates`, and the
 
 ## Scope of the plugin (current)
 
-**Pre-sale scoping only** — `client-intake`, `scope-project`, `sayer-rates`. The
-delivery skills (Linear project setup, Google Sheets, calendar/decks, retros) are part
-of the repo's workflow but are **not yet bundled in the plugin** — they carry
-credentials that aren't wired for team distribution. Adding them is a future phase.
+**Scoping + contract drafting** — `client-intake`, `scope-project`, `sayer-rates`, and
+`draft-csa-sow` (CSA/SOW drafting with shared Contracts-store logging; access restricted
+to the contracts team). The post-signing delivery skills (Linear project setup, Google
+Sheets, calendar/decks, retros) are part of the repo's workflow but are **not yet bundled
+in the plugin** — they carry credentials that aren't wired for team distribution. Adding
+them is a future phase.
 
 ## Credentials
 
@@ -63,9 +65,10 @@ credentials that aren't wired for team distribution. Adding them is a future pha
 (`op read "op://Shared/<KEY_NAME>/credential"`). Install the 1Password CLI, sign in to
 the Sayer account, and the Fireflies/HubSpot keys resolve from the `Shared` vault.
 Keychain/env/.env act as personal overrides (`SAYER_KEYCHAIN_ACCOUNT` overrides the
-Keychain account; `SAYER_OP_VAULT` overrides the vault). The `/client-intake` skill
-instead uses the HubSpot / Fireflies / Gmail / Notion **MCP connectors** under each
-user's own account. Full details in [`SETUP-FOR-TEAM.md`](SETUP-FOR-TEAM.md) and
+Keychain account; `SAYER_OP_VAULT` overrides the vault). The `/client-intake` and
+`/draft-csa-sow` skills instead use **MCP connectors** under each user's own account —
+HubSpot / Fireflies / Gmail / Notion for intake, and Google Drive / Notion for CSA/SOW
+drafting + Contracts-store logging. Full details in [`SETUP-FOR-TEAM.md`](SETUP-FOR-TEAM.md) and
 [`scripts/README.md`](scripts/README.md).
 
 ## Requirements

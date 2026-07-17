@@ -4,8 +4,8 @@ This repo is three things at once:
 
 1. A **working repo** — you clone it and run Claude Code *from inside it*. Client
    folders, the shared `calibration/` learning data, and `templates/` all live here.
-2. A **Claude Code plugin** (`project-scoping`) — bundles the scoping skills
-   (`/client-intake`, `/scope-project`, `/sayer-rates`) plus the
+2. A **Claude Code plugin** (`project-scoping`) — bundles the scoping + contract skills
+   (`/client-intake`, `/scope-project`, `/sayer-rates`, `/draft-csa-sow`) plus the
    `sayer-brand-guidelines` reference skill (applied automatically to Excel/docx
    output — no slash command needed) so they show up in Claude Code.
 3. A **plugin marketplace** (`sayer-scoping`) — so you install the plugin with one
@@ -14,9 +14,11 @@ This repo is three things at once:
 You need **both** the clone (for data + workspace) and the plugin (for the commands).
 This guide gets you from zero to producing a scope package.
 
-> Scope of this release: **pre-sale scoping only** — `client-intake`, `scope-project`,
-> `sayer-rates`. The delivery skills (Linear project setup, Google Sheets, calendars,
-> retros) are **not** bundled yet; they carry credentials that aren't wired for the team.
+> Scope of this release: **scoping + contract drafting** — `client-intake`,
+> `scope-project`, `sayer-rates`, and `draft-csa-sow` (CSA/SOW drafting with shared
+> Contracts-store logging — see "Contracts store" below). The post-signing delivery
+> skills (Linear project setup, Google Sheets, calendars, retros) are **not** bundled
+> yet; they carry credentials that aren't wired for the team.
 
 ---
 
@@ -27,9 +29,11 @@ This guide gets you from zero to producing a scope package.
 - **1Password** — the Sayer account, desktop app, and CLI. The shared Fireflies and
   HubSpot API keys live in the Sayer `Shared` vault; **you do not need your own API
   keys.** Setup in step 2 below.
-- **MCP connectors** — the `/client-intake` *skill* uses the HubSpot / Fireflies /
-  Gmail / Notion **MCP connectors** under your own account — connect those in Claude
-  Code (`/mcp`). (The 1Password keys cover the Python scripts like `intake.py`.)
+- **MCP connectors** — the skills use these **MCP connectors** under your own account,
+  connected in Claude Code (`/mcp`): HubSpot / Fireflies / Gmail / Notion (for
+  `/client-intake`), and **Google Drive + Notion** (for `/draft-csa-sow` — it fetches the
+  canonical CSA/SOW master from Drive and logs each contract to the Notion Contracts DB).
+  (The 1Password keys cover the Python scripts like `intake.py`.)
 - GitHub access to `Sayer-Strategy-Group/project-scoping-tool` (your org membership).
 - *Optional:* the **Rethink Sans** Google Font for decks — Excel/docx output falls
   back to Calibri automatically, so this is never blocking.
@@ -111,10 +115,10 @@ In Claude Code:
 /plugin install project-scoping@sayer-scoping
 ```
 
-You'll now have `/client-intake`, `/scope-project`, `/sayer-rates`, and the
-`sayer-brand-guidelines` reference skill (read automatically before client-facing
-output — Excel needs no logo; deck/doc covers fetch logos from the Sayer shared
-Google Drive when needed).
+You'll now have `/client-intake`, `/scope-project`, `/sayer-rates`, `/draft-csa-sow`,
+and the `sayer-brand-guidelines` reference skill (read automatically before
+client-facing output — Excel needs no logo; deck/doc covers fetch logos from the Sayer
+shared Google Drive when needed).
 
 ---
 
@@ -149,6 +153,24 @@ Then, typically:
 > it skips silently when no vault exists.
 
 ---
+
+## Contracts store (CSA / SOW)
+
+`/draft-csa-sow [Client]` runs a guided interview, drafts the CSA + SOW from the
+canonical master, produces branded `.docx` files, and **logs each contract to the shared
+Contracts registry** so the team sees every agreement in one place.
+
+- **Registry:** the **Contracts** Notion database under *Sayer Home* — one row per
+  CSA/SOW, linked to the client's Client Engagements page. Tracks Type, Status
+  (Draft → In Approval → Sent → Signed → Superseded), value, signed date, the Drive doc
+  link, and the HubSpot deal.
+- **Documents:** the branded `.docx` files live in the confidential **Contracts** Google
+  Drive folder (Partners-drive; do not post these links to Slack project channels).
+- **Access is restricted** to the contracts team — **Kyle, Greg, Cameron, Billy, Weston,
+  Aisha**. If you can't see the Contracts DB or the Drive folder, ask Kyle for access.
+- **Approval:** every SOW goes to **Billy Leigh & Greg Dyer** before it's sent to the
+  client — the skill flags this, and the registry `Status` reflects it.
+- **Requires** the Google Drive and Notion connectors (`/mcp`).
 
 ## Keeping things in sync
 
