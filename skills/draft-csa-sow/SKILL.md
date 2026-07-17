@@ -1,4 +1,8 @@
 ---
+layer: Org
+owner: team
+created_at: 2026-07-06
+access_level: internal
 name: draft-csa-sow
 description: >
   Draft a Sayer Consulting Services Agreement (CSA) and Statement of Work (SOW)
@@ -55,7 +59,7 @@ Invoke the `grill-me` skill (or run an equivalent one-question-at-a-time intervi
 
 ## Step 3: Draft the SOW
 
-Follow the canonical section order (this matches `templates/sow-docx-template.md` and the master doc's `#SOW Instructions` checklist):
+Follow the canonical section order (this matches the master doc's `#SOW Instructions` checklist — the single source of truth for section order; re-fetch it fresh per the Preflight):
 
 1. Masthead / metadata (Client, Prepared by, Start Date, SOW Date)
 2. Executive Summary

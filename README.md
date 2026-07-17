@@ -25,7 +25,7 @@ Quick version once you've cloned and installed deps:
 /plugin install project-scoping@sayer-scoping
 ```
 
-You'll get `/client-intake`, `/scope-project`, `/sayer-rates`, and the
+You'll get `/client-intake`, `/scope-project`, `/draft-csa-sow`, `/sayer-rates`, and the
 `sayer-brand-guidelines` reference skill (applied automatically to Excel/docx output).
 
 > **Always launch Claude Code from inside your clone of this repo.** The skills read
@@ -38,23 +38,26 @@ You'll get `/client-intake`, `/scope-project`, `/sayer-rates`, and the
 
 | Path | What it is |
 |------|------------|
-| `skills/` | The plugin's skills (`scope-project`, `client-intake`, `sayer-rates`, `sayer-brand-guidelines`). Auto-discovered when the plugin is installed. |
+| `skills/` | The plugin's skills (`scope-project`, `client-intake`, `draft-csa-sow`, `sayer-rates`, `sayer-brand-guidelines`). Auto-discovered when the plugin is installed. |
 | `.claude-plugin/` | Plugin + marketplace manifests (`plugin.json`, `marketplace.json`). |
 | `calibration/` | **Shared learning loop** — estimate baselines and adjustments from past projects. Single source of truth; read before scoping, append after closing one. |
-| `templates/` | Scope summary, decisions log, estimate, discovery prep, delivery, and retro templates. |
-| `scripts/` | Python automation — `intake.py` (HubSpot/Fireflies → client folder), credential loader, Excel/proposal helpers. See [`scripts/README.md`](scripts/README.md). |
-| `wiki/` | Synthesized, cross-linked knowledge base — read `wiki/clients/{slug}.md` before cold-reading a client's raw folder. |
-| `{Client Name}/` | Per-engagement folders: discovery materials, scope summary, decisions, `STATE.md`. |
+| `templates/` | Scope summary, decisions log, estimate, discovery prep, delivery, and retro templates, plus the JSON schemas (`scoping-schema.json`, `plan-schema.json`, `delivery-state-schema.json`) and the CSA master template. |
+| `scripts/` | Python automation — `intake.py` (HubSpot/Fireflies → client folder), credential loader, Excel helpers. See [`scripts/README.md`](scripts/README.md). |
+| `tests/` | Pytest suite for the scripts (workbook generator invariants + HubSpot client contract tests). |
+| `.api-specs/` | Vendored third-party API specs (e.g. HubSpot OpenAPI) that back the typed clients in `scripts/`. |
+| `docs/` | Design/architecture notes (e.g. the launch-artifact continuity review). |
+| `wiki/` | Synthesized, cross-linked knowledge base — read `wiki/clients/{slug}.md` before cold-reading a client's raw folder. *(Local-only; not committed.)* |
+| `{Client Name}/` | Per-engagement folders: discovery materials, scope summary, decisions, `STATE.md`. *(Local-only; not committed.)* |
 | `CLAUDE.md` | The full operating guide for working in this repo (session protocol, scoping workflow, calibration, delivery skills). |
 
 ---
 
 ## Scope of the plugin (current)
 
-**Pre-sale scoping only** — `client-intake`, `scope-project`, `sayer-rates`. The
-delivery skills (Linear project setup, Google Sheets, calendar/decks, retros) are part
-of the repo's workflow but are **not yet bundled in the plugin** — they carry
-credentials that aren't wired for team distribution. Adding them is a future phase.
+**Pre-sale scoping + contracting** — `client-intake`, `scope-project`, `draft-csa-sow`,
+`sayer-rates`. The delivery skills (Linear project setup, Google Sheets, calendar/decks,
+retros) are part of the repo's workflow but are **not yet bundled in the plugin** — they
+carry credentials that aren't wired for team distribution. Adding them is a future phase.
 
 ## Credentials
 

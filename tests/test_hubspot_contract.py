@@ -152,6 +152,7 @@ class TestParseRecordUrl:
 # ---------------------------------------------------------------------------
 
 
+@pytest.mark.live
 @requires_token
 class TestLiveContract:
     def test_ping_returns_owner_collection(
