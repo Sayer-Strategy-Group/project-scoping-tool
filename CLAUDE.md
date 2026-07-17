@@ -11,6 +11,7 @@ This repo doubles as the `project-scoping` Claude Code plugin (marketplace `saye
 |-------|---------|
 | `/client-intake` | Scaffold client folder; pull Fireflies/Gmail/HubSpot discovery; mirror to the Notion "Client Engagements" database |
 | `/scope-project` | Generate workstream estimates, risk register, branded 5-sheet Excel package |
+| `/draft-csa-sow` | Draft a Sayer CSA + SOW via a mandatory front-loaded interview (pricing, staffing, timeline) before any document is generated |
 | `/sayer-rates` | Rate card, blended rates, staffing bios |
 | `sayer-brand-guidelines` | Brand specs (colors, typography, logo) — auto-read before any client-facing artifact |
 
@@ -62,7 +63,8 @@ A synthesized knowledge wiki lives in `wiki/`. It compresses raw client folders 
 ## Key Files
 
 ### Scoping
-- `skills/scope-project/SKILL.md` -- The scoping skill definition (workstream templates, estimation framework, risk register standards, Excel format spec). Decomposed into `skills/scope-project/references/` (workstream-catalog, hour-ranges, risk-register-template, excel-formatting, example-scope). **Authoritative source of truth** — the former root `scoping-skill.md` monolith was retired 2026-06-12.
+- `skills/scope-project/SKILL.md` -- The scoping skill definition (workstream templates, estimation framework, risk register standards, Excel format spec). Decomposed into `skills/scope-project/references/` (workstream-catalog, hour-ranges, risk-register-template, excel-formatting, hubspot-cpq-capabilities, example-scope). **Authoritative source of truth** — the former root `scoping-skill.md` monolith was retired 2026-06-12.
+- `skills/draft-csa-sow/SKILL.md` -- The CSA/SOW contracting skill (bundled in the plugin). Runs a mandatory front-loaded interview, then drafts from the canonical master Google Doc (fileId in the skill's Preflight). `templates/Consulting Services Agreement CSA.md` is a cached fallback copy of that master doc and **can drift** — the live Google Doc is authoritative; the skill re-fetches it fresh every run.
 - `templates/scoping-schema.json` -- JSON Schema for `scope.json`, the structured estimate record `scope-project` emits per engagement (phase/task x hours x rate x cost). Calibration data source + AIVA invoke contract.
 - `calibration/calibration.md` -- **READ FIRST before every scoping session.** Calibration data from past projects, estimation adjustments, and cross-project patterns.
 - `templates/scope-summary-template.md` -- Post-discovery scope writeup (tier recommendation, workstreams, risks, assumptions, outstanding items)
@@ -104,8 +106,8 @@ A synthesized knowledge wiki lives in `wiki/`. It compresses raw client folders 
 2. Read discovery notes and transcript thoroughly
 3. Parse per the scoping skill: client profile, current state, desired future state, complexity indicators, unknowns
 4. Ask Kyle clarifying questions one at a time before generating estimates
-5. Generate Excel workbook (4 sheets + actuals columns) and scope summary markdown
-6. **Check for stale code:** When updating scoping docs, also check generator scripts (`build_estimate.py`, `generate_proposal.py`) and re-validate any prior analysis. Stale scripts can overwrite current workbooks.
+5. Generate Excel workbook (5 sheets + actuals columns) and scope summary markdown
+6. **Check for stale code:** When updating scoping docs, re-check the shared generator `build_estimate.py` and re-validate any prior analysis. (`generate_proposal.py` is a retired, gitignored/local-only generator superseded by `build_estimate.py` — it is NOT in the shared repo; do not rely on it, and delete any local copy to avoid accidentally producing an off-schema workbook.)
 7. Flag open items, gotchas, and questions to go back to client with
 8. Always recommend specific HubSpot tier with reasoning (not generic "TBD")
 9. **Log key decisions** in the client's `_decisions.md` during the session
@@ -147,7 +149,8 @@ These post-sale skills live in Kyle's `~/.claude/skills/` and are NOT distribute
 | `/project-plan` | Translate proposal → plan.json + Linear project | "plan [client]", "set up [client]" |
 | `/project-sheet` | Generate client-facing Google Sheets | "create sheet for [client]" |
 | `/meeting-calendar` | Generate Gamma decks + calendar events | "set up meetings for [client]" |
-| `/sayer-project-kickoff` | Orchestrate plan → sheet → meetings | "kick off [client]" |
+| `/sayer-project-setup` | **Launch orchestrator** — chains `/project-plan` → `/project-sheet` → `/meeting-calendar` to stand up delivery infrastructure after signing | "set up delivery", "stand up [client]" |
+| `/sayer-project-kickoff` | Generate the governance framework doc (working agreement, RACI, meeting cadence) — an engagement's first deliverable. NOTE: despite the name, this is NOT the plan→sheet→meetings orchestrator; that is `/sayer-project-setup` above | "build the governance doc for [client]" |
 | `/sayer-project-status` | Pull Linear data, generate status update | "status on [client]", "where are we" |
 | `/delivery-retro` | Conversational retro, feed calibration | "retro on [client]", "close out [client]" |
 

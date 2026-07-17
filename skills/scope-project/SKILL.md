@@ -197,6 +197,9 @@ spec is documented in `${CLAUDE_SKILL_DIR}/references/excel-formatting.md` and t
 `sayer-brand-guidelines` skill — read those to understand or modify the generator, not to
 author a workbook by hand.
 
+For a fully worked end-to-end example — discovery notes through `scope.json` to the
+finished package — see `${CLAUDE_SKILL_DIR}/references/example-scope.md`.
+
 ### Step 8: Generate Client-Ready Summary
 
 Create a concise summary suitable for Slack, email, or SOW insertion:

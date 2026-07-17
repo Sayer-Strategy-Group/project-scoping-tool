@@ -4,9 +4,9 @@ This repo is three things at once:
 
 1. A **working repo** — you clone it and run Claude Code *from inside it*. Client
    folders, the shared `calibration/` learning data, and `templates/` all live here.
-2. A **Claude Code plugin** (`project-scoping`) — bundles the scoping skills
-   (`/client-intake`, `/scope-project`, `/sayer-rates`) plus the
-   `sayer-brand-guidelines` reference skill (applied automatically to Excel/docx
+2. A **Claude Code plugin** (`project-scoping`) — bundles the scoping + contracting
+   skills (`/client-intake`, `/scope-project`, `/draft-csa-sow`, `/sayer-rates`) plus
+   the `sayer-brand-guidelines` reference skill (applied automatically to Excel/docx
    output — no slash command needed) so they show up in Claude Code.
 3. A **plugin marketplace** (`sayer-scoping`) — so you install the plugin with one
    command and update it with another.
@@ -14,9 +14,10 @@ This repo is three things at once:
 You need **both** the clone (for data + workspace) and the plugin (for the commands).
 This guide gets you from zero to producing a scope package.
 
-> Scope of this release: **pre-sale scoping only** — `client-intake`, `scope-project`,
-> `sayer-rates`. The delivery skills (Linear project setup, Google Sheets, calendars,
-> retros) are **not** bundled yet; they carry credentials that aren't wired for the team.
+> Scope of this release: **pre-sale scoping + contracting** — `client-intake`,
+> `scope-project`, `draft-csa-sow`, `sayer-rates`. The delivery skills (Linear project
+> setup, Google Sheets, calendars, retros) are **not** bundled yet; they carry
+> credentials that aren't wired for the team.
 
 ---
 
@@ -111,10 +112,10 @@ In Claude Code:
 /plugin install project-scoping@sayer-scoping
 ```
 
-You'll now have `/client-intake`, `/scope-project`, `/sayer-rates`, and the
-`sayer-brand-guidelines` reference skill (read automatically before client-facing
-output — Excel needs no logo; deck/doc covers fetch logos from the Sayer shared
-Google Drive when needed).
+You'll now have `/client-intake`, `/scope-project`, `/draft-csa-sow`, `/sayer-rates`,
+and the `sayer-brand-guidelines` reference skill (read automatically before
+client-facing output — Excel needs no logo; deck/doc covers fetch logos from the Sayer
+shared Google Drive when needed).
 
 ---
 
@@ -138,6 +139,9 @@ Then, typically:
    register, and the `AcmeCorp_Scoping_Estimate.xlsx` package.
 3. `/sayer-rates` is consulted automatically for the rate card; invoke it directly to
    review tiers or the pricing-negotiation protocol.
+4. `/draft-csa-sow AcmeCorp` — once scope is agreed, drafts the CSA + SOW. It runs a
+   mandatory interview (pricing model, staffing, timeline, out-of-scope) before writing
+   anything, and always drafts from the canonical master template, never a prior client's.
 
 > **Team visibility:** `/client-intake` also creates a page in the shared
 > **Client Engagements** Notion database (under Sayer Home) with status, intake date,

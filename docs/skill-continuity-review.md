@@ -118,8 +118,14 @@ as the ledger of record: **read it first, reuse present IDs, write back new ones
 
 ---
 
-## Open item for Kyle
+## Resolved (2026-07-17 machinery catalog)
 
-- **Confirm the real launch-skill name** and whether Drive+Slack provisioning already lives in
-  `/sayer-project-kickoff` or a separate skill. That determines which on-machine skill owns
-  writing the `launch.*` Drive/Slack/Linear IDs into `delivery-state.json`.
+- **The launch orchestrator is `/sayer-project-setup`** (on Kyle's machine), which chains
+  `/project-plan` → `/project-sheet` → `/meeting-calendar` to stand up delivery infrastructure
+  after signing. **`/sayer-project-kickoff` is a different skill** — it generates the governance
+  framework doc (working agreement, RACI, cadence), NOT the plan→sheet→meetings orchestrator that
+  CLAUDE.md's table previously implied. CLAUDE.md's Delivery Skills table has been corrected.
+- Still to pin down in the storage rearchitecture (tracked in the target-architecture proposal, not
+  here): exactly which skill *creates* the Drive folder / Slack channel / Linear project and writes
+  the `launch.*` IDs — under the target design these IDs move onto the Notion engagement page as the
+  canonical ledger, with `delivery-state.json` as a rebuildable local cache.
