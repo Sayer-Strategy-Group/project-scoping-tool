@@ -13,7 +13,11 @@ Output file: `{ClientName}_Scoping_Estimate.xlsx`
 
 Default to **5 sheets** (validated standard — include Task Breakdown and
 Deliverables & Acceptance without being asked). Approach Comparison is an
-optional 6th sheet when multiple implementation approaches are on the table.
+optional additional sheet when multiple implementation approaches are on the
+table. Schedule is an optional additional sheet (ranges mode) when
+`engagement.startDate` is set — set it whenever a project start date is known,
+per the standing rule to scope schedule alongside scope and budget, not just
+on request.
 
 ### Sheet 1: "Scoping Estimate"
 
@@ -82,6 +86,37 @@ Per-workstream task detail with hours per task.
 2. Out of Scope -- explicit exclusions
 3. Client Responsibilities -- what client must provide
 4. Open Items -- unresolved questions that could affect scope
+
+### Sheet 3 (ranges mode only, optional): "Schedule"
+
+Present only when `engagement.startDate` is set on scope.json — fully backward
+compatible (omitted entirely on scope.json records without it, including
+committed/T&M mode for v1). Inserted at index 2, right after Task Breakdown.
+
+**Columns:**
+- A: # (sequential)
+- B: Workstream
+- C: Task
+- D: Hours
+- E: Start Date
+- F: End Date
+- G: Duration (wks)
+
+**Requirements:**
+- Metadata block: Project Start Date + Assumed Capacity (hrs/week) as `INPUT_FILL`
+  cells, plus a caption explaining the model and how to recalculate (regenerate
+  after editing `scope.json`, not by hand-editing the sheet).
+- One row per task (synthesized as a single row from the workstream median if a
+  workstream has no `tasks[]`), followed by a bold "— window" rollup row per
+  workstream (min start / max end), followed by a final bold "PROJECT" row.
+- Model: `scheduling: "sequential"` (default) workstreams consume capacity in
+  `workstreams[]` array order — a single-track critical-path approximation with
+  no dependency graph. `scheduling: "concurrent"` workstreams (PM/governance,
+  an externally-gated feasibility spike) span the full computed timeline instead
+  of blocking it. See `compute_schedule()` in `scripts/build_estimate.py`.
+- Dates are computed once in Python at generation time (not live Excel formulas)
+  — regenerate the workbook after changing `engagement.startDate` or
+  `capacityHoursPerWeek`.
 
 ### Sheet 6: "Approach Comparison" (optional, if applicable)
 

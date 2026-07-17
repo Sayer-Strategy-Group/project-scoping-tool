@@ -153,6 +153,15 @@ re-derive the same numbers in three places; produce them once, here.
   (this is what the Task Breakdown integrity check enforces in the workbook).
 - Capture `client.hubspotUrl` from intake when available — it is the key used to stamp
   won/lost + final amount onto this record later (pricing calibration).
+- **Always set `engagement.startDate` when a project/phase kickoff date is known or assumed** —
+  scope, schedule, and budget are produced together as standard practice, not schedule-on-request.
+  This drives the optional Schedule sheet (see Step 7). Optionally set
+  `engagement.capacityHoursPerWeek` (defaults to `totalHours.median / estimatedTimelineWeeks` if
+  omitted). Mark a workstream `scheduling: "concurrent"` (default is `"sequential"`) when it
+  genuinely runs alongside the build rather than blocking it — PM/governance, an externally-gated
+  feasibility spike — so it isn't incorrectly pushed to the end of a single-track sequential chain.
+  If no start date is known yet, omit `startDate` entirely; the Schedule sheet is simply skipped
+  (never fabricate a placeholder date to force it in).
 - **Pick the estimate mode** (`engagement.estimateMode`):
   - `ranges` (default) — min/max/median per workstream. The pre-sale discovery scoping
     standard. Requires `workstreams[]` + `budgetSummary`.
@@ -178,7 +187,10 @@ python3 scripts/build_estimate.py {ClientFolder}/scope.json
 
 This emits `{ClientName}_Scoping_Estimate.xlsx` with 5 sheets by default (Scoping Estimate;
 Task Breakdown with formula-based integrity checks back to Sheet 1; Deliverables & Acceptance;
-Risk Register; Assumptions), plus an Approach Comparison sheet when `approaches` are present.
+Risk Register; Assumptions), plus an Approach Comparison sheet when `approaches` are present,
+plus a **Schedule** sheet (ranges mode) whenever `engagement.startDate` is set — computed
+start/end dates per task and workstream from the project start date and assumed weekly
+capacity (see Step 6 and `${CLAUDE_SKILL_DIR}/references/excel-formatting.md`).
 All styling comes from `scripts/brand_styles.py` (Sayer brand) — never hard-code hex. The sheet
 spec is documented in `${CLAUDE_SKILL_DIR}/references/excel-formatting.md` and the
 `sayer-brand-guidelines` skill — read those to understand or modify the generator, not to
@@ -225,6 +237,7 @@ Create a concise summary suitable for Slack, email, or SOW insertion:
 8. **ERP adds a complexity premium.** Financial data is unforgiving -- always add buffer for reconciliation.
 9. **Cap custom properties.** State the assumed cap (e.g., "up to 30 custom properties") -- overages are change orders.
 10. **Project management hours scale with project size.** Use 10-15% of total estimated hours.
+11. **Scope, schedule, and budget are produced together, every time.** Set `engagement.startDate` whenever a kickoff date is known or assumed, so the Schedule sheet computes alongside the hours/cost estimate — don't treat scheduling as an optional extra only built when asked. Mark genuinely parallel workstreams (PM, an externally-gated feasibility spike) `scheduling: "concurrent"`; everything else defaults to sequential build order.
 
 ## Deliverable Checklist
 
@@ -232,6 +245,7 @@ Before presenting to the user, verify all deliverables include:
 
 - [ ] `scope.json` written and passing `--validate-only` (the structured source of truth)
 - [ ] Workstream-level hour estimates (min/max/median)
+- [ ] `engagement.startDate` set (or explicitly noted as not yet known) and the resulting Schedule sheet present with sensible per-task/per-workstream dates
 - [ ] Rate modeling with configurable rate
 - [ ] Risk register with severity ratings
 - [ ] Assumptions and exclusions list

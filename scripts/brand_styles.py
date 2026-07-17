@@ -46,6 +46,7 @@ BODY_SIZE = 11
 CAPTION_SIZE = 10
 
 CURRENCY_FMT = "$#,##0"
+DATE_FMT = "mm/dd/yyyy"
 
 
 def _solid(color: str) -> PatternFill:
@@ -174,7 +175,7 @@ __all__ = [
     "SEV_HIGH", "SEV_MEDIUM", "SEV_LOW",
     # Typography
     "FONT_FAMILY", "TITLE_SIZE", "HEADER_SIZE", "BODY_SIZE", "CAPTION_SIZE",
-    "CURRENCY_FMT",
+    "CURRENCY_FMT", "DATE_FMT",
     # Fonts
     "TITLE_FONT", "SECTION_FONT", "HEADER_FONT", "SECONDARY_HEADER_FONT",
     "BODY_FONT", "BOLD_BODY_FONT", "TOTAL_FONT", "CAPTION_FONT",

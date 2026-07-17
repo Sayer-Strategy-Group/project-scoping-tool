@@ -3,9 +3,10 @@
 
 Reads a structured ``scope.json`` (conforming to ``templates/scoping-schema.json``)
 and emits the branded 5-sheet Sayer scoping workbook (+ optional Approach
-Comparison sheet). This REPLACES the per-client, hand-written ``build_estimate.py``
-scripts that previously lived in each client folder: one generator, one source of
-truth, driven entirely by data.
+Comparison sheet, + optional Schedule sheet when ``engagement.startDate`` is set —
+see ``compute_schedule``). This REPLACES the per-client, hand-written
+``build_estimate.py`` scripts that previously lived in each client folder: one
+generator, one source of truth, driven entirely by data.
 
 Usage:
     python3 scripts/build_estimate.py <path/to/scope.json> [--out <file.xlsx>]
@@ -20,6 +21,7 @@ Python 3.9 compatible (no ``X | None`` / ``tuple[X, Y]`` syntax).
 import argparse
 import json
 import sys
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -35,6 +37,7 @@ from brand_styles import (  # noqa: E402
     BOLD_BODY_FONT,
     CAPTION_FONT,
     CURRENCY_FMT,
+    DATE_FMT,
     INPUT_FILL,
     SECTION_FONT,
     THIN_BORDER,
@@ -567,6 +570,174 @@ def build_task_breakdown_committed(ws: Worksheet, scope: dict, phase_row_map: Di
 
 
 # --------------------------------------------------------------------------- #
+# Schedule — derive start/end dates from engagement.startDate (ranges mode only)
+# --------------------------------------------------------------------------- #
+def compute_schedule(scope: dict) -> Optional[dict]:
+    """Derive start/end dates per workstream + task from ``engagement.startDate``.
+
+    Simplified single-track model: SEQUENTIAL workstreams (the default) consume
+    capacity in ``workstreams[]`` array order — no explicit dependency graph or
+    resource contention. CONCURRENT workstreams (``scheduling: "concurrent"``)
+    span the full computed sequential timeline instead of blocking it — use for
+    work that genuinely runs alongside the build rather than gating it (PM /
+    governance, an externally-gated feasibility spike).
+
+    Returns ``None`` (no Schedule sheet) if ``engagement.startDate`` is absent —
+    fully backward compatible with scope.json records written before scheduling
+    existed — or if the scope is in committed/phase mode (v1 covers ranges mode
+    only; committed-mode scheduling is a documented limitation, not silently
+    wrong).
+    """
+    eng = scope.get("engagement", {})
+    start_str = eng.get("startDate")
+    if not start_str or "workstreams" not in scope:
+        return None
+    start_date = date.fromisoformat(start_str)
+
+    capacity = eng.get("capacityHoursPerWeek")
+    if not capacity:
+        weeks = eng.get("estimatedTimelineWeeks")
+        median_hours = (eng.get("totalHours") or {}).get("median")
+        capacity = (median_hours / weeks) if (weeks and median_hours) else 20.0
+    capacity = capacity or 20.0  # guard an explicit 0/None from a bad scope.json
+
+    def _add_weeks(base: date, weeks: float) -> date:
+        return base + timedelta(days=round(weeks * 7))
+
+    workstreams = scope["workstreams"]
+    sequential = [w for w in workstreams if w.get("scheduling", "sequential") == "sequential"]
+    concurrent = [w for w in workstreams if w.get("scheduling") == "concurrent"]
+
+    ws_schedule: Dict[str, dict] = {}
+    cumulative_hours = 0.0
+    for w in sequential:
+        tasks = w.get("tasks") or [{"name": w["name"], "hours": w["hours"]["median"]}]
+        synthetic = not w.get("tasks")
+        ws_start_hours = cumulative_hours
+        task_rows = []
+        for t in tasks:
+            t_start, t_end = cumulative_hours, cumulative_hours + t["hours"]
+            task_rows.append({
+                "name": t["name"],
+                "hours": t["hours"],
+                "start": _add_weeks(start_date, t_start / capacity),
+                "end": _add_weeks(start_date, t_end / capacity),
+            })
+            cumulative_hours = t_end
+        ws_schedule[w["id"]] = {
+            "start": _add_weeks(start_date, ws_start_hours / capacity),
+            "end": _add_weeks(start_date, cumulative_hours / capacity),
+            "tasks": task_rows,
+            "synthetic_tasks": synthetic,
+        }
+
+    overall_end = _add_weeks(start_date, cumulative_hours / capacity) if sequential else start_date
+    span_days = (overall_end - start_date).days
+
+    for w in concurrent:
+        tasks = w.get("tasks") or [{"name": w["name"], "hours": w["hours"]["median"]}]
+        synthetic = not w.get("tasks")
+        local_total = sum(t["hours"] for t in tasks) or 1
+        local_cum = 0.0
+        task_rows = []
+        for t in tasks:
+            frac_start, frac_end = local_cum / local_total, (local_cum + t["hours"]) / local_total
+            task_rows.append({
+                "name": t["name"],
+                "hours": t["hours"],
+                "start": start_date + timedelta(days=round(span_days * frac_start)),
+                "end": start_date + timedelta(days=round(span_days * frac_end)),
+            })
+            local_cum += t["hours"]
+        ws_schedule[w["id"]] = {
+            "start": start_date,
+            "end": overall_end,
+            "tasks": task_rows,
+            "synthetic_tasks": synthetic,
+        }
+
+    return {"start_date": start_date, "end_date": overall_end, "capacity": capacity, "workstreams": ws_schedule}
+
+
+def build_schedule_sheet(ws: Worksheet, scope: dict, schedule: dict) -> None:
+    _title(ws, "%s — Schedule" % scope["client"]["name"], last_col=7)
+
+    meta_row = 2
+    ws.cell(row=meta_row, column=1, value="Project Start Date").font = BOLD_BODY_FONT
+    start_cell = ws.cell(row=meta_row, column=3, value=schedule["start_date"])
+    start_cell.number_format = DATE_FMT
+    apply_input_fill_cells(ws, row=meta_row, cols=[3])
+
+    cap_row = meta_row + 1
+    ws.cell(row=cap_row, column=1, value="Assumed Capacity (hrs/week)").font = BOLD_BODY_FONT
+    ws.cell(row=cap_row, column=3, value=round(schedule["capacity"], 1))
+    apply_input_fill_cells(ws, row=cap_row, cols=[3])
+
+    caption_row = cap_row + 1
+    note = ws.cell(
+        row=caption_row, column=1,
+        value=("Sequential single-track model -- no dependency graph or resource contention. "
+               "Concurrent workstreams (PM, ongoing feasibility) span the full timeline rather "
+               "than blocking it. Edit engagement.startDate / capacityHoursPerWeek in scope.json "
+               "and regenerate the workbook to recalculate."))
+    note.font = CAPTION_FONT
+    note.alignment = Alignment(wrap_text=True, vertical="top")
+    ws.merge_cells(start_row=caption_row, start_column=1, end_row=caption_row, end_column=7)
+
+    header_row = caption_row + 2
+    headers = ["#", "Workstream", "Task", "Hours", "Start Date", "End Date", "Duration (wks)"]
+    for col, label in enumerate(headers, start=1):
+        ws.cell(row=header_row, column=col, value=label)
+    style_header_row(ws, row=header_row, max_col=7)
+
+    data_rows: List[int] = []
+    subtotal_rows: List[int] = []
+    r = header_row + 1
+    seq = 1
+    for w in scope["workstreams"]:
+        wsched = schedule["workstreams"].get(w["id"])
+        if not wsched:
+            continue  # defensive: shouldn't happen, but never crash workbook generation over it
+        for t_sched in wsched["tasks"]:
+            ws.cell(row=r, column=1, value=seq)
+            ws.cell(row=r, column=2, value="%s  %s" % (w["id"], w["name"]))
+            ws.cell(row=r, column=3, value=t_sched["name"])
+            ws.cell(row=r, column=4, value=t_sched["hours"])
+            sc = ws.cell(row=r, column=5, value=t_sched["start"]); sc.number_format = DATE_FMT
+            ec = ws.cell(row=r, column=6, value=t_sched["end"]); ec.number_format = DATE_FMT
+            ws.cell(row=r, column=7, value=round(max((t_sched["end"] - t_sched["start"]).days, 0) / 7.0, 1))
+            data_rows.append(r)
+            seq += 1
+            r += 1
+        sub_row = r
+        ws.cell(row=sub_row, column=2, value="%s — window" % w["id"]).font = BOLD_BODY_FONT
+        sc = ws.cell(row=sub_row, column=5, value=wsched["start"]); sc.number_format = DATE_FMT
+        ec = ws.cell(row=sub_row, column=6, value=wsched["end"]); ec.number_format = DATE_FMT
+        ws.cell(row=sub_row, column=7, value=round(max((wsched["end"] - wsched["start"]).days, 0) / 7.0, 1))
+        subtotal_rows.append(sub_row)
+        r += 1
+
+    proj_row = r
+    ws.cell(row=proj_row, column=2, value="PROJECT").font = BOLD_BODY_FONT
+    sc = ws.cell(row=proj_row, column=5, value=schedule["start_date"]); sc.number_format = DATE_FMT
+    ec = ws.cell(row=proj_row, column=6, value=schedule["end_date"]); ec.number_format = DATE_FMT
+    ws.cell(row=proj_row, column=7,
+            value=round(max((schedule["end_date"] - schedule["start_date"]).days, 0) / 7.0, 1))
+
+    last_row = proj_row
+    apply_data_styles_rows(ws, rows=data_rows, max_col=7)
+    for sr in subtotal_rows + [proj_row]:
+        for col_idx in range(1, 8):
+            cell = ws.cell(row=sr, column=col_idx)
+            cell.font = BOLD_BODY_FONT
+            cell.border = THIN_BORDER
+
+    _set_widths(ws, {"A": 5, "B": 30, "C": 44, "D": 9, "E": 13, "F": 13, "G": 15})
+    ws.freeze_panes = "A%d" % (header_row + 1)
+    ws.print_area = "A1:G%d" % last_row
+
+
+# --------------------------------------------------------------------------- #
 # Orchestration
 # --------------------------------------------------------------------------- #
 def build_workbook(scope: dict) -> Workbook:
@@ -580,6 +751,9 @@ def build_workbook(scope: dict) -> Workbook:
     else:
         ws_row_map = build_scoping_estimate(sheet1, scope)
         build_task_breakdown(wb.create_sheet("Task Breakdown"), scope, ws_row_map)
+        schedule = compute_schedule(scope)
+        if schedule:
+            build_schedule_sheet(wb.create_sheet("Schedule", index=2), scope, schedule)
     build_deliverables(wb.create_sheet("Deliverables & Acceptance"), scope)
     build_risk_register(wb.create_sheet("Risk Register"), scope)
     build_assumptions(wb.create_sheet("Assumptions"), scope)

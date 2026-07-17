@@ -103,7 +103,16 @@
           }
         },
         "estimatedTimelineWeeks": { "type": ["number", "null"] },
-        "totalHours": { "$ref": "#/$defs/range" }
+        "totalHours": { "$ref": "#/$defs/range" },
+        "startDate": {
+          "type": ["string", "null"],
+          "format": "date",
+          "description": "Assumed project/phase kickoff date (ISO 8601, e.g. 2026-08-03) driving the computed Schedule sheet. If absent, the schedule sheet is omitted entirely — fully backward compatible with scope.json records that predate scheduling."
+        },
+        "capacityHoursPerWeek": {
+          "type": ["number", "null"],
+          "description": "Assumed blended team hours/week devoted to this engagement, used to convert workstream/task hours into calendar start/end dates. If absent, the generator derives a default as totalHours.median / estimatedTimelineWeeks."
+        }
       }
     },
     "phases": {
@@ -155,6 +164,12 @@
           "description": { "type": "string" },
           "phase": { "type": ["string", "null"], "description": "Phase id this workstream belongs to, or null if not phased" },
           "owner": { "type": "string", "enum": ["sayer", "client", "shared"], "default": "sayer" },
+          "scheduling": {
+            "type": "string",
+            "enum": ["sequential", "concurrent"],
+            "default": "sequential",
+            "description": "sequential (default) = occupies its own slice of the capacity timeline in workstreams[] array order, contributing to the computed Schedule sheet's critical path. concurrent = spans the full computed engagement timeline in parallel instead of consuming sequential capacity — use for work that genuinely runs alongside the build rather than blocking it (PM/governance, an external feasibility spike gated on someone else's availability). Only meaningful when engagement.startDate is set."
+          },
           "hours": { "$ref": "#/$defs/range" },
           "rate": { "type": "number", "description": "Hourly rate applied to this workstream (usually engagement.defaultRate; may differ for tiered staffing)" },
           "cost": {

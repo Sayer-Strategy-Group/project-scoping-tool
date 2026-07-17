@@ -5,7 +5,9 @@ scope.json -> schema -> workbook path against the committed fixture. This is the
 guardrail that keeps a teammate from producing a workbook whose task breakdown
 disagrees with its top-line estimate.
 """
+import copy
 import json
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -116,6 +118,88 @@ def test_committed_task_subtotals_reconcile_to_committed_hours(committed):
         tasks = p.get("tasks") or []
         if tasks:
             assert sum(t["hours"] for t in tasks) == p["committedHours"], p["id"]
+
+
+# --------------------------------------------------------------------------- #
+# Schedule (engagement.startDate) — optional, ranges-mode-only, backward compatible
+# --------------------------------------------------------------------------- #
+def test_schedule_absent_without_start_date(scope):
+    """No engagement.startDate -> no Schedule sheet, fully backward compatible."""
+    assert be.compute_schedule(scope) is None
+    wb = be.build_workbook(scope)
+    assert "Schedule" not in wb.sheetnames
+
+
+def test_schedule_absent_in_committed_mode_even_with_start_date(committed):
+    """v1 schedule covers ranges mode only — committed/phase mode has no workstreams[]."""
+    s = copy.deepcopy(committed)
+    s["engagement"]["startDate"] = "2026-08-03"
+    assert be.compute_schedule(s) is None
+
+
+def test_schedule_sequential_chains_and_concurrent_spans_full_timeline(scope):
+    s = copy.deepcopy(scope)
+    s["engagement"]["startDate"] = "2026-08-03"
+    pm = next(w for w in s["workstreams"] if w["category"] == "pm")
+    pm["scheduling"] = "concurrent"
+
+    schedule = be.compute_schedule(s)
+    assert schedule["start_date"] == date(2026, 8, 3)
+    assert schedule["end_date"] > schedule["start_date"]
+
+    sequential = [w for w in s["workstreams"] if w.get("scheduling", "sequential") == "sequential"]
+    # Each sequential workstream's start == the previous one's end (single-track chain).
+    prev_end = schedule["start_date"]
+    for w in sequential:
+        sched = schedule["workstreams"][w["id"]]
+        assert sched["start"] == prev_end, w["id"]
+        assert sched["end"] >= sched["start"]
+        prev_end = sched["end"]
+    assert prev_end == schedule["end_date"]
+
+    # Concurrent workstream spans the full project window, not a sequential slice.
+    pm_sched = schedule["workstreams"][pm["id"]]
+    assert pm_sched["start"] == schedule["start_date"]
+    assert pm_sched["end"] == schedule["end_date"]
+
+    # Task-level dates within a workstream stay inside its own window.
+    for w in sequential:
+        sched = schedule["workstreams"][w["id"]]
+        for t in sched["tasks"]:
+            assert sched["start"] <= t["start"] <= t["end"] <= sched["end"]
+
+
+def test_schedule_sheet_rendered_when_start_date_set(scope):
+    s = copy.deepcopy(scope)
+    s["engagement"]["startDate"] = "2026-08-03"
+
+    wb = be.build_workbook(s)
+    assert "Schedule" in wb.sheetnames
+    # Inserted right after Task Breakdown.
+    assert wb.sheetnames[2] == "Schedule"
+
+    ws = wb["Schedule"]
+    header_row = next(r for r in range(1, ws.max_row + 1)
+                       if ws.cell(row=r, column=1).value == "#")
+    headers = [ws.cell(row=header_row, column=c).value for c in range(1, 8)]
+    assert headers == ["#", "Workstream", "Task", "Hours", "Start Date", "End Date", "Duration (wks)"]
+
+    # A final bold PROJECT rollup row exists with the overall window.
+    project_rows = [r for r in range(1, ws.max_row + 1)
+                     if ws.cell(row=r, column=2).value == "PROJECT"]
+    assert len(project_rows) == 1
+
+
+def test_schedule_capacity_defaults_from_total_hours_and_timeline(scope):
+    """No explicit capacityHoursPerWeek -> derived as totalHours.median / estimatedTimelineWeeks."""
+    s = copy.deepcopy(scope)
+    s["engagement"]["startDate"] = "2026-08-03"
+    s["engagement"].pop("capacityHoursPerWeek", None)
+    weeks = s["engagement"]["estimatedTimelineWeeks"]
+    median = s["engagement"]["totalHours"]["median"]
+
+    schedule = be.compute_schedule(s)
+    assert schedule["capacity"] == pytest.approx(median / weeks)
 
 
 def test_committed_mode_sheets_and_layout(committed):
