@@ -190,6 +190,63 @@ def test_schedule_sheet_rendered_when_start_date_set(scope):
     assert len(project_rows) == 1
 
 
+def test_schedule_sheet_is_formula_driven_not_static(scope):
+    """Regression guard: dates must be live formulas referencing the input
+    cells ($C$2 start date, $C$3 capacity, $C$4 computed end), NOT
+    pre-computed static values -- verified end-to-end with a real formula
+    engine (recalculating after changing $C$2) during development; this test
+    pins the formula SHAPE so a future edit can't silently revert to statics.
+    """
+    s = copy.deepcopy(scope)
+    s["engagement"]["startDate"] = "2026-08-03"
+    pm = next(w for w in s["workstreams"] if w["category"] == "pm")
+    pm["scheduling"] = "concurrent"
+
+    wb = be.build_workbook(s)
+    ws = wb["Schedule"]
+
+    # Input cells: start date is a plain value (the seed), capacity is a plain
+    # value, and the project end date is a formula derived from both.
+    assert not str(ws.cell(row=2, column=3).value).startswith("=")
+    assert not str(ws.cell(row=3, column=3).value).startswith("=")
+    end_formula = str(ws.cell(row=4, column=3).value)
+    assert end_formula.startswith("=$C$2")
+    assert "SUMIF(" in end_formula and "$C$3" in end_formula
+
+    header_row = next(r for r in range(1, ws.max_row + 1)
+                       if ws.cell(row=r, column=1).value == "#")
+    first_data_row = header_row + 1
+
+    # First sequential task's Start Date formula references $C$2 directly (no
+    # rows above it to accumulate) and its End Date adds its own hours.
+    first_start = str(ws.cell(row=first_data_row, column=5).value)
+    first_end = str(ws.cell(row=first_data_row, column=6).value)
+    assert first_start.startswith("=$C$2+(0/$C$3)")
+    assert first_end.startswith("=$C$2+((0+D%d)/$C$3)" % first_data_row)
+
+    # A later sequential row's cumulative-hours term is a bounded SUMIFS over
+    # the hidden Track column, not a static number.
+    later_rows = [r for r in range(first_data_row + 1, ws.max_row + 1)
+                  if str(ws.cell(row=r, column=8).value) == "SEQ"]
+    assert later_rows, "expected at least one later sequential task row"
+    later_formula = str(ws.cell(row=later_rows[0], column=5).value)
+    assert "SUMIFS(" in later_formula and '"SEQ"' in later_formula
+
+    # A concurrent row's dates are exactly the project start/end cells.
+    conc_rows = [r for r in range(first_data_row, ws.max_row + 1)
+                 if str(ws.cell(row=r, column=8).value) == "CONC"]
+    assert conc_rows
+    assert ws.cell(row=conc_rows[0], column=5).value == "=$C$2"
+    assert ws.cell(row=conc_rows[0], column=6).value == "=$C$4"
+
+    # Duration column is always computed from the row's own start/end cells.
+    assert str(ws.cell(row=first_data_row, column=7).value) == (
+        "=(F%d-E%d)/7" % (first_data_row, first_data_row))
+
+    # The Track helper column is hidden -- an internal aid, not a deliverable.
+    assert ws.column_dimensions["H"].hidden is True
+
+
 def test_schedule_capacity_defaults_from_total_hours_and_timeline(scope):
     """No explicit capacityHoursPerWeek -> derived as totalHours.median / estimatedTimelineWeeks."""
     s = copy.deepcopy(scope)

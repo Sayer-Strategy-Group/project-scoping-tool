@@ -660,6 +660,19 @@ def compute_schedule(scope: dict) -> Optional[dict]:
 
 
 def build_schedule_sheet(ws: Worksheet, scope: dict, schedule: dict) -> None:
+    """Render the Schedule sheet with LIVE Excel formulas, not static dates.
+
+    Project Start Date ($C$2) and Assumed Capacity ($C$3) are input cells —
+    editing either in Excel recalculates every task/workstream/project date
+    automatically, no regeneration required. A hidden helper column ("Track")
+    tags each row SEQ/CONC so a bounded SUMIFS can compute "cumulative
+    sequential hours before this row" while correctly ignoring interleaved
+    concurrent rows, matching ``compute_schedule()``'s Python model exactly.
+    ``schedule`` (from ``compute_schedule``) supplies structure (task order,
+    hours, synthetic-task detection) and seeds the two input cells; its
+    computed date VALUES are not written to the sheet — the formulas derive
+    dates independently once seeded, which is the point.
+    """
     _title(ws, "%s — Schedule" % scope["client"]["name"], last_col=7)
 
     meta_row = 2
@@ -673,13 +686,19 @@ def build_schedule_sheet(ws: Worksheet, scope: dict, schedule: dict) -> None:
     ws.cell(row=cap_row, column=3, value=round(schedule["capacity"], 1))
     apply_input_fill_cells(ws, row=cap_row, cols=[3])
 
-    caption_row = cap_row + 1
+    end_row = cap_row + 1
+    ws.cell(row=end_row, column=1, value="Computed Project End Date").font = BOLD_BODY_FONT
+    end_cell = ws.cell(row=end_row, column=3,
+                        value='=$C$2+(SUMIF($H:$H,"SEQ",$D:$D)/$C$3)*7')
+    end_cell.number_format = DATE_FMT
+
+    caption_row = end_row + 1
     note = ws.cell(
         row=caption_row, column=1,
         value=("Sequential single-track model -- no dependency graph or resource contention. "
-               "Concurrent workstreams (PM, ongoing feasibility) span the full timeline rather "
-               "than blocking it. Edit engagement.startDate / capacityHoursPerWeek in scope.json "
-               "and regenerate the workbook to recalculate."))
+               "Concurrent workstreams (PM, ongoing feasibility) span the full computed project "
+               "window rather than blocking it. Formulas recalculate automatically in Excel when "
+               "you change the Project Start Date or Assumed Capacity cells above."))
     note.font = CAPTION_FONT
     note.alignment = Alignment(wrap_text=True, vertical="top")
     ws.merge_cells(start_row=caption_row, start_column=1, end_row=caption_row, end_column=7)
@@ -689,40 +708,64 @@ def build_schedule_sheet(ws: Worksheet, scope: dict, schedule: dict) -> None:
     for col, label in enumerate(headers, start=1):
         ws.cell(row=header_row, column=col, value=label)
     style_header_row(ws, row=header_row, max_col=7)
+    ws.cell(row=header_row, column=8, value="Track (internal)")  # hidden SUMIFS helper
 
     data_rows: List[int] = []
     subtotal_rows: List[int] = []
-    r = header_row + 1
+    first_data_row = header_row + 1
+    r = first_data_row
     seq = 1
     for w in scope["workstreams"]:
         wsched = schedule["workstreams"].get(w["id"])
         if not wsched:
             continue  # defensive: shouldn't happen, but never crash workbook generation over it
+        is_concurrent = w.get("scheduling", "sequential") == "concurrent"
+        track = "CONC" if is_concurrent else "SEQ"
+        ws_first_row = None
         for t_sched in wsched["tasks"]:
+            if ws_first_row is None:
+                ws_first_row = r
             ws.cell(row=r, column=1, value=seq)
             ws.cell(row=r, column=2, value="%s  %s" % (w["id"], w["name"]))
             ws.cell(row=r, column=3, value=t_sched["name"])
             ws.cell(row=r, column=4, value=t_sched["hours"])
-            sc = ws.cell(row=r, column=5, value=t_sched["start"]); sc.number_format = DATE_FMT
-            ec = ws.cell(row=r, column=6, value=t_sched["end"]); ec.number_format = DATE_FMT
-            ws.cell(row=r, column=7, value=round(max((t_sched["end"] - t_sched["start"]).days, 0) / 7.0, 1))
+            ws.cell(row=r, column=8, value=track)
+
+            if is_concurrent:
+                start_formula, end_formula = "=$C$2", "=$C$4"
+            else:
+                cum_before = ("0" if r == first_data_row else
+                              'SUMIFS($D$%d:D%d,$H$%d:H%d,"SEQ")' % (first_data_row, r - 1, first_data_row, r - 1))
+                start_formula = "=$C$2+(%s/$C$3)*7" % cum_before
+                end_formula = "=$C$2+((%s+D%d)/$C$3)*7" % (cum_before, r)
+
+            sc = ws.cell(row=r, column=5, value=start_formula); sc.number_format = DATE_FMT
+            ec = ws.cell(row=r, column=6, value=end_formula); ec.number_format = DATE_FMT
+            ws.cell(row=r, column=7, value="=(F%d-E%d)/7" % (r, r))
             data_rows.append(r)
             seq += 1
             r += 1
+        ws_last_row = r - 1
+
         sub_row = r
         ws.cell(row=sub_row, column=2, value="%s — window" % w["id"]).font = BOLD_BODY_FONT
-        sc = ws.cell(row=sub_row, column=5, value=wsched["start"]); sc.number_format = DATE_FMT
-        ec = ws.cell(row=sub_row, column=6, value=wsched["end"]); ec.number_format = DATE_FMT
-        ws.cell(row=sub_row, column=7, value=round(max((wsched["end"] - wsched["start"]).days, 0) / 7.0, 1))
+        if is_concurrent:
+            sc = ws.cell(row=sub_row, column=5, value="=$C$2")
+            ec = ws.cell(row=sub_row, column=6, value="=$C$4")
+        else:
+            sc = ws.cell(row=sub_row, column=5, value="=E%d" % ws_first_row)
+            ec = ws.cell(row=sub_row, column=6, value="=F%d" % ws_last_row)
+        sc.number_format = DATE_FMT
+        ec.number_format = DATE_FMT
+        ws.cell(row=sub_row, column=7, value="=(F%d-E%d)/7" % (sub_row, sub_row))
         subtotal_rows.append(sub_row)
         r += 1
 
     proj_row = r
     ws.cell(row=proj_row, column=2, value="PROJECT").font = BOLD_BODY_FONT
-    sc = ws.cell(row=proj_row, column=5, value=schedule["start_date"]); sc.number_format = DATE_FMT
-    ec = ws.cell(row=proj_row, column=6, value=schedule["end_date"]); ec.number_format = DATE_FMT
-    ws.cell(row=proj_row, column=7,
-            value=round(max((schedule["end_date"] - schedule["start_date"]).days, 0) / 7.0, 1))
+    sc = ws.cell(row=proj_row, column=5, value="=$C$2"); sc.number_format = DATE_FMT
+    ec = ws.cell(row=proj_row, column=6, value="=$C$4"); ec.number_format = DATE_FMT
+    ws.cell(row=proj_row, column=7, value="=(F%d-E%d)/7" % (proj_row, proj_row))
 
     last_row = proj_row
     apply_data_styles_rows(ws, rows=data_rows, max_col=7)
@@ -733,7 +776,8 @@ def build_schedule_sheet(ws: Worksheet, scope: dict, schedule: dict) -> None:
             cell.border = THIN_BORDER
 
     _set_widths(ws, {"A": 5, "B": 30, "C": 44, "D": 9, "E": 13, "F": 13, "G": 15})
-    ws.freeze_panes = "A%d" % (header_row + 1)
+    ws.column_dimensions[get_column_letter(8)].hidden = True
+    ws.freeze_panes = "A%d" % first_data_row
     ws.print_area = "A1:G%d" % last_row
 
 

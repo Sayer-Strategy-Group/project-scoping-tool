@@ -103,20 +103,26 @@ committed/T&M mode for v1). Inserted at index 2, right after Task Breakdown.
 - G: Duration (wks)
 
 **Requirements:**
-- Metadata block: Project Start Date + Assumed Capacity (hrs/week) as `INPUT_FILL`
-  cells, plus a caption explaining the model and how to recalculate (regenerate
-  after editing `scope.json`, not by hand-editing the sheet).
+- Metadata block: Project Start Date (`$C$2`) + Assumed Capacity hrs/week (`$C$3`)
+  as `INPUT_FILL` cells, plus a **Computed Project End Date** (`$C$4`, a formula,
+  not an input) and a caption explaining the model.
+- **Dates are LIVE Excel formulas, not static values** — editing `$C$2` or `$C$3`
+  in the spreadsheet recalculates every task, workstream, and the project end date
+  automatically, matching Sheet 1's single-rate-cell pattern. No regeneration
+  needed to see a new start date's effect. A hidden helper column ("Track",
+  column H, `SEQ`/`CONC` per row) lets a bounded `SUMIFS` compute "cumulative
+  sequential hours before this row" while correctly ignoring interleaved
+  concurrent rows — see `compute_schedule()`/`build_schedule_sheet()` in
+  `scripts/build_estimate.py` for the exact formula shapes.
 - One row per task (synthesized as a single row from the workstream median if a
   workstream has no `tasks[]`), followed by a bold "— window" rollup row per
-  workstream (min start / max end), followed by a final bold "PROJECT" row.
+  workstream (min start / max end via direct cell references to its first/last
+  task rows), followed by a final bold "PROJECT" row (`=$C$2` / `=$C$4`).
 - Model: `scheduling: "sequential"` (default) workstreams consume capacity in
   `workstreams[]` array order — a single-track critical-path approximation with
   no dependency graph. `scheduling: "concurrent"` workstreams (PM/governance,
-  an externally-gated feasibility spike) span the full computed timeline instead
-  of blocking it. See `compute_schedule()` in `scripts/build_estimate.py`.
-- Dates are computed once in Python at generation time (not live Excel formulas)
-  — regenerate the workbook after changing `engagement.startDate` or
-  `capacityHoursPerWeek`.
+  an externally-gated feasibility spike) span the full computed project window
+  (`$C$2` to `$C$4`) instead of blocking it.
 
 ### Sheet 6: "Approach Comparison" (optional, if applicable)
 

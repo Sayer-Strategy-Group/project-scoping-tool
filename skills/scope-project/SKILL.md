@@ -188,9 +188,11 @@ python3 scripts/build_estimate.py {ClientFolder}/scope.json
 This emits `{ClientName}_Scoping_Estimate.xlsx` with 5 sheets by default (Scoping Estimate;
 Task Breakdown with formula-based integrity checks back to Sheet 1; Deliverables & Acceptance;
 Risk Register; Assumptions), plus an Approach Comparison sheet when `approaches` are present,
-plus a **Schedule** sheet (ranges mode) whenever `engagement.startDate` is set — computed
-start/end dates per task and workstream from the project start date and assumed weekly
-capacity (see Step 6 and `${CLAUDE_SKILL_DIR}/references/excel-formatting.md`).
+plus a **Schedule** sheet (ranges mode) whenever `engagement.startDate` is set — start/end
+dates per task and workstream, computed as LIVE Excel formulas from the project start date
+and assumed weekly capacity cells (edit either cell in Excel and every date recalculates
+automatically, same as Sheet 1's rate cell). See Step 6 and
+`${CLAUDE_SKILL_DIR}/references/excel-formatting.md`.
 All styling comes from `scripts/brand_styles.py` (Sayer brand) — never hard-code hex. The sheet
 spec is documented in `${CLAUDE_SKILL_DIR}/references/excel-formatting.md` and the
 `sayer-brand-guidelines` skill — read those to understand or modify the generator, not to
