@@ -11,7 +11,7 @@ description: >
   Trigger: "draft a CSA for [Client]", "draft a SOW for [Client]", "put
   together a contract for [Client]", "we need an agreement for [Client]"
 argument-hint: "[ClientName]"
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, mcp__claude_ai_Google_Drive__*
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, mcp__claude_ai_Google_Drive__*, mcp__claude_ai_Notion__*
 ---
 
 # Draft CSA / SOW Skill
@@ -55,7 +55,7 @@ Invoke the `grill-me` skill (or run an equivalent one-question-at-a-time intervi
 
 ## Step 3: Draft the SOW
 
-Follow the canonical section order (this matches `templates/sow-docx-template.md` and the master doc's `#SOW Instructions` checklist):
+Follow the canonical section order below — the master Google Doc's `#SOW Instructions` checklist is the single source of truth for section order (there is no local SOW template file; do not look for one):
 
 1. Masthead / metadata (Client, Prepared by, Start Date, SOW Date)
 2. Executive Summary
@@ -85,6 +85,25 @@ Write or append to `{Client}_decisions.md` in the client folder: every pricing/s
 ## Step 6: Summary + Approval Routing
 
 Report what was drafted and remind the user: **the master template's standing instruction is that all SOWs go to Billy Leigh & Greg Dyer for approval before being sent to the client for signature.** Do not imply the documents are ready to send until that approval has happened.
+
+## Step 7: Log to the Contracts Store
+
+Every CSA/SOW produced gets a row in the shared **Contracts** Notion database, so the team keeps one registry of every agreement. Write via the Notion MCP connector (`mcp__claude_ai_Notion__*`), mirroring the write pattern in `client-intake` Step 5.
+
+- **Contracts DB:** `78bfd361488243018ccdf6c507f0e12c` — data source `collection://bdd07ba3-9c12-44e2-896d-8ab3668524cc` (under "Sayer Home"). Access is limited to the contracts team (Kyle, Greg, Cameron, Billy, Weston, Aisha).
+- **One row per document.** A new CSA + its first SOW = two rows. An additional SOW under an existing CSA = one new SOW row — do not duplicate the CSA row.
+- **Link to the client.** Set the `Client` relation to the client's page in the Client Engagements DB (`1ee8290de7bc415a8afd62cc22b43fa7`, data source `collection://365887c7-a250-40fb-8421-d97a2ecab24b`). Search that DB by client name first; if no engagement page exists yet, either create one (as `client-intake` does) or leave the relation empty and flag it.
+- **Fields to set on creation:**
+  - `Name` — `{Client} — {CSA | Phase N SOW}` (e.g. "NEC — Discovery SOW")
+  - `Type` — CSA or SOW
+  - `Status` — **Draft** (advance to In Approval when it goes to Billy/Greg, then Sent, then Signed)
+  - `Contract Value` — the fixed fee or committed figure from Step 1 if disclosed; leave blank for pure rate-card / no-estimate SOWs
+  - `HubSpot Deal` — the deal URL if known
+  - `Approver` — Billy Leigh and/or Greg Dyer
+  - `Drive Doc Link` — the shared-Drive URL of the branded docx once it is filed to the confidential Contracts folder; leave blank until then and update the row when filed
+  - `Notes` — the contracting entity used and any open items from the decisions log
+- **Idempotency:** before creating, query the Contracts data source by `Name`/`Client` to check whether a row already exists for this client + document. If it does, update it rather than adding a duplicate.
+- **Degrade gracefully:** if the Notion connector isn't connected, report that the store row was skipped (do not fail the whole run) and tell the user to connect Notion via `/mcp` and re-run this step.
 
 ## Error Handling
 
