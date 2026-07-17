@@ -36,6 +36,7 @@ This skill exists because of a real failure mode: drafting from local precedent 
 Invoke the `grill-me` skill (or run an equivalent one-question-at-a-time interview if unavailable) to resolve every item below. Provide a recommended answer for each question, sourced from precedent where possible. Do not proceed to drafting until every applicable item is resolved or explicitly deferred by the user.
 
 1. **Pricing model.** Fixed Fee or Time & Materials? (If T&M, all remaining questions below apply. If Fixed Fee, skip to the fee/payment-structure questions in the master template's Cohesion example.)
+   - **Invoicing cadence default: biweekly, not monthly** (Kyle's standing instruction, 2026-07-17 — divide the fixed fee evenly across the biweekly installments that fit the engagement's timeline, e.g. a 12-week engagement = 6 installments). Confirm this still fits the specific engagement rather than assuming silently, but don't default to monthly.
 2. **Staffing / rate card.** Who is staffed on this engagement, and at what tier/rate? Get names and rates explicitly — do not assume from another engagement's staffing.
 3. **Estimate disclosure.** Should the SOW show an hour/dollar estimate at all? Three options exist — ask which:
    - **Per-phase range** (hours × rate per phase, shown) — most transparent, matches most T&M precedent.
