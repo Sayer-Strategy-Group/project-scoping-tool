@@ -124,10 +124,13 @@ shared Google Drive when needed).
 
 ## Daily use
 
-**Always launch Claude Code from inside your `project-scoping-tool` clone.** The
-skills are repo-bound — they read `calibration/` and write client folders relative
-to the working directory. Each skill runs a preflight check and will tell you to
-`cd` in if you're somewhere else.
+**Launch Claude Code from inside your `project-scoping-tool` clone for the scoping
+skills.** `/client-intake` and `/scope-project` are repo-bound — they read `calibration/`
+and write client folders relative to the working directory, and their preflight will tell
+you to `cd` in if you're somewhere else. **Exception: `/draft-csa-sow` does NOT need a
+clone** — it drafts from the canonical Google Doc master and writes to Drive + the Notion
+Contracts store, so it runs in **CoWork** (or any directory) with just the Google Drive +
+Notion connectors connected.
 
 ```bash
 cd ~/path/to/project-scoping-tool
